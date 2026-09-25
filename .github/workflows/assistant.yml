@@ -1,0 +1,41 @@
+name: Day Trader (paper)
+
+on:
+  schedule:
+    - cron: "20 13 * * 1-5"   # starts before the US open; the bot waits until 9:45 New York time
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "backtest or live"
+        default: "backtest"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: day-trader
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run bot
+        env:
+          ALPACA_KEY: ${{ secrets.ALPACA_KEY }}
+          ALPACA_SECRET: ${{ secrets.ALPACA_SECRET }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          MODE: ${{ inputs.mode || 'live' }}
+        run: python daytrader.py "$MODE"
+      - name: Save trade log
+        if: always()
+        run: |
+          git config user.name "day-bot"
+          git config user.email "day-bot@users.noreply.github.com"
+          git add daytrades.json 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "Update trade log" && git pull --rebase && git push)

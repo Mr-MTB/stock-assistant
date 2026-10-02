@@ -874,9 +874,37 @@ def simulate_day(day_bars, stats, balance, day, sess_open, sess_close):
         pnl = qty * (exit_price - entry) - fee(qty * entry) - fee(qty * exit_price)
         trades.append({"date": day.isoformat(), "symbol": s, "entry": round(entry, 2),
                        "exit": round(exit_price, 2), "exit_reason": reason,
-                       "pnl_usd": round(pnl, 2), "pct_of_account": pnl / balance})
+                       "pnl_usd": round(pnl, 2), "pct_of_account": pnl / balance,
+                       "time": eb["t"].isoformat(), "market": change_at(bars[i]["t"])})
         day_pnl += pnl
     return trades, balance + day_pnl, len(cands)
+
+
+def what_helped(trades):
+    """Win rate of the backtest's trades with vs without news before entry, and by market direction.
+    Each group is also shown for the older and newer half of the period, to see if it holds."""
+    for t in trades:
+        when = dt.datetime.fromisoformat(t["time"])
+        items = headlines(t["symbol"], when, limit=1)
+        t["news"] = None if items is None else bool(items)
+    half = len(trades) // 2
+    groups = [(f"News in the {NEWS_HOURS} hours before buying", lambda t: t["news"] is True),
+              ("No news", lambda t: t["news"] is False),
+              ("Market (S&P 500) up at entry", lambda t: t["market"] is not None and t["market"] > 0),
+              ("Market flat or down at entry", lambda t: t["market"] is not None and t["market"] <= 0)]
+    lines = []
+    for label, keep in groups:
+        parts = []
+        for name, chunk in (("all", trades), ("older half", trades[:half]), ("newer half", trades[half:])):
+            g = [t for t in chunk if keep(t)]
+            if g:
+                wins = sum(t["pnl_usd"] > 0 for t in g)
+                avg = sum(t["pct_of_account"] for t in g) / len(g) * 100
+                parts.append(f"{name}: {len(g)} trades, {wins / len(g) * 100:.0f}% winners, avg {avg:+.2f}%")
+            else:
+                parts.append(f"{name}: no trades")
+        lines.append(f"{label}: " + " | ".join(parts))
+    return lines
 
 
 def run_backtest():
@@ -923,6 +951,8 @@ def run_backtest():
     report += [f"{t['date']} {t['symbol']:<5} ${t['entry']:.2f} -> ${t['exit']:.2f} {t['exit_reason']:<6} "
                f"{t['pnl_usd'] * SAR_PER_USD:+.1f} SAR ({t['pct_of_account'] * 100:+.2f}% of account)"
                for t in trades] or ["(none)"]
+    report += ["", "Did news or the market make a difference? (same trades, split into groups)"]
+    report += what_helped(trades)
     report += ["", "Day by day:"] + day_lines
     path = write_report(f"backtest-{today}.txt", report, mode="w")
     wins = sum(t["pnl_usd"] > 0 for t in trades)

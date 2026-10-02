@@ -287,6 +287,9 @@ rp = f"reports/backtest-{days[-1] + dt.timedelta(days=3)}.txt"
 txt = open(rp).read() if os.path.exists(rp) else ""
 check("15 backtest: report saved with rules, trades and days",
       all(k in txt for k in ("Day-trading backtest", "up to 3 trades a day", "Every trade", "Day by day")), txt[:300])
+check("15 backtest: news and market comparison in the report",
+      "Did news or the market make a difference?" in txt and "No news:" in txt and "Market (S&P 500) up at entry:" in txt,
+      txt[-600:])
 st = json.load(open(D.STATS_FILE)) if os.path.exists(D.STATS_FILE) else {}
 check("15 backtest: success rate saved", st.get("trades", 0) > 0 and 0 <= st.get("win_rate", -1) <= 1, st)
 check("15 backtest: picks now show it", D.success_text().startswith("Past success rate of this setup:"),

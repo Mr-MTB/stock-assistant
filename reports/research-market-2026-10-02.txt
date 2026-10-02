@@ -1,0 +1,14 @@
+📊 Market & news check: every first breakout of the 5 busiest morning stocks, 250 days (2025-10-03 to 2026-10-01), Sahm costs, max 2-hour hold.
+Tuning months 2025-10-03 to 2026-06-15; test months 2026-06-16 to 2026-10-01.
+
+S&P 500 up on the day: tuning: 421 trades, 34% winners, avg -0.10% of the account | test: 165 trades, 37% winners, avg -0.08% of the account
+S&P 500 flat or down: tuning: 271 trades, 37% winners, avg -0.08% of the account | test: 122 trades, 23% winners, avg -0.16% of the account
+S&P 500 down more than 1%: tuning: 24 trades, 42% winners, avg -0.01% of the account | test: 6 trades, 17% winners, avg -0.18% of the account
+S&P 500 above its VWAP: tuning: 451 trades, 34% winners, avg -0.10% of the account | test: 174 trades, 33% winners, avg -0.11% of the account
+S&P 500 below its VWAP: tuning: 241 trades, 38% winners, avg -0.07% of the account | test: 113 trades, 28% winners, avg -0.14% of the account
+Up on the day AND above VWAP: tuning: 318 trades, 32% winners, avg -0.11% of the account | test: 120 trades, 40% winners, avg -0.07% of the account
+News in the 24 hours before: tuning: 561 trades, 35% winners, avg -0.09% of the account | test: 225 trades, 32% winners, avg -0.11% of the account
+No news: tuning: 131 trades, 36% winners, avg -0.09% of the account | test: 62 trades, 27% winners, avg -0.15% of the account
+Market up AND news: tuning: 349 trades, 35% winners, avg -0.09% of the account | test: 132 trades, 36% winners, avg -0.08% of the account
+Everything: tuning: 692 trades, 35% winners, avg -0.09% of the account | test: 287 trades, 31% winners, avg -0.12% of the account
+

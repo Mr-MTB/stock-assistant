@@ -22,6 +22,10 @@ on:
         description: "text to send to Telegram (notify mode only)"
         required: false
         default: ""
+      last_entry:
+        description: "live only: one-off latest entry time today, New York HH:MM (e.g. 13:55)"
+        required: false
+        default: ""
 
 permissions:
   contents: write   # save the trade log and reports
@@ -52,6 +56,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           MODE: ${{ inputs.mode || 'live' }}
           MESSAGE: ${{ inputs.message }}
+          LAST_ENTRY_NY: ${{ inputs.last_entry }}
         run: python daytrader.py "$MODE"
       - name: Save trade log and reports
         if: always()

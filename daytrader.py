@@ -286,8 +286,20 @@ def trade_deadline(entry_t, session_close):
     return min(entry_t + dt.timedelta(minutes=MAX_HOLD_MIN), session_close - dt.timedelta(minutes=5))
 
 
+def todays_cutoff():
+    """LAST_ENTRY, unless a run was started with a one-off later cutoff (LAST_ENTRY_NY="HH:MM")."""
+    value = os.environ.get("LAST_ENTRY_NY", "").strip()
+    if not value:
+        return LAST_ENTRY
+    try:
+        return dt.time.fromisoformat(value)
+    except ValueError:
+        print(f"Ignoring LAST_ENTRY_NY={value!r} (use HH:MM, New York time).")
+        return LAST_ENTRY
+
+
 def last_entry_time(day, session_close):
-    return min(dt.datetime.combine(day, LAST_ENTRY, NY),
+    return min(dt.datetime.combine(day, todays_cutoff(), NY),
                session_close - dt.timedelta(minutes=MAX_HOLD_MIN + 5))
 
 
@@ -454,8 +466,13 @@ def run_live():
         return
     _, sess_open, sess_close = days[0]
     book = load_book()
-    if book.get("last_run") == today.isoformat():
+    extra = todays_cutoff() != LAST_ENTRY  # a one-off extra session started by hand
+    done_today = [t for t in book["trades"] if t["date"] == today.isoformat()]
+    if book.get("last_run") == today.isoformat() and not extra:
         print("Today is already handled.")
+        return
+    if len(done_today) >= MAX_TRADES_PER_DAY:
+        print("Today's trade limit is already used.")
         return
     last_entry = last_entry_time(today, sess_close)
     if now >= last_entry:
@@ -476,7 +493,7 @@ def run_live():
         send("⏸ Day trader is paused (account fell below the safety limit). Review before restarting.")
         return
 
-    trades_today = trade_one_day(book, today, sess_open, sess_close)
+    trades_today = trade_one_day(book, today, sess_open, sess_close, MAX_TRADES_PER_DAY - len(done_today))
     if trades_today is not None:
         send(end_of_day_text(book, today))
     if book["balance_usd"] < book["start_usd"] * PAUSE_BELOW:
@@ -490,7 +507,7 @@ def run_live():
              + "\nSince start:\n" + summary(book["trades"], book["start_usd"], book["balance_usd"]))
 
 
-def trade_one_day(book, today, sess_open, sess_close):
+def trade_one_day(book, today, sess_open, sess_close, allowed=MAX_TRADES_PER_DAY):
     """Returns the list of trades made today (None if the bot couldn't run)."""
     or_end = sess_open + dt.timedelta(minutes=OR_MINUTES)
     last_entry = last_entry_time(today, sess_close)
@@ -514,7 +531,7 @@ def trade_one_day(book, today, sess_open, sess_close):
 
     active = {c["symbol"]: c for c in cands}
     trades_today = []
-    while active and len(trades_today) < MAX_TRADES_PER_DAY and now_ny() < last_entry:
+    while active and len(trades_today) < allowed and now_ny() < last_entry:
         nxt = now_ny().replace(second=5, microsecond=0) + dt.timedelta(minutes=1)
         sleep_until(nxt)
         now = now_ny()

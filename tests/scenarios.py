@@ -285,5 +285,40 @@ check("15 failed send is recorded", any("(Telegram failed: Unauthorized)" in x f
 check("15 no token in the record", not any(D.TG_TOKEN in x for x in D.LOG))
 D.RAW_TG_TOKEN = D.TG_TOKEN = D.RAW_TG_CHAT = D.TG_CHAT = ""
 
+# 16. One-off later cutoff: a hand-started session can trade after 11:30 on a day already handled,
+#     still exits within 2 hours and before the close, and respects the daily trade limit.
+class LateBreak(F.World):
+    """Quiet until 11:50, then one stock breaks above its opening range."""
+
+    def make_day(self, s, d, prev, scenario):
+        bars = super().make_day(s, d, prev, lambda *_: "up")
+        top = max(b["h"] for b in bars[:15])
+        for i, b in enumerate(bars[15:], start=15):
+            level = top * 0.998 if (i < 140 or s != "NVDA") else top * (1 + 0.0004 * (i - 139))
+            for k in "ohlc":
+                b[k] = level
+        return bars
+
+
+fresh_dir()
+w = LateBreak([DAY], SYMS, seed=4)
+F.install(w, at(DAY, 11, 41))
+D.save_book({"start_usd": 533.33, "balance_usd": 533.33, "paused": False, "last_run": DAY.isoformat(), "trades": []})
+os.environ["LAST_ENTRY_NY"] = "13:55"
+F.run_main()
+book = D.load_book()
+check("16 extra session: watches until 20:55 your time", any("until 20:55 (your time)" in m for m in F.SENT), F.SENT[:1])
+check("16 extra session: trades after 11:30", [t["symbol"] for t in book["trades"]] == ["NVDA"], book["trades"])
+check("16 extra session: closed before the market close", w.now <= at(DAY, 16, 0), w.now)
+check("16 extra session: end-of-day result sent", any(m.startswith("📊 End of day") for m in F.SENT))
+F.install(w, at(DAY, 12, 30))
+F.run_main()
+check("16 extra session: daily trade limit respected", not F.SENT and len(D.load_book()["trades"]) == 1, F.SENT)
+os.environ["LAST_ENTRY_NY"] = "1:55 PM"
+F.install(w, at(DAY, 12, 31))
+F.run_main()
+check("16 bad cutoff value is ignored safely", not F.SENT, F.SENT)
+os.environ.pop("LAST_ENTRY_NY", None)
+
 print(f"\n{sum(ok for _, ok in results)}/{len(results)} checks passed")
 sys.exit(0 if all(ok for _, ok in results) else 1)

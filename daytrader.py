@@ -110,7 +110,7 @@ def note(text):
     """Record a line in today's report without sending it to Telegram."""
     print(text)
     now = now_ny()
-    LOG.append(f"[{now:%H:%M} New York | {local(now)} your time] {text}")
+    LOG.append(f"[{clock(now)} New York | {local(now)} your time] {text}")
 
 
 def write_report(name, lines, mode="a"):
@@ -275,7 +275,12 @@ def record_text(trades):
 
 
 def local(t):
-    return t.astimezone(ZoneInfo(LOCAL_TZ)).strftime("%H:%M")
+    return clock(t.astimezone(ZoneInfo(LOCAL_TZ)))
+
+
+def clock(t):
+    """12-hour time, e.g. 8:55 PM."""
+    return t.strftime("%I:%M %p").lstrip("0")
 
 
 def fee(order_value):
@@ -348,7 +353,7 @@ def wait_then_restart(work_end):
     go = work_end - dt.timedelta(minutes=JOB_LIMIT_MIN)  # from here one run can cover the whole day
     wake = min(go, job_deadline() - dt.timedelta(minutes=10))
     print(f"Started too early for one GitHub run to cover the trading day. "
-          f"Waiting until {wake:%H:%M} New York, then starting a fresh run.")
+          f"Waiting until {clock(wake)} New York, then starting a fresh run.")
     sleep_until(wake)
     if not start_fresh_run():
         send("⚠️ The bot couldn't restart itself on GitHub this morning, so it may miss today's session.")
@@ -488,7 +493,7 @@ def run_live():
 
     book["last_run"] = today.isoformat()
     save_book(book)
-    note(f"Run started at {now:%H:%M} New York ({local(now)} your time).")
+    note(f"Run started at {clock(now)} New York ({local(now)} your time).")
     if book["paused"]:
         send("⏸ Day trader is paused (account fell below the safety limit). Review before restarting.")
         return
@@ -742,7 +747,7 @@ def run_telegram_check():
             notes.append("had extra spaces or line breaks (now ignored)")
         return ", ".join(notes)
 
-    lines = [f"Telegram check, {now_ny():%Y-%m-%d %H:%M} New York",
+    lines = [f"Telegram check, {now_ny():%Y-%m-%d} {clock(now_ny())} New York",
              f"TELEGRAM_TOKEN: {shape(RAW_TG_TOKEN, r'[0-9]+:[A-Za-z0-9_-]{30,}')}",
              f"TELEGRAM_CHAT_ID: {shape(RAW_TG_CHAT, r'-?[0-9]+')}"]
     if TG_TOKEN:

@@ -91,8 +91,12 @@ def fake_api(method, url, params=None, body=None):
             out[s] = [dict(b, t=fmt(b["t"])) for b in sel]
         return {"bars": out, "next_page_token": None}
     if path == "/v2/stocks/trades/latest":
-        s = params["symbols"]
-        return {"trades": {s: {"p": W.price(s)}}}
+        return {"trades": {s: {"p": W.price(s)} for s in params["symbols"].split(",")}}
+    if path == "/v1beta1/news":
+        if getattr(W, "news_down", False):
+            raise RuntimeError("news service down")
+        items = getattr(W, "news", {}).get(params["symbols"], [])
+        return {"news": [{"headline": h} for h in items[:int(params.get("limit", 2))]], "next_page_token": None}
     if path == "/v2/orders" and method == "POST":
         oid, s = f"o{len(W.orders)}", body["symbol"]
         p = W.price(s)
@@ -172,3 +176,57 @@ def run_main(mode="live"):
     finally:
         if mode == "live" and D.LOG:
             D.write_report(f"live-{D.now_ny().date()}.txt", D.LOG)
+
+
+class ScriptWorld(World):
+    """Market days written to order.
+
+    script: {symbol: (breakout_minute, outcome)} with outcome "target", "stop" or "time"
+    (breakout_minute None = a strong morning but no breakout). Scripted stocks gap up 1% and rise
+    for 15 minutes on heavy volume, then sit just under their 15-minute high until the breakout.
+    Other stocks stay flat (they never pass the morning filters). spy: "up" or "down" (-2%).
+    """
+
+    def __init__(self, days, symbols, script, spy="up", dip_at=None, **kw):
+        self.script, self.spy_mode, self.dip_at = script, spy, dip_at or {}
+        super().__init__(days, list(dict.fromkeys(symbols + ["SPY"])), **kw)
+
+    def make_day(self, s, d, prev, scenario):
+        t = dt.datetime.combine(d, dt.time(9, 30), NY)
+        n = int((dt.datetime.combine(d, self.close) - dt.datetime.combine(d, dt.time(9, 30))).total_seconds() // 60)
+        closes, vols = [], []
+        if s == "SPY":
+            for i in range(n):
+                step = (1 - 0.001 * min(i + 1, 20)) if self.spy_mode == "down" else (1 + 0.0001 * min(i + 1, 30))
+                closes.append(prev * step)
+                vols.append(50_000)
+        elif s not in self.script:
+            closes, vols = [prev * 1.002] * n, [10_000] * n
+        else:
+            bo, outcome = self.script[s]
+            p0 = prev * 1.01
+            for i in range(15):
+                closes.append(p0 * (1 + 0.0005 * (i + 1)))
+                vols.append(60_000)
+            top = max(closes) * 1.0005
+            for i in range(15, n):
+                if bo is None or i < bo:
+                    c = top * 0.998
+                elif i == bo:
+                    c = top * 1.001
+                elif outcome == "target":
+                    c = top * 1.001 * (1 + 0.0005 * (i - bo))
+                elif outcome == "stop":
+                    c = top * 1.001 * (1 - 0.0005 * (i - bo))
+                else:
+                    c = top * 1.001
+                closes.append(c)
+                vols.append(20_000)
+        bars, o = [], closes[0] / 1.0005 if s in self.script else closes[0]
+        for i, c in enumerate(closes):
+            lo = min(o, c) * 0.9995
+            if self.dip_at.get(s) == i:
+                lo = min(o, c) * 0.985  # a quick dip inside one minute
+            bars.append({"t": t, "o": o, "h": max(o, c) * 1.0005, "l": lo, "c": c, "v": vols[i]})
+            o, t = c, t + dt.timedelta(minutes=1)
+        return bars

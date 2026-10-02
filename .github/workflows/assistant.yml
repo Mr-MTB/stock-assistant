@@ -16,8 +16,12 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "backtest or live"
+        description: "backtest, live or notify"
         default: "backtest"
+      message:
+        description: "text to send to Telegram (notify mode only)"
+        required: false
+        default: ""
 
 permissions:
   contents: write   # save the trade log and reports
@@ -47,6 +51,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GITHUB_TOKEN: ${{ github.token }}
           MODE: ${{ inputs.mode || 'live' }}
+          MESSAGE: ${{ inputs.message }}
         run: python daytrader.py "$MODE"
       - name: Save trade log and reports
         if: always()

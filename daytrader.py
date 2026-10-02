@@ -13,6 +13,7 @@ Strategy: Opening Range Breakout, long only, every trade closed within 2 hours.
 Modes:
   python daytrader.py live      -> trades one day on the Alpaca PAPER account
   python daytrader.py backtest  -> replays the rules on the last 60 trading days
+  python daytrader.py notify    -> sends the text in MESSAGE to Telegram (updates from Claude)
 
 Timing on GitHub: scheduled runs often start hours late, so the workflow has several
 wake-up calls. A run that starts too early for one 6-hour GitHub run to cover the trading
@@ -35,7 +36,7 @@ import urllib.request
 from zoneinfo import ZoneInfo
 
 # ======================= SETTINGS =======================
-START_SAR = 1000.0            # virtual account size
+START_SAR = 2000.0            # virtual (paper) account size
 SAR_PER_USD = 3.75
 LOCAL_TZ = "Asia/Riyadh"      # times in messages are shown in your local time
 RISK_PER_TRADE = 0.03         # medium risk (low = 0.01, high = 0.06)
@@ -67,6 +68,7 @@ WATCHLIST = [
 
 BOOK_FILE = "daytrades.json"
 REPORTS_DIR = "reports"
+STATS_FILE = "reports/setup-stats.json"  # past success rate, refreshed by every backtest
 NY = ZoneInfo("America/New_York")
 UTC = dt.timezone.utc
 TRADE_URL = "https://paper-api.alpaca.markets"
@@ -315,6 +317,35 @@ def wait_then_restart(work_end):
         send("⚠️ The bot couldn't restart itself on GitHub this morning, so it may miss today's session.")
 
 
+def success_text():
+    """How often this setup won in the latest backtest (written by `backtest` mode)."""
+    try:
+        with open(STATS_FILE) as f:
+            st = json.load(f)
+    except (FileNotFoundError, ValueError):
+        return "Past success rate: not measured yet."
+    if not st.get("trades"):
+        return "Past success rate: no trades in the last backtest."
+    return (f"Past success rate of this setup: {st['win_rate'] * 100:.0f}% "
+            f"({st['wins']} of {st['trades']} trades won, {st['from']} to {st['to']}).")
+
+
+def end_of_day_text(book, today):
+    todays = [t for t in book["trades"] if t["date"] == today.isoformat()]
+    lines = [f"📊 End of day {today}"]
+    if todays:
+        pnl = sum(t["pnl_usd"] for t in todays)
+        before = book["balance_usd"] - pnl
+        lines.append(f"Today: {len(todays)} trade{'s' if len(todays) != 1 else ''}, "
+                     f"{pnl * SAR_PER_USD:+.1f} SAR ({pnl / before * 100:+.2f}%)")
+    else:
+        lines.append("Today: no trade, so no gain or loss.")
+    total = book["balance_usd"] - book["start_usd"]
+    lines.append(f"Balance: {sar(book['balance_usd'])} | Since start: {total * SAR_PER_USD:+.1f} SAR "
+                 f"({total / book['start_usd'] * 100:+.1f}%), {record_text(book['trades'])}")
+    return "\n".join(lines)
+
+
 # ---------------- trade log ----------------
 def load_book():
     try:
@@ -421,8 +452,8 @@ def run_live():
         return
 
     trades_today = trade_one_day(book, today, sess_open, sess_close)
-    if trades_today is not None and not trades_today:
-        send(f"📊 {today}: no trade today. Balance {sar(book['balance_usd'])}.")
+    if trades_today is not None:
+        send(end_of_day_text(book, today))
     if book["balance_usd"] < book["start_usd"] * PAUSE_BELOW:
         book["paused"] = True
         send("⏸ Account fell below 75% of the start. Bot paused for review.")
@@ -454,7 +485,7 @@ def trade_one_day(book, today, sess_open, sess_close):
         return []
     send(f"👀 {today} — watching for breakouts until {local(last_entry)} (your time):\n" + "\n".join(
         f"{c['symbol']}: buy above ${c['or_high']:.2f} (volume {c['rvol'] * 100:.0f}% of a normal day already)"
-        for c in cands))
+        for c in cands) + f"\nThe first one to break out is today's pick.\n{success_text()}")
 
     active = {c["symbol"]: c for c in cands}
     trades_today = []
@@ -487,7 +518,8 @@ def trade_one_day(book, today, sess_open, sess_close):
         target = entry + REWARD_RISK * (entry - stop)
         deadline = trade_deadline(entry_t, sess_close)
         send(f"✅ BOUGHT {s}: {qty:.4f} shares at ${entry:.2f} (${qty * entry:.2f} ≈ {sar(qty * entry)})\n"
-             f"Stop ${stop:.2f} | Target ${target:.2f} | Sell by {local(deadline)} (your time) at the latest")
+             f"Stop ${stop:.2f} | Target ${target:.2f} | Sell by {local(deadline)} (your time) at the latest\n"
+             f"{success_text()}")
 
         invested = qty * entry
         near_target = entry + NEAR_LEVEL * (target - entry)
@@ -649,14 +681,27 @@ def run_backtest():
                for t in trades] or ["(none)"]
     report += ["", "Day by day:"] + day_lines
     path = write_report(f"backtest-{today}.txt", report, mode="w")
+    wins = sum(t["pnl_usd"] > 0 for t in trades)
+    with open(STATS_FILE, "w") as f:
+        json.dump({"trades": len(trades), "wins": wins, "win_rate": wins / len(trades) if trades else 0.0,
+                   "from": days[0][0].isoformat(), "to": days[-1][0].isoformat(), "updated": today.isoformat()},
+                  f, indent=2)
     print(f"Saved {path}")
     send("\n".join(lines))
+
+
+def run_notify():
+    text = os.environ.get("MESSAGE", "").strip()
+    if text:
+        send(text)
+    else:
+        print("No message to send.")
 
 
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "live"
     try:
-        {"live": run_live, "backtest": run_backtest}[mode]()
+        {"live": run_live, "backtest": run_backtest, "notify": run_notify}[mode]()
     except Exception as e:
         send(f"⚠️ Day trader error ({mode}): {e}")
         raise

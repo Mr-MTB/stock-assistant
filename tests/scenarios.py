@@ -81,6 +81,11 @@ rep = open(f"reports/live-{DAY}.txt").read() if os.path.exists(f"reports/live-{D
 check("3 on-time run: report has start time, watchlist, buy and sell",
       all(k in rep for k in ("Run started", "watching for breakouts", "BOUGHT NVDA", "SOLD NVDA")), rep[:400])
 check("3 on-time run: no secrets in report", "test-token" not in rep)
+check("3 on-time run: pick shows a success rate (none measured yet)",
+      any("BOUGHT NVDA" in m and "Past success rate: not measured yet." in m for m in F.SENT), F.SENT)
+check("3 on-time run: end-of-day result sent",
+      any(m.startswith("📊 End of day") and "Today: 1 trade," in m and "Since start:" in m for m in F.SENT), F.SENT)
+check("3 on-time run: account starts at 2,000 SAR", abs(book["start_usd"] * D.SAR_PER_USD - 2000) < 0.1, book)
 
 # 4. A late wake-up the same afternoon stops silently (reads the newest trade log).
 F.install(w, at(DAY, 15, 2))
@@ -177,6 +182,41 @@ check("11 backtest: has summary, trades and days",
 n_day_lines = sum(1 for line in txt.splitlines() if "passed the filters" in line and line[:4] == "2026")
 check("11 backtest: one line per day", n_day_lines == 15, n_day_lines)
 check("11 backtest: Telegram summary has no per-trade list", F.SENT and "Every trade" not in F.SENT[-1])
+st = json.load(open(D.STATS_FILE)) if os.path.exists(D.STATS_FILE) else {}
+check("11 backtest: success rate saved", st.get("trades") == 14 and st.get("wins") == 13, st)
+check("11 backtest: picks now show it", D.success_text().startswith("Past success rate of this setup: 93% (13 of 14"),
+      D.success_text())
+
+# 13. A day with candidates but no breakout: end-of-day says no trade.
+class Sliding(F.World):
+    """After the first 15 minutes every stock slides steadily, so nothing ever breaks out."""
+
+    def make_day(self, s, d, prev, scenario):
+        bars = super().make_day(s, d, prev, lambda *_: "up")
+        ref = bars[14]["c"]
+        for i, b in enumerate(bars[15:], start=15):
+            for k in "ohlc":
+                b[k] = ref * (1 - 0.0005 * (i - 14))
+        return bars
+
+
+fresh_dir()
+w = Sliding([DAY], SYMS, seed=4)
+F.install(w, at(DAY, 9, 0))
+F.run_main()
+check("13 no-trade day: end-of-day message", any("Today: no trade, so no gain or loss." in m for m in F.SENT), F.SENT)
+
+# 12. Notify mode: sends exactly the given text, and nothing when it's empty.
+fresh_dir()
+F.install(w, at(DAY, 12, 0))
+os.environ["MESSAGE"] = "  📋 Claude: test update  "
+D.run_notify()
+check("12 notify: sends the message", F.SENT == ["📋 Claude: test update"], F.SENT)
+F.SENT.clear()
+os.environ["MESSAGE"] = "   "
+D.run_notify()
+check("12 notify: empty message sends nothing", not F.SENT, F.SENT)
+os.environ.pop("MESSAGE", None)
 
 print(f"\n{sum(ok for _, ok in results)}/{len(results)} checks passed")
 sys.exit(0 if all(ok for _, ok in results) else 1)

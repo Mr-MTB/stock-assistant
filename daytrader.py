@@ -30,6 +30,7 @@ reports/ folder (one file per live day and per backtest).
 
 Paper trading and research only. Not financial advice.
 """
+import csv
 import datetime as dt
 import json
 import re
@@ -79,6 +80,7 @@ WATCHLIST = [
 BOOK_FILE = "daytrades.json"
 REPORTS_DIR = "reports"
 STATS_FILE = "reports/setup-stats.json"  # past success rate, refreshed by every backtest
+JOURNAL_DIR = "journal"       # the practice database: every trade, every signal, every day
 NY = ZoneInfo("America/New_York")
 UTC = dt.timezone.utc
 TRADE_URL = "https://paper-api.alpaca.markets"
@@ -250,7 +252,8 @@ def select_candidates(or_bars, stats, n=CANDIDATES):
         rng = (hi - lo) / last
         if last > vwap and last > stats[s]["prev_close"] and 0.003 <= rng <= 0.03:
             cands.append({"symbol": s, "or_high": hi, "or_low": lo, "stop": (hi + lo) / 2,
-                          "rvol": vol / stats[s]["avg_vol"]})
+                          "rvol": vol / stats[s]["avg_vol"], "range_pct": rng * 100,
+                          "gap_pct": (bars[0]["o"] / stats[s]["prev_close"] - 1) * 100})
     cands.sort(key=lambda c: c["rvol"], reverse=True)
     return cands[:n]
 
@@ -423,6 +426,50 @@ def end_of_day_text(book, today):
     return "\n".join(lines)
 
 
+# ---------------- practice database (journal/) ----------------
+TRADE_FIELDS = ["date", "symbol", "rank", "entry_time_ny", "exit_time_ny", "minutes", "entry", "exit", "stop",
+                "target", "invested_usd", "pnl_usd", "pnl_pct", "result", "exit_reason", "market_pct",
+                "had_news", "headlines", "rvol", "range_pct", "gap_pct"]
+SIGNAL_FIELDS = ["date", "time_ny", "symbol", "rank", "taken", "why_not", "market_pct", "rvol", "range_pct",
+                 "gap_pct", "would_exit", "would_pnl_pct", "would_result"]
+DAY_FIELDS = ["date", "market_pct", "candidates", "signals", "trades", "wins", "pnl_usd", "balance_usd"]
+
+
+def journal_add(name, fields, rows):
+    """Append rows to journal/<name>.csv (created with a header the first time)."""
+    if not rows:
+        return
+    os.makedirs(JOURNAL_DIR, exist_ok=True)
+    path = os.path.join(JOURNAL_DIR, f"{name}.csv")
+    new = not os.path.exists(path)
+    with open(path, "a", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+        if new:
+            w.writeheader()
+        for row in rows:
+            w.writerow({k: (f"{v:.4f}" if isinstance(v, float) else v) for k, v in row.items()})
+
+
+def signal_outcomes(signals, sess_close):
+    """What each breakout would have made under the bot's rules (bought or not), from 1-minute candles."""
+    for sig in signals:
+        bar_t = dt.datetime.fromisoformat(sig["bar_t"])
+        try:
+            bars = get_bars([sig["symbol"]], "1Min", bar_t, sess_close).get(sig["symbol"], [])
+        except Exception as e:
+            print(f"Couldn't load candles for {sig['symbol']}: {e}")
+            continue
+        if len(bars) < 2:
+            continue
+        entry = bars[1]["o"] * (1 + SLIPPAGE)
+        if entry <= sig["stop"]:
+            continue
+        target = entry + REWARD_RISK * (entry - sig["stop"])
+        _, exit_price, why = simulate_exit(bars, 1, sig["stop"], target, trade_deadline(bars[1]["t"], sess_close))
+        pct = net_pct(entry, exit_price)
+        sig.update(would_exit=why, would_pnl_pct=pct, would_result="win" if pct > 0 else "loss")
+
+
 # ---------------- trade log ----------------
 def load_book():
     try:
@@ -533,7 +580,7 @@ def run_live():
     if now >= last_entry and not book["open"]:
         book["last_run"] = today.isoformat()
         if day.get("announced"):  # the day had started; a hand-over landed after the last entry time
-            finish_day(book, today)
+            finish_day(book, today, sess_close)
             return
         day["done"] = True
         save_book(book)
@@ -565,7 +612,7 @@ def run_live():
         close_everything(book, today, f"something went wrong ({e})")
         raise
     if finished:
-        finish_day(book, today)
+        finish_day(book, today, sess_close)
 
 
 def work_day(book, today, sess_open, sess_close):
@@ -582,12 +629,15 @@ def work_day(book, today, sess_open, sess_close):
     daily = get_bars(WATCHLIST + ["SPY"], "1Day", sess_open - dt.timedelta(days=45),
                      sess_open - dt.timedelta(hours=10), adjustment="split")
     stats = stats_for_day(daily, today)
+    day["spy_prev"] = stats.get("SPY", {}).get("prev_close")
     or_bars = get_bars(WATCHLIST, "1Min", sess_open, or_end)
     or_bars = {s: [b for b in bars if b["t"] < or_end] for s, bars in or_bars.items()}
     cands = select_candidates(or_bars, stats)
-    taken = {t["symbol"] for t in today_trades(book, today)} | {p["symbol"] for p in book["open"]}
+    seen = {x["symbol"] for x in day.get("signals", []) if x["why_not"] != "market"}
+    taken = {t["symbol"] for t in today_trades(book, today)} | {p["symbol"] for p in book["open"]} | seen
     active = {c["symbol"]: c for c in cands if c["symbol"] not in taken}
     rank = {c["symbol"]: i for i, c in enumerate(cands)}
+    day["candidates"] = len(cands)
 
     if not day.get("announced"):
         announce(book, today, cands, last_entry, spy_change(stats))
@@ -603,15 +653,14 @@ def work_day(book, today, sess_open, sess_close):
 
     while True:
         now = now_ny()
-        room = MAX_TRADES_PER_DAY - len(today_trades(book, today)) - len(book["open"])
-        can_enter = now < last_entry and room > 0 and bool(active)
-        if not book["open"] and not can_enter:
+        watching = now < last_entry and bool(active)  # after the 3-trade limit it still records signals
+        if not book["open"] and not watching:
             return True
         if now >= hand_over_at:
             return hand_over(book, today)
         if book["open"]:
             manage_positions(book, today)
-        if can_enter and now >= scan_from + dt.timedelta(minutes=1, seconds=5):
+        if watching and now >= scan_from + dt.timedelta(minutes=1, seconds=5):
             scan_from = scan_for_entries(book, today, sess_close, stats, active, rank, scan_from, last_entry)
         sleep(20)
 
@@ -666,38 +715,59 @@ def scan_for_entries(book, today, sess_close, stats, active, rank, scan_from, la
             skipped = book["day"].setdefault("skipped", [])
             if s not in skipped:
                 skipped.append(s)
+                record_signal(book, c, rank[s], b["t"], change, "market")
                 send(f"⏸ {s} broke out at {local(b['t'] + dt.timedelta(minutes=1))} (your time), but the "
                      f"S&P 500 is down {abs(change) * 100:.2f}% today, so no buy for now.")
     for t, _, s, change in sorted(signals):
+        cand = active.pop(s)
         if MAX_TRADES_PER_DAY - len(today_trades(book, today)) - len(book["open"]) <= 0:
-            break
-        open_position(book, today, sess_close, active.pop(s), change)
+            record_signal(book, cand, rank[s], t, change, "limit")
+            continue
+        why_not = open_position(book, today, sess_close, cand, rank[s], change)
+        record_signal(book, cand, rank[s], t, change, why_not)
+    save_book(book)
     return max(scan_from, latest + dt.timedelta(minutes=1))
 
 
-def open_position(book, today, sess_close, cand, change):
+def record_signal(book, cand, rank, bar_t, change, why_not):
+    """Keep every breakout for the practice database; what it would have made is added at day end."""
+    book["day"].setdefault("signals", []).append({
+        "time_ny": clock(bar_t + dt.timedelta(minutes=1)), "bar_t": bar_t.isoformat(), "symbol": cand["symbol"],
+        "rank": rank + 1, "taken": "yes" if not why_not else "no", "why_not": why_not or "",
+        "market_pct": None if change is None else change * 100, "rvol": cand["rvol"],
+        "range_pct": cand.get("range_pct"), "gap_pct": cand.get("gap_pct"), "stop": cand["stop"]})
+
+
+def open_position(book, today, sess_close, cand, rank, change):
+    """Buy one breakout. Returns "" when bought, else why not ("plan" or "fill")."""
     s = cand["symbol"]
     price = latest_price(s)
     plan = plan_trade(cand, price, book["day"]["start_usd"] / SLOTS, book["day"]["start_usd"])
     if not plan:
         note(f"Skipped {s}: its stop would be too close or too far.")
-        return
+        return "plan"
     qty, entry = buy(s, plan["notional"], price)
     if qty <= 0:
         note(f"Skipped {s}: the buy order didn't fill.")
-        return
+        return "fill"
     now = now_ny()
     stop = plan["stop"]
     target = entry + REWARD_RISK * (entry - stop)
     deadline = trade_deadline(now, sess_close)
+    news = headlines(s, now)
     book["open"].append({"symbol": s, "qty": qty, "entry": entry, "stop": stop, "target": target,
-                         "entry_time": now.isoformat(), "deadline": deadline.isoformat(), "warned": []})
+                         "entry_time": now.isoformat(), "deadline": deadline.isoformat(), "warned": [],
+                         "context": {"rank": rank + 1, "market_pct": None if change is None else change * 100,
+                                     "had_news": "" if news is None else ("yes" if news else "no"),
+                                     "headlines": " | ".join(news or []), "rvol": cand["rvol"],
+                                     "range_pct": cand.get("range_pct"), "gap_pct": cand.get("gap_pct")}})
     save_book(book)
     number = len(today_trades(book, today)) + len(book["open"])
     send(f"✅ BOUGHT {s} (trade {number} of {MAX_TRADES_PER_DAY} today): {qty:.4f} shares at ${entry:.2f} "
          f"(≈ {sar(qty * entry)})\n"
          f"Stop ${stop:.2f} | Target ${target:.2f} | Sell by {local(deadline)} (your time) at the latest\n"
-         f"{market_text(change)}\n{news_text(headlines(s, now))}\n{success_text()}")
+         f"{market_text(change)}\n{news_text(news)}\n{success_text()}")
+    return ""
 
 
 def manage_positions(book, today):
@@ -751,6 +821,11 @@ def close_position(book, today, p, reason):
                            "exit": round(exit_price, 4), "qty": qty, "exit_reason": reason,
                            "minutes": minutes, "pnl_usd": round(pnl, 2), "balance_usd": book["balance_usd"]})
     save_book(book)
+    journal_add("trades", TRADE_FIELDS, [dict(p.get("context", {}), date=today.isoformat(), symbol=s,
+                entry_time_ny=clock(dt.datetime.fromisoformat(p["entry_time"])), exit_time_ny=clock(now_ny()),
+                minutes=minutes, entry=entry, exit=exit_price, stop=p["stop"], target=p["target"],
+                invested_usd=invested, pnl_usd=pnl, pnl_pct=pnl / invested * 100,
+                result="win" if pnl > 0 else "loss", exit_reason=reason)])
     number = len(today_trades(book, today))
     icon = {"target": "🎯", "stop": "🛑", "time": "⏰"}.get(reason, "⚠️")
     label = {"target": "hit target", "stop": "hit stop", "time": "2 hours passed"}.get(reason, "closed for safety")
@@ -802,7 +877,25 @@ def close_everything(book, today, why):
     save_book(book)
 
 
-def finish_day(book, today):
+def finish_day(book, today, sess_close=None):
+    day = book["day"]
+    if not day.get("journaled"):
+        signals = day.get("signals", [])
+        if sess_close:
+            signal_outcomes(signals, sess_close)
+        journal_add("signals", SIGNAL_FIELDS, [dict(x, date=today.isoformat()) for x in signals])
+        todays = today_trades(book, today)
+        market = None
+        if day.get("spy_prev"):
+            try:
+                market = (latest_price("SPY") / day["spy_prev"] - 1) * 100
+            except Exception as e:
+                print(f"Market price unavailable: {e}")
+        journal_add("days", DAY_FIELDS, [{
+            "date": today.isoformat(), "market_pct": market, "candidates": day.get("candidates", 0),
+            "signals": len(signals), "trades": len(todays), "wins": sum(t["pnl_usd"] > 0 for t in todays),
+            "pnl_usd": float(sum(t["pnl_usd"] for t in todays)), "balance_usd": float(book["balance_usd"])}])
+        day["journaled"] = True
     book["day"]["done"] = True
     send(end_of_day_text(book, today))
     if book["balance_usd"] < book["start_usd"] * PAUSE_BELOW:
@@ -817,6 +910,25 @@ def finish_day(book, today):
 
 
 # ---------------- backtest ----------------
+def simulate_exit(bars, k, stop, target, deadline):
+    """Buy at the open of bars[k]; returns (entry, exit price, reason) under the bot's exit rules."""
+    entry = bars[k]["o"] * (1 + SLIPPAGE)
+    for b in bars[k:]:
+        if b["t"] >= deadline:
+            return entry, b["o"] * (1 - SLIPPAGE), "time"
+        if b["l"] <= stop:
+            return entry, min(stop, b["o"]) * (1 - SLIPPAGE), "stop"
+        if b["h"] >= target:
+            return entry, max(target, b["o"]) * (1 - SLIPPAGE), "target"
+    last = [b for b in bars if b["t"] < deadline][-1]
+    return entry, last["c"] * (1 - SLIPPAGE), "time"
+
+
+def net_pct(entry, exit_price):
+    """Result of one trade after Sahm fees, as % of the money put in."""
+    return ((exit_price / entry - 1) - COMMISSION_PCT - COMMISSION_PCT * exit_price / entry) * 100
+
+
 def simulate_day(day_bars, stats, balance, day, sess_open, sess_close):
     """Replays one day with the live rules: each watched stock's first breakout while the market
     is OK, earliest first, up to MAX_TRADES_PER_DAY trades with a slot of the money each."""
@@ -855,21 +967,7 @@ def simulate_day(day_bars, stats, balance, day, sess_open, sess_close):
             continue
         stop = plan["stop"]
         target = entry + REWARD_RISK * (entry - stop)
-        deadline = trade_deadline(eb["t"], sess_close)
-        exit_price, reason = None, None
-        for b in bars[i + 1:]:
-            if b["t"] >= deadline:
-                exit_price, reason = b["o"] * (1 - SLIPPAGE), "time"
-                break
-            if b["l"] <= stop:
-                exit_price, reason = min(stop, b["o"]) * (1 - SLIPPAGE), "stop"
-                break
-            if b["h"] >= target:
-                exit_price, reason = max(target, b["o"]) * (1 - SLIPPAGE), "target"
-                break
-        if exit_price is None:
-            last = [b for b in bars if b["t"] < deadline][-1]
-            exit_price, reason = last["c"] * (1 - SLIPPAGE), "time"
+        _, exit_price, reason = simulate_exit(bars, i + 1, stop, target, trade_deadline(eb["t"], sess_close))
         qty = plan["notional"] / entry
         pnl = qty * (exit_price - entry) - fee(qty * entry) - fee(qty * exit_price)
         trades.append({"date": day.isoformat(), "symbol": s, "entry": round(entry, 2),

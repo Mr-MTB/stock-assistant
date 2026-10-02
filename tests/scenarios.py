@@ -5,6 +5,7 @@ Run from the repo root:  python3 tests/scenarios.py
 """
 import datetime as dt
 import io
+import csv
 import json
 import os
 import sys
@@ -39,6 +40,11 @@ def at(day, h, m, s=0):
 
 def sent(text):
     return [m for m in F.SENT if text in m]
+
+
+def journal(name):
+    path = f"journal/{name}.csv"
+    return list(csv.DictReader(open(path))) if os.path.exists(path) else []
 
 
 DAY = dt.date(2026, 10, 5)  # a Monday (New York summer time)
@@ -111,6 +117,18 @@ rep = open(f"reports/live-{DAY}.txt").read()
 check("3 normal day: report has start time and all trades",
       all(k in rep for k in ("Run started at 9:20 AM", "SOLD NVDA", "SOLD AAPL", "SOLD MSFT")), rep[:300])
 check("3 normal day: finished inside the 6-hour limit", w.now <= start3 + dt.timedelta(minutes=D.JOB_LIMIT_MIN))
+jt, js, jd = journal("trades"), journal("signals"), journal("days")
+check("3 database: every trade with its context",
+      [(r["symbol"], r["result"], r["exit_reason"]) for r in jt] == [("NVDA", "win", "target"), ("AAPL", "loss", "stop"),
+                                                                   ("MSFT", "loss", "time")]
+      and jt[0]["had_news"] == "yes" and "Nvidia unveils" in jt[0]["headlines"] and jt[1]["had_news"] == "no"
+      and all(r["market_pct"] and r["rvol"] and r["range_pct"] and r["entry_time_ny"] for r in jt), jt)
+check("3 database: every breakout, bought or not, with what it would have made",
+      [(r["symbol"], r["taken"], r["why_not"], r["would_exit"]) for r in js] ==
+      [("NVDA", "yes", "", "target"), ("AAPL", "yes", "", "stop"), ("MSFT", "yes", "", "time"),
+       ("AMD", "no", "limit", "target")], js)
+check("3 database: one row for the day", len(jd) == 1 and jd[0]["candidates"] == "5" and jd[0]["signals"] == "4"
+      and jd[0]["trades"] == "3" and jd[0]["wins"] == "1", jd)
 
 # 4. A late wake-up the same afternoon stops silently.
 before = open("daytrades.json").read()
@@ -141,6 +159,9 @@ skips = sent("so no buy for now")
 check("6 market down: one note per breakout", len(skips) == 4 and len({m.split()[1] for m in skips}) == 4, skips)
 check("6 market down: watchlist warns", sent("⛔ no new buys"), sent("picks"))
 check("6 market down: end of day says no trade", sent("Today: no trade, so no gain or loss."))
+check("6 database: skipped breakouts recorded with the reason",
+      [(r["taken"], r["why_not"]) for r in journal("signals")] == [("no", "market")] * 4
+      and journal("days")[0]["trades"] == "0", journal("signals"))
 
 # 7. Hand-over: the run reaches its 6-hour limit with a trade open; the next run carries on.
 LATE = {"NVDA": (200, "time")}  # buys 12:50 PM, closes at the 2-hour limit (2:50 PM)
@@ -163,6 +184,9 @@ check("7 resume: trade closed at its 2-hour limit", [(t["symbol"], t["exit_reaso
 check("7 resume: no second watchlist, one end of day",
       not sent("picks: watching") and len(sent("End of day")) == 1, F.SENT)
 check("7 resume: closed by 2:51 PM", w.now < at(DAY, 14, 52), w.now)
+check("7 database: written once, across the hand-over",
+      len(journal("trades")) == 1 and len(journal("signals")) == 1 and len(journal("days")) == 1,
+      (journal("trades"), journal("signals"), journal("days")))
 
 # 7b. Hand-over with nothing open, and the next run only starts after 1:55 PM: it wraps up the day.
 fresh_dir()

@@ -1,0 +1,6 @@
+Telegram check, 2026-10-02 11:37 New York
+TELEGRAM_TOKEN: set, format OK, had extra spaces or line breaks (now ignored)
+TELEGRAM_CHAT_ID: set, format OK
+Token accepted by Telegram: yes (@basaqr_stocks_bot)
+Test message delivered: yes
+

@@ -25,6 +25,7 @@ DAYS = int(os.environ.get("RESEARCH_DAYS", "250"))
 TEST_SHARE = 0.30
 MIN_TRADES = 40            # in the tuning months
 GOAL_WIN_RATE = 0.80
+LOW_SLIP = 0.0001           # 'what if trading were nearly free' comparison
 DATA_DIR = "data"
 FEE, SLIP, RISK, HOLD = D.COMMISSION_PCT, D.SLIPPAGE, D.RISK_PER_TRADE, D.MAX_HOLD_MIN
 MAX_STOP = D.MAX_STOP_PCT
@@ -255,12 +256,12 @@ CURRENT = ("Breakout", {"or": 15, "stop": "mid", "tgt": 2, "mkt": False, "trend"
 
 
 # ---------------- simulation (same entry, exit, sizing and costs as the bot's backtest) ----------------
-def trade_for_day(F, sigs):
+def trade_for_day(F, sigs, fee=FEE, slip=SLIP):
     for m, _, s, stop_spec, tgt_spec in sorted(sigs, key=lambda x: (x[0], x[1])):
         k0 = m + 1
         if k0 >= F.n - 5:
             continue
-        entry = F.o[s, k0] * (1 + SLIP)
+        entry = F.o[s, k0] * (1 + slip)
         stop = stop_spec[1] if stop_spec[0] == "abs" else entry * (1 - stop_spec[1])
         risk = (entry - stop) / entry
         if risk < 0.001 or risk > MAX_STOP + 1e-9:
@@ -281,9 +282,9 @@ def trade_for_day(F, sigs):
             k_exit, raw, why = k0 + i_s, min(stop, op[i_s]), "stop"
         else:
             k_exit, raw, why = k0 + i_t, max(target, op[i_t]), "target"
-        exit_ = raw * (1 - SLIP)
+        exit_ = raw * (1 - slip)
         size = min(D.MAX_POSITION, RISK / risk)
-        ret = size * ((exit_ / entry - 1) - FEE - FEE * exit_ / entry)
+        ret = size * ((exit_ / entry - 1) - fee - fee * exit_ / entry)
         best = F.h[s, k0:k_exit + 1].max() / entry - 1  # best price reached while holding
         return {"day": F.day, "stock": s, "minute": m, "entry": entry, "exit": exit_, "why": why,
                 "ret": ret, "gross": size * (raw / F.o[s, k0] - 1), "best": best,
@@ -291,9 +292,9 @@ def trade_for_day(F, sigs):
     return None
 
 
-def run(days, family, params):
+def run(days, family, params, fee=FEE, slip=SLIP):
     fn = FAMILIES[family]
-    return [t for t in (trade_for_day(F, fn(F, params)) for F in days) if t]
+    return [t for t in (trade_for_day(F, fn(F, params), fee, slip) for F in days) if t]
 
 
 def stats(trades):
@@ -416,6 +417,24 @@ def research():
         lines += ["", "== Trades of the top rule in the test months ==", describe(family, p)]
         for t in [t for t in trades if t["day"] >= test[0].day]:
             lines.append(f"{t['day']} {names[t['stock']]:<5} {t['why']:<6} {t['ret'] * 100:+.2f}%")
+
+    # Would cheaper trading rescue any rule? Same test with no commission and tiny slippage.
+    low = []
+    for family, p in grid():
+        a, b = run(tune, family, p, 0.0, LOW_SLIP), run(test, family, p, 0.0, LOW_SLIP)
+        low.append((family, p, stats(a), stats(b)))
+    low_ok = [x for x in low if x[2]["n"] >= MIN_TRADES]
+    lines += ["", f"== What if trading cost nothing (no commission, {LOW_SLIP * 100:.2f}% slippage)? =="]
+    cur_low = next(x for x in low if (x[0], x[1]) == CURRENT)
+    lines += [f"Current rules, tuning months: {line(cur_low[2])}", f"Current rules, test months:   {line(cur_low[3])}"]
+    goal_low = [x for x in low_ok if x[2]["wr"] >= GOAL_WIN_RATE and x[2]["total"] > 0]
+    lines.append(f"Rules with 80%+ winners AND profit in the tuning months: {len(goal_low)}; "
+                 f"still 80%+ and profitable in the test months: "
+                 f"{sum(x[3]['wr'] >= GOAL_WIN_RATE and x[3]['total'] > 0 for x in goal_low)}.")
+    for family, p, a, b in sorted(low_ok, key=lambda x: -x[2]["total"])[:6]:
+        lines += [describe(family, p), f"   tuning: {line(a)}", f"   TEST:   {line(b)}"]
+    lines.append(f"Of {len(low_ok)} rules with enough trades, {sum(x[3]['total'] > 0 for x in low_ok)} "
+                 "made money in the test months.")
 
     path = D.write_report(f"research-{today}.txt", lines, mode="w")
     print("\n".join(lines))

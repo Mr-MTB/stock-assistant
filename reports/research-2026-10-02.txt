@@ -122,3 +122,27 @@ Gap-down recovery: gap down 2%+, stop 5-min low, target half the gap, only stock
 2026-09-24 MU    target +0.05%
 2026-09-28 MSFT  time   +0.15%
 
+== What if trading cost nothing (no commission, 0.01% slippage)? ==
+Current rules, tuning months: 167 trades |  50% winners |  +15.9% | avg +0.09%/trade | worst drop 10.2%
+Current rules, test months:    73 trades |  37% winners |   -8.3% | avg -0.11%/trade | worst drop 14.1%
+Rules with 80%+ winners AND profit in the tuning months: 6; still 80%+ and profitable in the test months: 0.
+Breakout: 5-min opening range, stop at range bottom, target 1.5x risk, until 13:30
+   tuning: 174 trades |  52% winners |  +43.1% | avg +0.22%/trade | worst drop 12.5%
+   TEST:    75 trades |  37% winners |  -12.4% | avg -0.17%/trade | worst drop 14.5%
+Breakout: 5-min opening range, stop at range bottom, target 1.5x risk, until 11:30
+   tuning: 172 trades |  51% winners |  +42.2% | avg +0.21%/trade | worst drop 12.5%
+   TEST:    75 trades |  37% winners |  -12.4% | avg -0.17%/trade | worst drop 14.5%
+Breakout: 5-min opening range, stop at range bottom, target 2x risk, until 13:30
+   tuning: 174 trades |  52% winners |  +40.9% | avg +0.21%/trade | worst drop 12.5%
+   TEST:    75 trades |  37% winners |  -11.7% | avg -0.16%/trade | worst drop 13.6%
+Breakout: 5-min opening range, stop at range bottom, target 2x risk, until 11:30
+   tuning: 172 trades |  51% winners |  +40.0% | avg +0.20%/trade | worst drop 12.5%
+   TEST:    75 trades |  37% winners |  -11.7% | avg -0.16%/trade | worst drop 13.6%
+Breakout: 5-min opening range, stop at range bottom, target 1.5x risk, until 13:30, only when market is OK
+   tuning: 170 trades |  48% winners |  +35.7% | avg +0.19%/trade | worst drop  9.6%
+   TEST:    73 trades |  42% winners |   -7.7% | avg -0.10%/trade | worst drop 13.5%
+Breakout: 5-min opening range, stop at range bottom, target 1.5x risk, until 11:30, only when market is OK
+   tuning: 167 trades |  47% winners |  +31.4% | avg +0.17%/trade | worst drop 11.4%
+   TEST:    72 trades |  42% winners |   -7.9% | avg -0.11%/trade | worst drop 13.5%
+Of 1276 rules with enough trades, 271 made money in the test months.
+

@@ -14,6 +14,7 @@ import concurrent.futures as cf
 import datetime as dt
 import itertools
 import os
+import sys
 
 import numpy as np
 
@@ -139,6 +140,7 @@ class Day:
         self.n = arr.shape[1]
         tp = (self.h + self.l + self.c) / 3
         cv = np.cumsum(self.v, axis=1)
+        self.cumv = cv
         self.vwap = np.where(cv > 0, np.cumsum(tp * self.v, axis=1) / np.maximum(cv, 1e-12), self.c)
         self.prev_close, self.avg_vol, self.sma20, self.sma50 = (stats[:, k] for k in range(4))
         self.ok = (self.real >= 0.5) & ~np.isnan(self.prev_close) & (self.avg_vol > 0)
@@ -163,7 +165,7 @@ def breakout(F, p):
     if p["trend"]:
         ok &= F.prev_close > F.sma50
     rvol = np.where(ok, vol / F.avg_vol, -1)
-    cands = [s for s in np.argsort(-rvol, kind="stable")[:3] if ok[s]]
+    cands = [s for s in np.argsort(-rvol, kind="stable")[:p.get("top", 3)] if ok[s]]
     mkt = F.c[F.spy, n_or:cut] > F.vwap[F.spy, n_or:cut]
     sigs = []
     for rank, s in enumerate(cands):
@@ -256,39 +258,46 @@ CURRENT = ("Breakout", {"or": 15, "stop": "mid", "tgt": 2, "mkt": False, "trend"
 
 
 # ---------------- simulation (same entry, exit, sizing and costs as the bot's backtest) ----------------
+def simulate_signal(F, m, s, stop_spec, tgt_spec, fee=FEE, slip=SLIP, cap=D.MAX_POSITION):
+    """Buy stock s at the open after signal minute m; None if the plan isn't valid."""
+    k0 = m + 1
+    if k0 >= F.n - 5:
+        return None
+    entry = F.o[s, k0] * (1 + slip)
+    stop = stop_spec[1] if stop_spec[0] == "abs" else entry * (1 - stop_spec[1])
+    risk = (entry - stop) / entry
+    if risk < 0.001 or risk > MAX_STOP + 1e-9:
+        return None
+    kind, val = tgt_spec
+    target = (entry + val * (entry - stop) if kind == "R" else entry * (1 + val) if kind == "pct"
+              else F.h[s, :m + 1].max() if kind == "high" else val)
+    if target <= entry * 1.001:
+        return None
+    deadline = min(k0 + HOLD, F.n - 5)
+    lo, hi, op = F.l[s, k0:deadline], F.h[s, k0:deadline], F.o[s, k0:deadline]
+    hs, ht = lo <= stop, hi >= target
+    i_s = int(np.argmax(hs)) if hs.any() else 10 ** 6
+    i_t = int(np.argmax(ht)) if ht.any() else 10 ** 6
+    if i_s == i_t == 10 ** 6:
+        k_exit, raw, why = deadline, F.o[s, deadline], "time"
+    elif i_s <= i_t:  # stop first when both happen in the same minute (cautious)
+        k_exit, raw, why = k0 + i_s, min(stop, op[i_s]), "stop"
+    else:
+        k_exit, raw, why = k0 + i_t, max(target, op[i_t]), "target"
+    exit_ = raw * (1 - slip)
+    size = min(cap, RISK / risk)
+    ret = size * ((exit_ / entry - 1) - fee - fee * exit_ / entry)
+    best = F.h[s, k0:k_exit + 1].max() / entry - 1  # best price reached while holding
+    return {"day": F.day, "stock": s, "minute": m, "entry": entry, "exit": exit_, "why": why,
+            "ret": ret, "gross": size * (raw / F.o[s, k0] - 1), "best": best, "stop": stop, "target": target,
+            "mkt_up": F.c[F.spy, m] > F.vwap[F.spy, m]}
+
+
 def trade_for_day(F, sigs, fee=FEE, slip=SLIP):
     for m, _, s, stop_spec, tgt_spec in sorted(sigs, key=lambda x: (x[0], x[1])):
-        k0 = m + 1
-        if k0 >= F.n - 5:
-            continue
-        entry = F.o[s, k0] * (1 + slip)
-        stop = stop_spec[1] if stop_spec[0] == "abs" else entry * (1 - stop_spec[1])
-        risk = (entry - stop) / entry
-        if risk < 0.001 or risk > MAX_STOP + 1e-9:
-            continue
-        kind, val = tgt_spec
-        target = (entry + val * (entry - stop) if kind == "R" else entry * (1 + val) if kind == "pct"
-                  else F.h[s, :m + 1].max() if kind == "high" else val)
-        if target <= entry * 1.001:
-            continue
-        deadline = min(k0 + HOLD, F.n - 5)
-        lo, hi, op = F.l[s, k0:deadline], F.h[s, k0:deadline], F.o[s, k0:deadline]
-        hs, ht = lo <= stop, hi >= target
-        i_s = int(np.argmax(hs)) if hs.any() else 10 ** 6
-        i_t = int(np.argmax(ht)) if ht.any() else 10 ** 6
-        if i_s == i_t == 10 ** 6:
-            k_exit, raw, why = deadline, F.o[s, deadline], "time"
-        elif i_s <= i_t:  # stop first when both happen in the same minute (cautious)
-            k_exit, raw, why = k0 + i_s, min(stop, op[i_s]), "stop"
-        else:
-            k_exit, raw, why = k0 + i_t, max(target, op[i_t]), "target"
-        exit_ = raw * (1 - slip)
-        size = min(D.MAX_POSITION, RISK / risk)
-        ret = size * ((exit_ / entry - 1) - fee - fee * exit_ / entry)
-        best = F.h[s, k0:k_exit + 1].max() / entry - 1  # best price reached while holding
-        return {"day": F.day, "stock": s, "minute": m, "entry": entry, "exit": exit_, "why": why,
-                "ret": ret, "gross": size * (raw / F.o[s, k0] - 1), "best": best,
-                "mkt_up": F.c[F.spy, m] > F.vwap[F.spy, m]}
+        t = simulate_signal(F, m, s, stop_spec, tgt_spec, fee, slip)
+        if t:
+            return t
     return None
 
 
@@ -366,7 +375,8 @@ def gap_analysis(trades):
     return out
 
 
-def research():
+def load_study():
+    """A year of prices, split into tuning months (older 70%) and test months (newest 30%)."""
     symbols = syms()
     today = D.now_ny().date()
     days = D.calendar(today - dt.timedelta(days=int(DAYS * 1.6) + 10), today - dt.timedelta(days=1))[-DAYS:]
@@ -374,7 +384,11 @@ def research():
     table = daily_table(symbols, days)
     feats = [Day(day, raw[day], day_stats(table, symbols, day)) for day, _, _ in days]
     split = int(len(feats) * (1 - TEST_SHARE))
-    tune, test = feats[:split], feats[split:]
+    return symbols, today, feats, feats[:split], feats[split:]
+
+
+def research():
+    symbols, today, feats, tune, test = load_study()
     names = symbols
 
     results = []
@@ -443,9 +457,177 @@ def research():
            f"Full report saved in the repo ({path}).")
 
 
+# ---------------- AI filter: at most 2 trades a day, only the highest-confidence setups ----------------
+def _bo(n_or, stop):
+    return ("Breakout", {"or": n_or, "stop": stop, "tgt": 1, "mkt": False, "trend": False, "until": 240, "top": 60})
+
+
+def _pb(up, stop, tgt):
+    return ("VWAP pullback", {"up": up, "stop": stop, "tgt": tgt, "mkt": False, "until": 240})
+
+
+def _dip(d, tgt, stop):
+    return ("Dip below VWAP", {"dip": d, "tgt": tgt, "stop": stop, "mkt": False, "trend": False, "until": 240})
+
+
+def _gap(g):
+    return ("Gap-down recovery", {"gap": g, "stop": 0.01, "tgt": 0.01, "trend": False})
+
+
+# Every setup's target is at least as far as its stop, so a high win rate really means profit.
+GENERATORS = [_bo(5, "mid"), _bo(5, "low"), _bo(15, "mid"), _bo(15, "low"), _bo(30, "low"),
+              _pb(0.005, 0.0075, 0.0075), _pb(0.005, 0.01, 0.01), _pb(0.01, 0.0075, 0.01),
+              _dip(0.0075, 0.0075, 0.0075), _dip(0.01, 0.01, 0.01), _dip(0.015, 0.01, 0.01),
+              _dip(0.02, 0.015, 0.015), _gap(0.01), _gap(0.02)]
+HALF = 0.5           # each of the 2 daily trades uses half the account
+MAX_PER_DAY = 2
+QUANTILES = (0.0, 0.5, 0.75, 0.9, 0.95, 0.98, 0.99, 0.995)
+MIN_PICKS = 25       # fewest picks a confidence bar needs in the check period
+
+
+def setup_features(F, s, m, g, t):
+    """What the AI sees: only information available when the signal fires."""
+    c, a, k = F.c[s], max(m - 15, 0), min(15, m + 1)
+    rets = np.diff(np.log(c[a:m + 1]))
+    return [g, m, c[m] / F.prev_close[s] - 1, c[m] / F.o[s, 0] - 1, F.o[s, 0] / F.prev_close[s] - 1,
+            c[m] / F.vwap[s, m] - 1, (F.h[s, :k].max() - F.l[s, :k].min()) / F.o[s, 0],
+            F.cumv[s, m] / (F.avg_vol[s] * (m + 1) / F.n), c[m] / c[a] - 1,
+            float(rets.std()) if len(rets) > 1 else 0.0, c[m] / F.h[s, :m + 1].max() - 1,
+            c[m] / F.l[s, :m + 1].min() - 1, F.prev_close[s] / F.sma20[s] - 1, F.prev_close[s] / F.sma50[s] - 1,
+            F.c[F.spy, m] / F.prev_close[F.spy] - 1, F.c[F.spy, m] / F.vwap[F.spy, m] - 1,
+            1 - t["stop"] / t["entry"], t["target"] / t["entry"] - 1]
+
+
+def collect(days):
+    """Every setup on every day, with what the AI would see and how the trade turned out."""
+    rows = []
+    for F in days:
+        for g, (family, p) in enumerate(GENERATORS):
+            for m, _, s, stop_spec, tgt_spec in FAMILIES[family](F, p):
+                t = simulate_signal(F, m, s, stop_spec, tgt_spec, cap=HALF)
+                if t:
+                    rows.append({"day": F.day, "minute": m, "stock": s, "x": setup_features(F, s, m, g, t),
+                                 "ret": t["ret"], "why": t["why"], "setup": g})
+    return rows
+
+
+def pick(rows, scores, bar):
+    """Live-style choice: go through the day in time order, take a setup if it clears the bar,
+    at most 2 a day, never the same stock twice."""
+    by_day = {}
+    for i, r in enumerate(rows):
+        by_day.setdefault(r["day"], []).append(i)
+    taken = []
+    for day in sorted(by_day):
+        stocks = set()
+        for i in sorted(by_day[day], key=lambda i: (rows[i]["minute"], -scores[i])):
+            if len(stocks) >= MAX_PER_DAY:
+                break
+            if scores[i] >= bar and rows[i]["stock"] not in stocks:
+                taken.append(i)
+                stocks.add(rows[i]["stock"])
+    return taken
+
+
+def portfolio(rows, idx):
+    """Trades share a day's account (half each), so the account grows day by day."""
+    if not idx:
+        return {"n": 0, "wr": 0.0, "total": 0.0, "avg": 0.0, "dd": 0.0}
+    r = np.array([rows[i]["ret"] for i in idx])
+    daily = {}
+    for i in idx:
+        daily[rows[i]["day"]] = daily.get(rows[i]["day"], 0.0) + rows[i]["ret"]
+    eq = np.cumprod(1 + np.array([daily[d] for d in sorted(daily)]))
+    peak = np.maximum.accumulate(np.concatenate(([1.0], eq)))[1:]
+    return {"n": len(r), "wr": float((r > 0).mean()), "total": float(eq[-1] - 1), "avg": float(r.mean()),
+            "dd": float((1 - eq / peak).max())}
+
+
+def fit(rows):
+    from sklearn.ensemble import HistGradientBoostingClassifier
+    model = HistGradientBoostingClassifier(max_depth=3, learning_rate=0.05, max_iter=200, min_samples_leaf=200,
+                                           l2_regularization=1.0, categorical_features=[0], random_state=0)
+    model.fit(np.array([r["x"] for r in rows]), np.array([r["ret"] > 0 for r in rows]))
+    return model
+
+
+def score(model, rows):
+    return model.predict_proba(np.array([r["x"] for r in rows]))[:, 1] if rows else np.array([])
+
+
+def ai_research():
+    symbols, today, feats, tune, test = load_study()
+    cut = int(len(tune) * 0.7)
+    learn, check = tune[:cut], tune[cut:]
+    rows_learn, rows_check, rows_test = collect(learn), collect(check), collect(test)
+    print(f"Setups: {len(rows_learn)} learn, {len(rows_check)} check, {len(rows_test)} test")
+
+    # 1. Choose the confidence bar using only the tuning months (learn on the older part, check on the rest).
+    model = fit(rows_learn)
+    s_learn, s_check = score(model, rows_learn), score(model, rows_check)
+    table, options = [], []
+    for q in QUANTILES:
+        bar = float(np.quantile(s_learn, q))
+        st = portfolio(rows_check, pick(rows_check, s_check, bar))
+        table.append(f"  best {100 - q * 100:g}% of setups: {line(st)}")
+        options.append((q, st))
+    ok = [(q, st) for q, st in options if st["n"] >= MIN_PICKS]
+    goal = [x for x in ok if x[1]["wr"] >= GOAL_WIN_RATE and x[1]["total"] > 0]
+    profit = [x for x in ok if x[1]["total"] > 0]
+    q_best = (max(goal, key=lambda x: x[1]["total"]) if goal else max(profit, key=lambda x: x[1]["wr"]) if profit
+              else max(ok, key=lambda x: x[1]["total"]) if ok else (0.0, None))[0]
+
+    # 2. Retrain on all tuning months, then judge once on the test months.
+    rows_tune = rows_learn + rows_check
+    final = fit(rows_tune)
+    bar = float(np.quantile(score(final, rows_tune), q_best))
+    s_test = score(final, rows_test)
+    picks = pick(rows_test, s_test, bar)
+    ai = portfolio(rows_test, picks)
+    plain = portfolio(rows_test, pick(rows_test, np.ones(len(rows_test)), 0.0))
+    expected = float(np.mean([s_test[i] for i in picks])) if picks else 0.0
+
+    def win_share(rows):
+        return np.mean([r["ret"] > 0 for r in rows]) * 100 if rows else 0.0
+
+    lines = [f"🤖 AI filter test: at most {MAX_PER_DAY} trades a day (half the account each), "
+             "only the setups the AI is most confident about.",
+             f"Data: {len(feats)} trading days ({feats[0].day} to {feats[-1].day}), {len(symbols) - 1} stocks, "
+             f"Sahm {FEE * 100:.3f}% per order + {SLIP * 100:.2f}% slippage each way, max 2-hour hold.",
+             f"Setups: {len(rows_learn) + len(rows_check) + len(rows_test)} from {len(GENERATORS)} setup types "
+             "(breakouts, VWAP pullbacks, dips below VWAP, gap-down recoveries); every target is at least as "
+             "far as its stop.",
+             f"Share of all setups that won: tuning months {win_share(rows_tune):.0f}%, "
+             f"test months {win_share(rows_test):.0f}%.", "",
+             f"== Choosing the confidence bar (AI learned {learn[0].day} to {learn[-1].day}, "
+             f"checked {check[0].day} to {check[-1].day}) =="] + table
+    lines.append(f"Chosen bar: the best {100 - q_best * 100:g}% of setups.")
+    lines += ["", f"== Result on the test months {test[0].day} to {test[-1].day} (never seen) ==",
+              f"No filter (first 2 setups each day): {line(plain)}",
+              f"AI filter:                           {line(ai)}",
+              f"The AI expected {expected * 100:.0f}% of its picks to win; {ai['wr'] * 100:.0f}% actually won."]
+    verdict = ("MET: 80%+ winners and a profit on months it never saw."
+               if ai["n"] >= MIN_PICKS and ai["wr"] >= GOAL_WIN_RATE and ai["total"] > 0 else
+               "NOT MET: the AI's picks did not reach 80% winners with a profit on the months it never saw.")
+    lines.append(f"Goal (80%+ winners and profit): {verdict}")
+    if picks:
+        lines += ["", "== AI picks in the test months =="]
+        for i in picks:
+            r = rows_test[i]
+            t0 = (dt.datetime(2000, 1, 1, 9, 30) + dt.timedelta(minutes=r["minute"] + 1)).strftime("%H:%M")
+            lines.append(f"{r['day']} {t0} {symbols[r['stock']]:<5} {describe(*GENERATORS[r['setup']]).split(':')[0]:<17} "
+                         f"{r['why']:<6} {r['ret'] * 100:+.2f}% (AI confidence {s_test[i] * 100:.0f}%)")
+
+    path = D.write_report(f"research-ai-{today}.txt", lines, mode="w")
+    print("\n".join(lines))
+    print(f"Saved {path}")
+    D.send(f"🤖 AI filter test finished. Full report saved in the repo ({path}).")
+
+
 if __name__ == "__main__":
+    job = sys.argv[1] if len(sys.argv) > 1 else "research"
     try:
-        research()
+        ai_research() if job == "research_ai" else research()
     except Exception as e:
         D.send(f"⚠️ Research error: {e}")
         raise

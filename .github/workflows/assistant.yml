@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "backtest, live or research"
+        description: "backtest, live, research or research_ai"
         default: "backtest"
 
 permissions:
@@ -40,7 +40,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Reuse downloaded prices (research only)
-        if: inputs.mode == 'research'
+        if: startsWith(inputs.mode, 'research')
         uses: actions/cache@v4
         with:
           path: data
@@ -55,9 +55,9 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           MODE: ${{ inputs.mode || 'live' }}
         run: |
-          if [ "$MODE" = "research" ]; then
-            pip install --quiet numpy
-            python research.py
+          if [ "$MODE" = "research" ] || [ "$MODE" = "research_ai" ]; then
+            pip install --quiet numpy scikit-learn
+            python research.py "$MODE"
           else
             python daytrader.py "$MODE"
           fi

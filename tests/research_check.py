@@ -11,6 +11,8 @@ import os
 import sys
 import tempfile
 
+import numpy as np
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fake as F  # noqa: E402
 
@@ -98,6 +100,43 @@ check("report has every section",
       all(k in text for k in ("Where the current rules lose", "Rules with 80%+ winners",
                               "Most profitable rules in the tuning months", "Test months")), text[:300])
 check("Telegram note sent", any("Research finished" in m for m in F.SENT), F.SENT[-1:] if F.SENT else None)
+
+# 4. AI filter: the daily pick rule
+rows = [{"day": 1, "minute": 10, "stock": 0}, {"day": 1, "minute": 12, "stock": 0},
+        {"day": 1, "minute": 20, "stock": 1}, {"day": 1, "minute": 30, "stock": 2},
+        {"day": 2, "minute": 5, "stock": 3}, {"day": 2, "minute": 6, "stock": 4}]
+scores = [0.9, 0.95, 0.4, 0.8, 0.7, 0.99]
+check("pick: time order, bar respected, 2 a day, no repeated stock",
+      R.pick(rows, scores, 0.6) == [0, 3, 4, 5], R.pick(rows, scores, 0.6))
+
+# 5. AI filter: what the AI sees never depends on prices after the signal
+day0, o0, c0 = cal[5]
+stats0 = R.day_stats(table, symbols, day0)
+base = R.Day(day0, raw[day0].copy(), stats0)
+changed = raw[day0].copy()
+m0 = 40
+changed[:, m0 + 1:, :] *= 1.07
+moved = R.Day(day0, changed, stats0)
+t0 = {"entry": 100.0, "stop": 99.0, "target": 101.0}
+same = all(np.allclose(R.setup_features(base, s, m0, 3, t0), R.setup_features(moved, s, m0, 3, t0), equal_nan=True)
+           for s in range(len(SYMS)))
+check("AI features use only information up to the signal", same)
+
+# 6. AI filter study runs end to end
+R.MIN_PICKS = 3
+F.SENT.clear()
+R.ai_research()
+path = f"reports/research-ai-{D.now_ny().date()}.txt"
+text = open(path).read() if os.path.exists(path) else ""
+check("AI report saved with every section",
+      all(k in text for k in ("Choosing the confidence bar", "Result on the test months", "No filter",
+                              "AI filter:", "Goal (80%+ winners and profit)")), text[:400])
+check("AI Telegram note sent", any("AI filter test finished" in m for m in F.SENT), F.SENT[-1:])
+picked = [ln for ln in text.splitlines() if "AI confidence" in ln]
+per_day = {}
+for ln in picked:
+    per_day[ln[:10]] = per_day.get(ln[:10], 0) + 1
+check("AI never picks more than 2 a day", all(n <= 2 for n in per_day.values()), per_day)
 
 print("\nALL PASSED" if ok_all else "\nSOME CHECKS FAILED")
 sys.exit(0 if ok_all else 1)

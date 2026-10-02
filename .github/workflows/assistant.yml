@@ -2,25 +2,44 @@ name: Day Trader (paper)
 
 on:
   schedule:
-    - cron: "20 13 * * 1-5"   # starts before the US open; the bot waits until 9:45 New York time
+    # GitHub often starts scheduled runs hours late (5-7 hours in the first week),
+    # so there are several wake-up calls. Whichever run starts first works out what to do:
+    #   too early   -> waits, then starts a fresh run at the right moment
+    #   in time     -> trades today's session
+    #   too late    -> sends one notice
+    #   day handled -> stops after a few seconds
+    - cron: "41 5 * * 1-5"
+    - cron: "41 8 * * 1-5"
+    - cron: "11 11 * * 1-5"
+    - cron: "51 12 * * 1-5"
+    - cron: "21 14 * * 1-5"
   workflow_dispatch:
     inputs:
       mode:
-        description: "backtest or live"
+        description: "backtest, live or notify"
         default: "backtest"
+      message:
+        description: "text to send to Telegram (notify mode only)"
+        required: false
+        default: ""
 
 permissions:
-  contents: write
+  contents: write   # save the trade log and reports
+  actions: write    # let the bot start a fresh run at the right moment
 
 concurrency:
-  group: day-trader
+  group: day-trader-${{ inputs.mode || 'live' }}
 
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 355
     steps:
+      - name: Note start time
+        run: echo "JOB_START=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}   # newest trade log, even if this run waited in the queue
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -30,12 +49,21 @@ jobs:
           ALPACA_SECRET: ${{ secrets.ALPACA_SECRET }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GITHUB_TOKEN: ${{ github.token }}
           MODE: ${{ inputs.mode || 'live' }}
+          MESSAGE: ${{ inputs.message }}
         run: python daytrader.py "$MODE"
-      - name: Save trade log
+      - name: Save trade log and reports
         if: always()
         run: |
           git config user.name "day-bot"
           git config user.email "day-bot@users.noreply.github.com"
-          git add daytrades.json 2>/dev/null || true
-          git diff --cached --quiet || (git commit -m "Update trade log" && git pull --rebase && git push)
+          git add daytrades.json
+          if [ -d reports ]; then git add reports; fi
+          if ! git diff --cached --quiet; then
+            git commit -m "Update trade log and reports"
+            for attempt in 1 2 3; do
+              git pull --rebase && git push && break
+              sleep 10
+            done
+          fi

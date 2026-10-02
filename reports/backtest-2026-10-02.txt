@@ -184,6 +184,12 @@ Every trade (date, stock, entry -> exit, why it closed, result):
 2026-10-01 NVDA  $231.53 -> $229.77 stop   -5.2 SAR (-0.32% of account)
 2026-10-01 TSLA  $358.97 -> $356.69 stop   -4.5 SAR (-0.28% of account)
 
+Did news or the market make a difference? (same trades, split into groups)
+News in the 24 hours before buying: all: 135 trades, 31% winners, avg -0.12% | older half: 66 trades, 35% winners, avg -0.10% | newer half: 69 trades, 28% winners, avg -0.15%
+No news: all: 37 trades, 24% winners, avg -0.15% | older half: 20 trades, 25% winners, avg -0.16% | newer half: 17 trades, 24% winners, avg -0.14%
+Market (S&P 500) up at entry: all: 96 trades, 36% winners, avg -0.09% | older half: 53 trades, 40% winners, avg -0.07% | newer half: 43 trades, 33% winners, avg -0.12%
+Market flat or down at entry: all: 76 trades, 21% winners, avg -0.18% | older half: 33 trades, 21% winners, avg -0.17% | newer half: 43 trades, 21% winners, avg -0.18%
+
 Day by day:
 2026-07-09: 5 stock(s) passed the filters, AMD time +2.4 SAR, MU stop -7.6 SAR, TSLA stop -8.3 SAR. Balance 1,986 SAR
 2026-07-10: 5 stock(s) passed the filters, NVDA time +8.5 SAR. Balance 1,995 SAR

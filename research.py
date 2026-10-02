@@ -624,10 +624,66 @@ def ai_research():
     D.send(f"🤖 AI filter test finished. Full report saved in the repo ({path}).")
 
 
+# ---------------- market and news check for the v2 rules, over the whole year ----------------
+def had_news(symbol, when):
+    """True/False: headlines about the stock in the 24 hours before `when` (None if unknown)."""
+    try:
+        r = D.api("GET", D.DATA_URL + "/v1beta1/news", {
+            "symbols": symbol, "start": D.iso(when - dt.timedelta(hours=24)), "end": D.iso(when), "limit": 1})
+        return bool(r.get("news"))
+    except Exception as e:
+        print(f"news unavailable for {symbol}: {e}")
+        return None
+
+
+def market_research():
+    """Every first breakout of the 5 busiest morning stocks (v2 rules: entries until 1:55 PM, a third of the
+    money each), split by what the S&P 500 was doing and by news, in the tuning and the test months."""
+    symbols, today, feats, tune, test = load_study()
+    p = {"or": 15, "stop": "mid", "tgt": 2, "mkt": False, "trend": False, "until": 265, "top": 5}
+    rows = []
+    for part, days in (("tuning", tune), ("test", test)):
+        for F in days:
+            for m, _, s, stop_spec, tgt_spec in breakout(F, p):
+                t = simulate_signal(F, m, s, stop_spec, tgt_spec, cap=1 / 3)
+                if t:
+                    when = dt.datetime.combine(F.day, dt.time(9, 30), D.NY) + dt.timedelta(minutes=m + 1)
+                    rows.append({"part": part, "ret": t["ret"], "news": had_news(symbols[s], when),
+                                 "spy": F.c[F.spy, m] / F.prev_close[F.spy] - 1,
+                                 "spy_vwap": F.c[F.spy, m] / F.vwap[F.spy, m] - 1})
+    groups = [("S&P 500 up on the day", lambda r: r["spy"] > 0),
+              ("S&P 500 flat or down", lambda r: r["spy"] <= 0),
+              ("S&P 500 down more than 1%", lambda r: r["spy"] <= -0.01),
+              ("S&P 500 above its VWAP", lambda r: r["spy_vwap"] > 0),
+              ("S&P 500 below its VWAP", lambda r: r["spy_vwap"] <= 0),
+              ("Up on the day AND above VWAP", lambda r: r["spy"] > 0 and r["spy_vwap"] > 0),
+              ("News in the 24 hours before", lambda r: r["news"] is True),
+              ("No news", lambda r: r["news"] is False),
+              ("Market up AND news", lambda r: r["spy"] > 0 and r["news"] is True),
+              ("Everything", lambda r: True)]
+    lines = [f"📊 Market & news check: every first breakout of the 5 busiest morning stocks, {len(feats)} days "
+             f"({feats[0].day} to {feats[-1].day}), Sahm costs, max 2-hour hold.",
+             f"Tuning months {tune[0].day} to {tune[-1].day}; test months {test[0].day} to {test[-1].day}.", ""]
+    for label, keep in groups:
+        cells = []
+        for part in ("tuning", "test"):
+            g = [r for r in rows if r["part"] == part and keep(r)]
+            if g:
+                r_ = np.array([x["ret"] for x in g])
+                cells.append(f"{part}: {len(g)} trades, {(r_ > 0).mean() * 100:.0f}% winners, "
+                             f"avg {r_.mean() * 100:+.2f}% of the account")
+            else:
+                cells.append(f"{part}: no trades")
+        lines.append(f"{label}: " + " | ".join(cells))
+    path = D.write_report(f"research-market-{today}.txt", lines, mode="w")
+    print("\n".join(lines))
+    print(f"Saved {path}")
+
+
 if __name__ == "__main__":
     job = sys.argv[1] if len(sys.argv) > 1 else "research"
     try:
-        ai_research() if job == "research_ai" else research()
+        {"research_ai": ai_research, "research_market": market_research}.get(job, research)()
     except Exception as e:
         D.send(f"⚠️ Research error: {e}")
         raise

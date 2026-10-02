@@ -55,7 +55,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           MODE: ${{ inputs.mode || 'live' }}
         run: |
-          if [ "$MODE" = "research" ] || [ "$MODE" = "research_ai" ]; then
+          if [ "$MODE" = "research" ] || [ "$MODE" = "research_ai" ] || [ "$MODE" = "research_market" ]; then
             pip install --quiet numpy scikit-learn
             python research.py "$MODE"
           else

@@ -218,5 +218,72 @@ D.run_notify()
 check("12 notify: empty message sends nothing", not F.SENT, F.SENT)
 os.environ.pop("MESSAGE", None)
 
+# 14. Telegram self-check: finds missing/wrong secrets, never writes them into the report.
+import io  # noqa: E402
+import urllib.error  # noqa: E402
+import urllib.parse  # noqa: E402
+
+GOOD_TOKEN, GOOD_CHAT = "8000000001:AAAbbbCCCdddEEEfffGGGhhhIIIjjjKKKl", "5025545947"
+calls = []
+
+
+def fake_telegram(req, timeout=None, data=None):
+    url = req.full_url if isinstance(req, urllib.request.Request) else req
+    body = req.data if isinstance(req, urllib.request.Request) else data
+    token, method = url.split("/bot", 1)[1].split("/", 1)
+    calls.append(method)
+
+    def fail(code, why):
+        raise urllib.error.HTTPError(url, code, why, {}, io.BytesIO(json.dumps(
+            {"ok": False, "error_code": code, "description": why}).encode()))
+    if token != GOOD_TOKEN:
+        fail(401, "Unauthorized")
+    if method == "getMe":
+        return F.FakeResp(json.dumps({"ok": True, "result": {"username": "basaqr_stocks_bot"}}).encode())
+    if urllib.parse.parse_qs(body.decode())["chat_id"][0] != GOOD_CHAT:
+        fail(400, "Bad Request: chat not found")
+    return F.FakeResp(b'{"ok": true, "result": {}}')
+
+
+def tg_check(raw_token, raw_chat):
+    fresh_dir()
+    F.install(w, at(DAY, 12, 0))
+    F.urllib.request.urlopen = fake_telegram
+    D.RAW_TG_TOKEN, D.RAW_TG_CHAT = raw_token, raw_chat
+    D.TG_TOKEN, D.TG_CHAT = raw_token.strip(), raw_chat.strip()
+    calls.clear()
+    D.run_telegram_check()
+    text = open("reports/telegram-check.txt").read()
+    leaked = any(x.strip() and x.strip() in text for x in (raw_token, raw_chat))
+    return text, leaked
+
+
+txt, leaked = tg_check("", GOOD_CHAT)
+check("14 telegram: missing token reported, nothing called", "TELEGRAM_TOKEN: MISSING" in txt and not calls, txt)
+txt, leaked = tg_check(GOOD_TOKEN + "\n", " " + GOOD_CHAT)
+check("14 telegram: stray spaces/line breaks spotted and fixed",
+      txt.count("had extra spaces or line breaks") == 2 and "Test message delivered: yes" in txt, txt)
+check("14 telegram: no secret in the report (fixed case)", not leaked)
+txt, leaked = tg_check("8000000001:WRONGwrongWRONGwrongWRONGwrong12345", GOOD_CHAT)
+check("14 telegram: wrong token reported", "Token accepted by Telegram: NO (Unauthorized)" in txt, txt)
+check("14 telegram: no secret in the report (wrong token)", not leaked)
+txt, leaked = tg_check(GOOD_TOKEN, "12345")
+check("14 telegram: wrong chat ID reported", "Test message delivered: NO (Bad Request: chat not found)" in txt, txt)
+txt, leaked = tg_check(GOOD_TOKEN, GOOD_CHAT)
+check("14 telegram: all good", "Token accepted by Telegram: yes (@basaqr_stocks_bot)" in txt
+      and "Test message delivered: yes" in txt, txt)
+
+# 15. A failed send is written into the day's report (without the token).
+fresh_dir()
+F.install(w, at(DAY, 12, 0))
+F.urllib.request.urlopen = fake_telegram
+D.RAW_TG_TOKEN = D.TG_TOKEN = "8000000001:WRONGwrongWRONGwrongWRONGwrong12345"
+D.RAW_TG_CHAT = D.TG_CHAT = GOOD_CHAT
+D.LOG.clear()
+F.ORIG_SEND("hello")
+check("15 failed send is recorded", any("(Telegram failed: Unauthorized)" in x for x in D.LOG), D.LOG)
+check("15 no token in the record", not any(D.TG_TOKEN in x for x in D.LOG))
+D.RAW_TG_TOKEN = D.TG_TOKEN = D.RAW_TG_CHAT = D.TG_CHAT = ""
+
 print(f"\n{sum(ok for _, ok in results)}/{len(results)} checks passed")
 sys.exit(0 if all(ok for _, ok in results) else 1)

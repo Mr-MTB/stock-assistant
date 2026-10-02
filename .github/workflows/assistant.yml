@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "backtest, live or notify"
+        description: "backtest, live, notify or telegram_check"
         default: "backtest"
       message:
         description: "text to send to Telegram (notify mode only)"

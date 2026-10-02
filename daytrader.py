@@ -27,6 +27,7 @@ Paper trading and research only. Not financial advice.
 """
 import datetime as dt
 import json
+import re
 import os
 import sys
 import time
@@ -75,8 +76,10 @@ TRADE_URL = "https://paper-api.alpaca.markets"
 DATA_URL = "https://data.alpaca.markets"
 KEY = os.environ.get("ALPACA_KEY", "")
 SECRET = os.environ.get("ALPACA_SECRET", "")
-TG_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
-TG_CHAT = os.environ.get("TELEGRAM_CHAT_ID", "")
+RAW_TG_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
+RAW_TG_CHAT = os.environ.get("TELEGRAM_CHAT_ID", "")
+TG_TOKEN = RAW_TG_TOKEN.strip()  # stray spaces or line breaks pasted into a secret would break sending
+TG_CHAT = RAW_TG_CHAT.strip()
 
 
 # ---------------- helpers ----------------
@@ -118,15 +121,37 @@ def write_report(name, lines, mode="a"):
     return path
 
 
+def hide_secrets(text):
+    for secret in {RAW_TG_TOKEN, TG_TOKEN, RAW_TG_CHAT, TG_CHAT}:
+        if secret:
+            text = text.replace(secret, "<hidden>")
+    return text
+
+
+def telegram(method, data=None):
+    """Call the Telegram API; returns Telegram's answer, or {"ok": False, "description": why}."""
+    body = urllib.parse.urlencode(data).encode() if data else None
+    try:
+        with urllib.request.urlopen(f"https://api.telegram.org/bot{TG_TOKEN}/{method}", data=body, timeout=30) as r:
+            return json.loads(r.read().decode())
+    except urllib.error.HTTPError as e:
+        try:
+            return json.loads(e.read().decode())
+        except Exception:
+            return {"ok": False, "description": f"HTTP {e.code}"}
+    except Exception as e:
+        return {"ok": False, "description": hide_secrets(str(e))}
+
+
 def send(text):
     note(text)
     if not TG_TOKEN or not TG_CHAT:
+        if os.environ.get("GITHUB_ACTIONS"):
+            note("(Telegram not sent: the TELEGRAM_TOKEN or TELEGRAM_CHAT_ID secret is missing.)")
         return
-    try:
-        data = urllib.parse.urlencode({"chat_id": TG_CHAT, "text": text[:4000]}).encode()
-        urllib.request.urlopen(f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage", data=data, timeout=30)
-    except Exception as e:
-        print(f"Telegram failed: {e}")
+    answer = telegram("sendMessage", {"chat_id": TG_CHAT, "text": text[:4000]})
+    if not answer.get("ok"):
+        note(f"(Telegram failed: {hide_secrets(str(answer.get('description')))})")
 
 
 def api(method, url, params=None, body=None):
@@ -690,6 +715,33 @@ def run_backtest():
     send("\n".join(lines))
 
 
+def run_telegram_check():
+    """Checks the Telegram secrets without revealing them. Result: reports/telegram-check.txt."""
+    def shape(raw, pattern):
+        if not raw:
+            return "MISSING"
+        notes = ["set", "format OK" if re.fullmatch(pattern, raw.strip()) else "format WRONG"]
+        if raw != raw.strip():
+            notes.append("had extra spaces or line breaks (now ignored)")
+        return ", ".join(notes)
+
+    lines = [f"Telegram check, {now_ny():%Y-%m-%d %H:%M} New York",
+             f"TELEGRAM_TOKEN: {shape(RAW_TG_TOKEN, r'[0-9]+:[A-Za-z0-9_-]{30,}')}",
+             f"TELEGRAM_CHAT_ID: {shape(RAW_TG_CHAT, r'-?[0-9]+')}"]
+    if TG_TOKEN:
+        me = telegram("getMe")
+        lines.append("Token accepted by Telegram: " + (f"yes (@{me['result'].get('username', '?')})" if me.get("ok")
+                                                      else f"NO ({hide_secrets(str(me.get('description')))})"))
+        if TG_CHAT and me.get("ok"):
+            sent = telegram("sendMessage", {"chat_id": TG_CHAT,
+                                            "text": "✅ Telegram check: the bot can reach you. Updates will arrive here."})
+            lines.append("Test message delivered: " + ("yes" if sent.get("ok")
+                                                       else f"NO ({hide_secrets(str(sent.get('description')))})"))
+    path = write_report("telegram-check.txt", [hide_secrets(x) for x in lines], mode="w")
+    print("\n".join(lines))
+    print(f"Saved {path}")
+
+
 def run_notify():
     text = os.environ.get("MESSAGE", "").strip()
     if text:
@@ -701,7 +753,8 @@ def run_notify():
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "live"
     try:
-        {"live": run_live, "backtest": run_backtest, "notify": run_notify}[mode]()
+        {"live": run_live, "backtest": run_backtest, "notify": run_notify,
+         "telegram_check": run_telegram_check}[mode]()
     except Exception as e:
         send(f"⚠️ Day trader error ({mode}): {e}")
         raise

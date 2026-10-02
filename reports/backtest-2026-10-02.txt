@@ -1,133 +1,248 @@
-🧪 Day-trading backtest: last 60 trading days (2026-07-09 to 2026-10-01), medium risk, max 2-hour hold
+🧪 Day-trading backtest: last 60 trading days (2026-07-09 to 2026-10-01)
+Rules: up to 3 trades a day with a third of the money each, entries until 1:55 PM New York, no buys when the S&P 500 is down more than 1%, max 2-hour hold
 
-Trades: 58 | Winners: 16 (28%)
-Balance: 1,000 SAR → 767 SAR (-23.3%)
-Exits: {'time': 27, 'target': 2, 'stop': 29}
-Avg trade: -0.45% of account | Best +1.9% | Worst -1.8%
-Days with no trade: 2 (no stock passed the filters on 0)
-Biggest drop from a peak: 26.0%
+Trades: 172 | Winners: 51 (30%)
+Balance: 2,000 SAR → 1,595 SAR (-20.2%)
+Exits: {'time': 72, 'stop': 83, 'target': 17}
+Avg trade: -0.13% of account | Best +1.0% | Worst -0.6%
+Days with no trade: 0 (no stock passed the filters on 0)
+Biggest drop from a peak: 20.2%
 SPY buy-and-hold same period: +2.5%
 Fees 0.105% per order (Sahm), slippage 0.05%. IEX data only, so volume is partial.
 
 Every trade (date, stock, entry -> exit, why it closed, result):
-2026-07-09 AMD   $551.91 -> $555.03 time   +3.6 SAR (+0.36% of account)
-2026-07-10 NVDA  $205.53 -> $208.61 time   +12.9 SAR (+1.28% of account)
-2026-07-13 CRM   $169.09 -> $172.50 target +18.3 SAR (+1.80% of account)
-2026-07-14 GS    $1113.29 -> $1116.83 time   +1.1 SAR (+0.11% of account)
-2026-07-16 CVX   $183.90 -> $182.84 stop   -8.2 SAR (-0.79% of account)
-2026-07-17 JNJ   $255.35 -> $253.66 stop   -8.9 SAR (-0.87% of account)
-2026-07-20 GOOGL $359.20 -> $356.99 time   -8.4 SAR (-0.82% of account)
-2026-07-21 WFC   $86.84 -> $87.23 time   +2.4 SAR (+0.24% of account)
-2026-07-22 BA    $207.37 -> $205.91 stop   -9.3 SAR (-0.92% of account)
-2026-07-23 CSCO  $113.45 -> $112.54 stop   -10.1 SAR (-1.01% of account)
-2026-07-24 BAC   $61.85 -> $62.09 time   +1.8 SAR (+0.18% of account)
-2026-07-27 GOOGL $329.29 -> $326.96 stop   -9.2 SAR (-0.92% of account)
-2026-07-28 WMT   $115.14 -> $114.30 stop   -9.3 SAR (-0.94% of account)
-2026-07-29 AAPL  $342.51 -> $340.67 stop   -7.3 SAR (-0.74% of account)
-2026-07-30 AMZN  $235.44 -> $237.86 time   +7.9 SAR (+0.82% of account)
-2026-07-31 MSFT  $461.48 -> $454.91 stop   -15.9 SAR (-1.63% of account)
-2026-08-03 GOOGL $373.78 -> $367.89 stop   -17.1 SAR (-1.78% of account)
-2026-08-04 AAPL  $304.72 -> $306.19 time   +2.6 SAR (+0.27% of account)
-2026-08-05 BAC   $63.31 -> $63.17 time   -4.1 SAR (-0.44% of account)
-2026-08-06 UBER  $69.11 -> $69.67 time   +5.5 SAR (+0.59% of account)
-2026-08-07 LOW   $221.92 -> $220.82 time   -6.7 SAR (-0.71% of account)
-2026-08-10 CRM   $194.74 -> $196.05 time   +4.4 SAR (+0.46% of account)
-2026-08-11 MRK   $132.73 -> $131.07 stop   -13.8 SAR (-1.46% of account)
-2026-08-12 WMT   $114.07 -> $114.76 time   +3.7 SAR (+0.40% of account)
-2026-08-13 AVGO  $424.09 -> $422.09 time   -6.4 SAR (-0.68% of account)
-2026-08-14 TSLA  $348.30 -> $344.80 stop   -11.3 SAR (-1.21% of account)
-2026-08-17 GE    $371.22 -> $368.90 stop   -7.7 SAR (-0.83% of account)
-2026-08-18 PFE   $27.31 -> $27.20 stop   -5.7 SAR (-0.62% of account)
-2026-08-19 XOM   $167.63 -> $166.77 time   -6.6 SAR (-0.72% of account)
-2026-08-20 XOM   $168.41 -> $167.36 stop   -7.5 SAR (-0.83% of account)
-2026-08-21 BAC   $62.51 -> $62.25 stop   -5.5 SAR (-0.61% of account)
-2026-08-24 MCD   $272.98 -> $271.54 stop   -6.5 SAR (-0.74% of account)
-2026-08-25 NVDA  $212.89 -> $211.33 stop   -8.2 SAR (-0.94% of account)
-2026-08-26 GE    $353.55 -> $354.02 time   -0.7 SAR (-0.08% of account)
-2026-08-27 AVGO  $367.39 -> $363.62 stop   -10.8 SAR (-1.24% of account)
-2026-08-28 PEP   $140.67 -> $140.70 time   -1.6 SAR (-0.19% of account)
-2026-08-31 TSLA  $357.26 -> $364.79 time   +16.2 SAR (+1.90% of account)
-2026-09-01 UNH   $397.59 -> $394.46 stop   -8.7 SAR (-1.00% of account)
-2026-09-02 META  $590.58 -> $591.61 time   -0.3 SAR (-0.03% of account)
-2026-09-03 TSLA  $375.53 -> $370.36 stop   -13.7 SAR (-1.59% of account)
-2026-09-04 NVDA  $234.09 -> $231.71 stop   -10.4 SAR (-1.22% of account)
-2026-09-08 CAT   $830.55 -> $823.03 stop   -9.4 SAR (-1.11% of account)
-2026-09-09 WFC   $88.55 -> $89.36 time   +5.8 SAR (+0.69% of account)
-2026-09-10 UNH   $399.34 -> $396.62 stop   -7.5 SAR (-0.89% of account)
-2026-09-11 XOM   $165.60 -> $166.93 target +4.9 SAR (+0.59% of account)
-2026-09-14 GOOGL $346.11 -> $343.68 stop   -7.6 SAR (-0.91% of account)
-2026-09-16 ORCL  $143.90 -> $143.75 time   -2.6 SAR (-0.32% of account)
-2026-09-17 MU    $980.75 -> $978.38 time   -3.7 SAR (-0.45% of account)
-2026-09-18 AVGO  $361.96 -> $356.10 stop   -15.0 SAR (-1.83% of account)
-2026-09-21 TSLA  $377.34 -> $374.53 time   -7.7 SAR (-0.95% of account)
-2026-09-22 GOOGL $362.23 -> $359.38 stop   -8.0 SAR (-1.00% of account)
-2026-09-23 META  $752.73 -> $745.35 stop   -9.4 SAR (-1.19% of account)
-2026-09-24 KO    $89.27 -> $88.94 stop   -4.6 SAR (-0.58% of account)
-2026-09-25 QCOM  $200.78 -> $203.55 time   +9.1 SAR (+1.17% of account)
-2026-09-28 JNJ   $273.24 -> $272.52 time   -3.7 SAR (-0.47% of account)
-2026-09-29 BA    $190.87 -> $188.26 time   -12.3 SAR (-1.58% of account)
-2026-09-30 GOOGL $349.13 -> $352.12 time   +5.0 SAR (+0.65% of account)
-2026-10-01 NVDA  $231.53 -> $229.77 stop   -7.5 SAR (-0.97% of account)
+2026-07-09 AMD   $551.91 -> $555.03 time   +2.4 SAR (+0.12% of account)
+2026-07-09 MU    $1024.85 -> $1015.28 stop   -7.6 SAR (-0.38% of account)
+2026-07-09 TSLA  $397.32 -> $393.21 stop   -8.3 SAR (-0.41% of account)
+2026-07-10 NVDA  $205.53 -> $208.61 time   +8.5 SAR (+0.43% of account)
+2026-07-13 NKE   $44.90 -> $44.49 stop   -7.5 SAR (-0.37% of account)
+2026-07-13 CRM   $169.09 -> $172.50 target +12.0 SAR (+0.60% of account)
+2026-07-13 MSFT  $391.21 -> $392.17 time   +0.3 SAR (+0.01% of account)
+2026-07-14 META  $661.89 -> $656.10 time   -7.2 SAR (-0.36% of account)
+2026-07-14 GS    $1113.29 -> $1116.83 time   +0.7 SAR (+0.04% of account)
+2026-07-14 MS    $228.97 -> $227.83 time   -4.7 SAR (-0.24% of account)
+2026-07-15 PFE   $24.55 -> $24.77 time   +4.4 SAR (+0.22% of account)
+2026-07-16 CVX   $183.90 -> $182.84 stop   -5.2 SAR (-0.26% of account)
+2026-07-16 MCD   $269.30 -> $272.10 target +5.5 SAR (+0.28% of account)
+2026-07-16 AAPL  $329.81 -> $327.77 stop   -5.5 SAR (-0.28% of account)
+2026-07-17 MRK   $131.14 -> $129.49 stop   -9.7 SAR (-0.49% of account)
+2026-07-17 GE    $353.78 -> $354.97 time   +0.9 SAR (+0.04% of account)
+2026-07-17 JNJ   $255.09 -> $253.66 stop   -5.1 SAR (-0.26% of account)
+2026-07-20 GOOGL $359.20 -> $356.99 time   -5.4 SAR (-0.27% of account)
+2026-07-20 SBUX  $106.66 -> $105.79 stop   -6.7 SAR (-0.34% of account)
+2026-07-20 CRM   $171.53 -> $174.29 time   +9.2 SAR (+0.47% of account)
+2026-07-21 XOM   $150.44 -> $151.39 time   +2.8 SAR (+0.14% of account)
+2026-07-21 WFC   $86.84 -> $87.23 time   +1.5 SAR (+0.08% of account)
+2026-07-21 TSLA  $377.91 -> $380.90 time   +3.8 SAR (+0.19% of account)
+2026-07-22 HON   $237.52 -> $234.38 stop   -10.1 SAR (-0.51% of account)
+2026-07-22 BA    $207.37 -> $205.91 stop   -6.0 SAR (-0.31% of account)
+2026-07-22 NFLX  $70.27 -> $70.30 time   -1.1 SAR (-0.06% of account)
+2026-07-23 CSCO  $113.45 -> $112.54 stop   -6.6 SAR (-0.34% of account)
+2026-07-23 NFLX  $69.02 -> $68.27 stop   -8.5 SAR (-0.43% of account)
+2026-07-23 BA    $210.88 -> $208.02 stop   -10.2 SAR (-0.52% of account)
+2026-07-24 BAC   $61.85 -> $62.09 time   +1.2 SAR (+0.06% of account)
+2026-07-24 GOOGL $322.14 -> $318.98 stop   -7.7 SAR (-0.40% of account)
+2026-07-24 IBM   $212.01 -> $214.42 time   +6.0 SAR (+0.31% of account)
+2026-07-27 NOW   $103.41 -> $101.74 stop   -11.7 SAR (-0.61% of account)
+2026-07-27 GOOGL $329.29 -> $326.96 stop   -5.9 SAR (-0.31% of account)
+2026-07-27 UBER  $66.78 -> $67.99 time   +10.2 SAR (+0.53% of account)
+2026-07-28 WMT   $115.14 -> $114.30 stop   -6.0 SAR (-0.31% of account)
+2026-07-28 COST  $982.80 -> $973.61 stop   -7.3 SAR (-0.38% of account)
+2026-07-28 TMO   $585.91 -> $579.46 stop   -8.4 SAR (-0.44% of account)
+2026-07-29 AAPL  $342.51 -> $340.67 stop   -4.7 SAR (-0.25% of account)
+2026-07-29 KO    $90.43 -> $90.20 time   -2.9 SAR (-0.15% of account)
+2026-07-29 NOW   $112.18 -> $115.04 target +14.9 SAR (+0.78% of account)
+2026-07-30 AMZN  $235.44 -> $237.86 time   +5.2 SAR (+0.27% of account)
+2026-07-30 GS    $1009.80 -> $1002.49 stop   -6.0 SAR (-0.31% of account)
+2026-07-30 ORCL  $125.17 -> $125.18 time   -1.3 SAR (-0.07% of account)
+2026-07-31 MSFT  $461.48 -> $454.91 stop   -10.4 SAR (-0.54% of account)
+2026-07-31 GE    $360.51 -> $360.65 time   -1.1 SAR (-0.06% of account)
+2026-08-03 GOOGL $373.78 -> $367.89 stop   -11.3 SAR (-0.59% of account)
+2026-08-03 CRM   $193.17 -> $191.01 stop   -8.4 SAR (-0.44% of account)
+2026-08-03 BA    $225.53 -> $226.92 time   +2.6 SAR (+0.13% of account)
+2026-08-04 LLY   $1130.40 -> $1119.01 stop   -7.7 SAR (-0.41% of account)
+2026-08-04 AAPL  $304.72 -> $306.19 time   +1.7 SAR (+0.09% of account)
+2026-08-04 AVGO  $411.71 -> $415.73 time   +4.8 SAR (+0.26% of account)
+2026-08-05 BAC   $63.31 -> $63.17 time   -2.7 SAR (-0.15% of account)
+2026-08-05 HON   $251.15 -> $249.07 stop   -6.5 SAR (-0.35% of account)
+2026-08-05 BA    $238.85 -> $237.59 stop   -4.6 SAR (-0.25% of account)
+2026-08-06 UBER  $69.11 -> $69.67 time   +3.6 SAR (+0.20% of account)
+2026-08-06 CSCO  $121.83 -> $120.78 stop   -6.6 SAR (-0.36% of account)
+2026-08-06 MSFT  $496.13 -> $495.14 time   -2.6 SAR (-0.14% of account)
+2026-08-07 LOW   $221.92 -> $220.82 time   -4.4 SAR (-0.24% of account)
+2026-08-07 AMZN  $277.70 -> $274.99 stop   -7.3 SAR (-0.40% of account)
+2026-08-07 HD    $354.49 -> $352.32 time   -5.1 SAR (-0.27% of account)
+2026-08-10 BAC   $63.69 -> $63.77 time   -0.6 SAR (-0.03% of account)
+2026-08-10 CRM   $194.74 -> $196.05 time   +2.9 SAR (+0.15% of account)
+2026-08-10 MSFT  $509.32 -> $510.65 time   +0.3 SAR (+0.02% of account)
+2026-08-11 MRK   $132.73 -> $131.07 stop   -9.0 SAR (-0.49% of account)
+2026-08-11 CAT   $862.09 -> $853.79 stop   -7.2 SAR (-0.39% of account)
+2026-08-11 HD    $355.72 -> $356.07 time   -0.7 SAR (-0.04% of account)
+2026-08-12 WMT   $114.07 -> $114.76 time   +2.4 SAR (+0.13% of account)
+2026-08-12 AMD   $488.23 -> $486.33 time   -3.7 SAR (-0.20% of account)
+2026-08-13 INTC  $103.14 -> $106.30 target +17.4 SAR (+0.95% of account)
+2026-08-13 AVGO  $424.09 -> $422.09 time   -4.2 SAR (-0.23% of account)
+2026-08-13 AMZN  $268.99 -> $267.03 stop   -5.7 SAR (-0.31% of account)
+2026-08-14 XOM   $160.38 -> $160.50 time   -0.8 SAR (-0.05% of account)
+2026-08-14 TSLA  $348.30 -> $344.80 stop   -7.4 SAR (-0.40% of account)
+2026-08-14 AMD   $497.06 -> $510.77 target +15.6 SAR (+0.85% of account)
+2026-08-17 BAC   $65.15 -> $64.68 stop   -5.7 SAR (-0.31% of account)
+2026-08-17 GE    $371.22 -> $368.90 stop   -5.1 SAR (-0.28% of account)
+2026-08-17 MU    $1022.11 -> $1026.26 time   +1.2 SAR (+0.07% of account)
+2026-08-18 PFE   $27.31 -> $27.20 stop   -3.8 SAR (-0.21% of account)
+2026-08-18 ADBE  $261.77 -> $264.93 target +6.1 SAR (+0.33% of account)
+2026-08-18 ABBV  $256.89 -> $255.10 stop   -5.5 SAR (-0.30% of account)
+2026-08-19 XOM   $167.63 -> $166.77 time   -4.4 SAR (-0.24% of account)
+2026-08-19 PFE   $28.12 -> $28.07 time   -2.6 SAR (-0.14% of account)
+2026-08-19 MRK   $149.97 -> $149.81 time   -2.0 SAR (-0.11% of account)
+2026-08-20 XOM   $168.41 -> $167.36 stop   -5.1 SAR (-0.28% of account)
+2026-08-20 CVX   $208.37 -> $207.52 stop   -3.8 SAR (-0.21% of account)
+2026-08-21 BAC   $62.51 -> $62.25 stop   -3.7 SAR (-0.20% of account)
+2026-08-21 PFE   $27.99 -> $28.35 target +6.4 SAR (+0.35% of account)
+2026-08-21 LLY   $1246.11 -> $1258.20 target +4.6 SAR (+0.25% of account)
+2026-08-24 V     $380.21 -> $380.72 time   -0.4 SAR (-0.03% of account)
+2026-08-24 CRM   $212.37 -> $209.98 stop   -8.1 SAR (-0.44% of account)
+2026-08-24 MCD   $272.98 -> $271.54 stop   -4.5 SAR (-0.25% of account)
+2026-08-25 NVDA  $212.89 -> $211.33 stop   -5.7 SAR (-0.31% of account)
+2026-08-25 CRM   $210.14 -> $207.81 stop   -8.0 SAR (-0.44% of account)
+2026-08-25 NFLX  $81.53 -> $81.91 time   +1.6 SAR (+0.09% of account)
+2026-08-26 GE    $353.55 -> $354.02 time   -0.5 SAR (-0.03% of account)
+2026-08-26 AMD   $488.55 -> $481.19 stop   -10.3 SAR (-0.57% of account)
+2026-08-26 CVX   $200.72 -> $202.01 time   +2.6 SAR (+0.14% of account)
+2026-08-27 META  $579.53 -> $572.10 stop   -8.9 SAR (-0.50% of account)
+2026-08-27 ADBE  $285.14 -> $286.81 time   +2.2 SAR (+0.12% of account)
+2026-08-27 AVGO  $367.39 -> $363.62 stop   -7.4 SAR (-0.41% of account)
+2026-08-28 INTC  $92.71 -> $91.27 stop   -10.4 SAR (-0.59% of account)
+2026-08-28 MSFT  $512.76 -> $508.19 stop   -6.5 SAR (-0.37% of account)
+2026-08-28 PEP   $140.67 -> $140.70 time   -1.1 SAR (-0.06% of account)
+2026-08-31 TSLA  $357.26 -> $364.79 time   +11.1 SAR (+0.63% of account)
+2026-08-31 QCOM  $169.51 -> $166.68 stop   -11.0 SAR (-0.63% of account)
+2026-08-31 WMT   $104.09 -> $104.47 time   +0.9 SAR (+0.05% of account)
+2026-09-01 AAPL  $319.52 -> $324.37 target +7.7 SAR (+0.44% of account)
+2026-09-01 PG    $147.82 -> $147.80 time   -1.3 SAR (-0.08% of account)
+2026-09-01 UNH   $397.59 -> $394.46 stop   -5.9 SAR (-0.33% of account)
+2026-09-02 META  $590.58 -> $591.61 time   -0.2 SAR (-0.01% of account)
+2026-09-02 WFC   $88.74 -> $89.93 target +6.6 SAR (+0.37% of account)
+2026-09-03 TSLA  $375.53 -> $370.36 stop   -9.3 SAR (-0.53% of account)
+2026-09-03 MSFT  $512.18 -> $512.56 time   -0.8 SAR (-0.04% of account)
+2026-09-03 BAC   $62.97 -> $62.98 time   -1.1 SAR (-0.06% of account)
+2026-09-04 NVDA  $234.09 -> $231.71 stop   -7.2 SAR (-0.41% of account)
+2026-09-04 AMD   $468.17 -> $469.63 time   +0.6 SAR (+0.03% of account)
+2026-09-04 QCOM  $170.50 -> $168.88 stop   -6.8 SAR (-0.39% of account)
+2026-09-08 CAT   $830.55 -> $823.03 stop   -6.5 SAR (-0.37% of account)
+2026-09-08 PEP   $138.32 -> $138.08 time   -2.2 SAR (-0.13% of account)
+2026-09-08 CVX   $213.32 -> $212.29 stop   -4.0 SAR (-0.23% of account)
+2026-09-09 WFC   $88.55 -> $89.36 time   +4.0 SAR (+0.23% of account)
+2026-09-09 AMD   $519.20 -> $522.68 time   +2.6 SAR (+0.15% of account)
+2026-09-09 META  $652.95 -> $649.95 time   -3.9 SAR (-0.22% of account)
+2026-09-10 UNH   $399.34 -> $396.62 stop   -5.1 SAR (-0.30% of account)
+2026-09-10 NOW   $133.83 -> $132.26 stop   -8.0 SAR (-0.46% of account)
+2026-09-10 PEP   $137.55 -> $136.87 stop   -4.1 SAR (-0.23% of account)
+2026-09-11 XOM   $165.60 -> $166.93 target +3.4 SAR (+0.20% of account)
+2026-09-11 INTC  $104.32 -> $102.52 stop   -11.1 SAR (-0.65% of account)
+2026-09-11 SHOP  $131.51 -> $130.42 stop   -5.9 SAR (-0.35% of account)
+2026-09-14 GOOGL $346.11 -> $343.68 stop   -5.2 SAR (-0.30% of account)
+2026-09-14 META  $664.02 -> $656.11 stop   -7.9 SAR (-0.47% of account)
+2026-09-14 AAPL  $335.00 -> $332.86 stop   -4.8 SAR (-0.28% of account)
+2026-09-15 AMD   $507.17 -> $502.29 stop   -6.6 SAR (-0.39% of account)
+2026-09-15 META  $676.79 -> $665.54 stop   -10.5 SAR (-0.62% of account)
+2026-09-15 TSLA  $362.21 -> $358.19 stop   -7.4 SAR (-0.44% of account)
+2026-09-16 ORCL  $143.90 -> $143.75 time   -1.8 SAR (-0.11% of account)
+2026-09-16 AMD   $523.33 -> $525.88 time   +1.5 SAR (+0.09% of account)
+2026-09-16 MS    $207.59 -> $207.15 time   -2.4 SAR (-0.14% of account)
+2026-09-17 MU    $980.75 -> $978.38 time   -2.5 SAR (-0.15% of account)
+2026-09-17 GE    $317.61 -> $315.27 stop   -5.2 SAR (-0.32% of account)
+2026-09-17 INTC  $107.33 -> $110.03 target +12.7 SAR (+0.77% of account)
+2026-09-18 AVGO  $361.96 -> $356.10 stop   -10.1 SAR (-0.61% of account)
+2026-09-18 AMD   $550.49 -> $546.80 stop   -4.9 SAR (-0.29% of account)
+2026-09-18 COIN  $183.61 -> $189.58 target +16.8 SAR (+1.01% of account)
+2026-09-21 NFLX  $72.56 -> $73.33 target +4.7 SAR (+0.28% of account)
+2026-09-21 JNJ   $273.00 -> $271.53 time   -4.2 SAR (-0.25% of account)
+2026-09-21 TSLA  $377.34 -> $374.53 time   -5.3 SAR (-0.32% of account)
+2026-09-22 GOOGL $362.23 -> $359.38 stop   -5.5 SAR (-0.33% of account)
+2026-09-22 AMD   $618.40 -> $616.56 time   -2.8 SAR (-0.17% of account)
+2026-09-22 INTC  $122.55 -> $121.37 stop   -6.5 SAR (-0.39% of account)
+2026-09-23 TSLA  $385.09 -> $381.46 stop   -6.3 SAR (-0.38% of account)
+2026-09-23 META  $752.73 -> $745.35 stop   -6.5 SAR (-0.40% of account)
+2026-09-23 BA    $201.05 -> $201.40 time   -0.2 SAR (-0.01% of account)
+2026-09-24 LLY   $1182.72 -> $1193.98 time   +4.0 SAR (+0.25% of account)
+2026-09-24 KO    $89.27 -> $88.94 stop   -3.2 SAR (-0.19% of account)
+2026-09-24 PFE   $28.66 -> $28.52 time   -3.9 SAR (-0.24% of account)
+2026-09-25 QCOM  $200.78 -> $203.55 time   +6.3 SAR (+0.39% of account)
+2026-09-25 AMD   $638.17 -> $633.53 stop   -5.1 SAR (-0.31% of account)
+2026-09-25 CAT   $822.90 -> $816.06 stop   -5.6 SAR (-0.35% of account)
+2026-09-28 V     $369.06 -> $367.36 stop   -3.6 SAR (-0.22% of account)
+2026-09-28 UNH   $380.03 -> $377.69 stop   -4.5 SAR (-0.28% of account)
+2026-09-28 JNJ   $273.24 -> $272.52 time   -2.6 SAR (-0.16% of account)
+2026-09-29 BA    $190.87 -> $188.26 time   -8.5 SAR (-0.53% of account)
+2026-09-29 ORCL  $134.47 -> $136.58 target +7.3 SAR (+0.45% of account)
+2026-09-29 UBER  $69.48 -> $68.87 stop   -5.9 SAR (-0.36% of account)
+2026-09-30 GOOGL $349.13 -> $352.12 time   +3.5 SAR (+0.22% of account)
+2026-09-30 AMZN  $247.74 -> $249.52 target +2.7 SAR (+0.17% of account)
+2026-09-30 AAPL  $333.52 -> $337.17 target +4.7 SAR (+0.29% of account)
+2026-10-01 COIN  $191.26 -> $188.42 stop   -9.1 SAR (-0.56% of account)
+2026-10-01 NVDA  $231.53 -> $229.77 stop   -5.2 SAR (-0.32% of account)
+2026-10-01 TSLA  $358.97 -> $356.69 stop   -4.5 SAR (-0.28% of account)
 
 Day by day:
-2026-07-09: 3 stock(s) passed the filters, AMD time +3.6 SAR. Balance 1,004 SAR
-2026-07-10: 3 stock(s) passed the filters, NVDA time +12.9 SAR. Balance 1,016 SAR
-2026-07-13: 3 stock(s) passed the filters, CRM target +18.3 SAR. Balance 1,035 SAR
-2026-07-14: 3 stock(s) passed the filters, GS time +1.1 SAR. Balance 1,036 SAR
-2026-07-15: 3 stock(s) passed the filters, no trade. Balance 1,036 SAR
-2026-07-16: 3 stock(s) passed the filters, CVX stop -8.2 SAR. Balance 1,028 SAR
-2026-07-17: 3 stock(s) passed the filters, JNJ stop -8.9 SAR. Balance 1,019 SAR
-2026-07-20: 3 stock(s) passed the filters, GOOGL time -8.4 SAR. Balance 1,010 SAR
-2026-07-21: 3 stock(s) passed the filters, WFC time +2.4 SAR. Balance 1,013 SAR
-2026-07-22: 3 stock(s) passed the filters, BA stop -9.3 SAR. Balance 1,003 SAR
-2026-07-23: 3 stock(s) passed the filters, CSCO stop -10.1 SAR. Balance 993 SAR
-2026-07-24: 3 stock(s) passed the filters, BAC time +1.8 SAR. Balance 995 SAR
-2026-07-27: 3 stock(s) passed the filters, GOOGL stop -9.2 SAR. Balance 986 SAR
-2026-07-28: 3 stock(s) passed the filters, WMT stop -9.3 SAR. Balance 977 SAR
-2026-07-29: 3 stock(s) passed the filters, AAPL stop -7.3 SAR. Balance 970 SAR
-2026-07-30: 3 stock(s) passed the filters, AMZN time +7.9 SAR. Balance 977 SAR
-2026-07-31: 3 stock(s) passed the filters, MSFT stop -15.9 SAR. Balance 961 SAR
-2026-08-03: 3 stock(s) passed the filters, GOOGL stop -17.1 SAR. Balance 944 SAR
-2026-08-04: 3 stock(s) passed the filters, AAPL time +2.6 SAR. Balance 947 SAR
-2026-08-05: 3 stock(s) passed the filters, BAC time -4.1 SAR. Balance 943 SAR
-2026-08-06: 3 stock(s) passed the filters, UBER time +5.5 SAR. Balance 948 SAR
-2026-08-07: 3 stock(s) passed the filters, LOW time -6.7 SAR. Balance 942 SAR
-2026-08-10: 3 stock(s) passed the filters, CRM time +4.4 SAR. Balance 946 SAR
-2026-08-11: 3 stock(s) passed the filters, MRK stop -13.8 SAR. Balance 932 SAR
-2026-08-12: 3 stock(s) passed the filters, WMT time +3.7 SAR. Balance 936 SAR
-2026-08-13: 3 stock(s) passed the filters, AVGO time -6.4 SAR. Balance 930 SAR
-2026-08-14: 3 stock(s) passed the filters, TSLA stop -11.3 SAR. Balance 918 SAR
-2026-08-17: 3 stock(s) passed the filters, GE stop -7.7 SAR. Balance 911 SAR
-2026-08-18: 3 stock(s) passed the filters, PFE stop -5.7 SAR. Balance 905 SAR
-2026-08-19: 3 stock(s) passed the filters, XOM time -6.6 SAR. Balance 898 SAR
-2026-08-20: 3 stock(s) passed the filters, XOM stop -7.5 SAR. Balance 891 SAR
-2026-08-21: 3 stock(s) passed the filters, BAC stop -5.5 SAR. Balance 885 SAR
-2026-08-24: 3 stock(s) passed the filters, MCD stop -6.5 SAR. Balance 879 SAR
-2026-08-25: 3 stock(s) passed the filters, NVDA stop -8.2 SAR. Balance 871 SAR
-2026-08-26: 3 stock(s) passed the filters, GE time -0.7 SAR. Balance 870 SAR
-2026-08-27: 3 stock(s) passed the filters, AVGO stop -10.8 SAR. Balance 859 SAR
-2026-08-28: 3 stock(s) passed the filters, PEP time -1.6 SAR. Balance 858 SAR
-2026-08-31: 3 stock(s) passed the filters, TSLA time +16.2 SAR. Balance 874 SAR
-2026-09-01: 3 stock(s) passed the filters, UNH stop -8.7 SAR. Balance 865 SAR
-2026-09-02: 3 stock(s) passed the filters, META time -0.3 SAR. Balance 865 SAR
-2026-09-03: 3 stock(s) passed the filters, TSLA stop -13.7 SAR. Balance 851 SAR
-2026-09-04: 3 stock(s) passed the filters, NVDA stop -10.4 SAR. Balance 841 SAR
-2026-09-08: 3 stock(s) passed the filters, CAT stop -9.4 SAR. Balance 831 SAR
-2026-09-09: 3 stock(s) passed the filters, WFC time +5.8 SAR. Balance 837 SAR
-2026-09-10: 3 stock(s) passed the filters, UNH stop -7.5 SAR. Balance 830 SAR
-2026-09-11: 3 stock(s) passed the filters, XOM target +4.9 SAR. Balance 835 SAR
-2026-09-14: 3 stock(s) passed the filters, GOOGL stop -7.6 SAR. Balance 827 SAR
-2026-09-15: 3 stock(s) passed the filters, no trade. Balance 827 SAR
-2026-09-16: 3 stock(s) passed the filters, ORCL time -2.6 SAR. Balance 824 SAR
-2026-09-17: 3 stock(s) passed the filters, MU time -3.7 SAR. Balance 821 SAR
-2026-09-18: 3 stock(s) passed the filters, AVGO stop -15.0 SAR. Balance 806 SAR
-2026-09-21: 3 stock(s) passed the filters, TSLA time -7.7 SAR. Balance 798 SAR
-2026-09-22: 3 stock(s) passed the filters, GOOGL stop -8.0 SAR. Balance 790 SAR
-2026-09-23: 3 stock(s) passed the filters, META stop -9.4 SAR. Balance 781 SAR
-2026-09-24: 3 stock(s) passed the filters, KO stop -4.6 SAR. Balance 776 SAR
-2026-09-25: 3 stock(s) passed the filters, QCOM time +9.1 SAR. Balance 785 SAR
-2026-09-28: 3 stock(s) passed the filters, JNJ time -3.7 SAR. Balance 781 SAR
-2026-09-29: 3 stock(s) passed the filters, BA time -12.3 SAR. Balance 769 SAR
-2026-09-30: 3 stock(s) passed the filters, GOOGL time +5.0 SAR. Balance 774 SAR
-2026-10-01: 3 stock(s) passed the filters, NVDA stop -7.5 SAR. Balance 767 SAR
+2026-07-09: 5 stock(s) passed the filters, AMD time +2.4 SAR, MU stop -7.6 SAR, TSLA stop -8.3 SAR. Balance 1,986 SAR
+2026-07-10: 5 stock(s) passed the filters, NVDA time +8.5 SAR. Balance 1,995 SAR
+2026-07-13: 5 stock(s) passed the filters, NKE stop -7.5 SAR, CRM target +12.0 SAR, MSFT time +0.3 SAR. Balance 2,000 SAR
+2026-07-14: 5 stock(s) passed the filters, META time -7.2 SAR, GS time +0.7 SAR, MS time -4.7 SAR. Balance 1,988 SAR
+2026-07-15: 5 stock(s) passed the filters, PFE time +4.4 SAR. Balance 1,993 SAR
+2026-07-16: 5 stock(s) passed the filters, CVX stop -5.2 SAR, MCD target +5.5 SAR, AAPL stop -5.5 SAR. Balance 1,988 SAR
+2026-07-17: 5 stock(s) passed the filters, MRK stop -9.7 SAR, GE time +0.9 SAR, JNJ stop -5.1 SAR. Balance 1,974 SAR
+2026-07-20: 5 stock(s) passed the filters, GOOGL time -5.4 SAR, SBUX stop -6.7 SAR, CRM time +9.2 SAR. Balance 1,971 SAR
+2026-07-21: 5 stock(s) passed the filters, XOM time +2.8 SAR, WFC time +1.5 SAR, TSLA time +3.8 SAR. Balance 1,979 SAR
+2026-07-22: 5 stock(s) passed the filters, HON stop -10.1 SAR, BA stop -6.0 SAR, NFLX time -1.1 SAR. Balance 1,962 SAR
+2026-07-23: 5 stock(s) passed the filters, CSCO stop -6.6 SAR, NFLX stop -8.5 SAR, BA stop -10.2 SAR. Balance 1,936 SAR
+2026-07-24: 5 stock(s) passed the filters, BAC time +1.2 SAR, GOOGL stop -7.7 SAR, IBM time +6.0 SAR. Balance 1,936 SAR
+2026-07-27: 5 stock(s) passed the filters, NOW stop -11.7 SAR, GOOGL stop -5.9 SAR, UBER time +10.2 SAR. Balance 1,928 SAR
+2026-07-28: 5 stock(s) passed the filters, WMT stop -6.0 SAR, COST stop -7.3 SAR, TMO stop -8.4 SAR. Balance 1,907 SAR
+2026-07-29: 5 stock(s) passed the filters, AAPL stop -4.7 SAR, KO time -2.9 SAR, NOW target +14.9 SAR. Balance 1,914 SAR
+2026-07-30: 5 stock(s) passed the filters, AMZN time +5.2 SAR, GS stop -6.0 SAR, ORCL time -1.3 SAR. Balance 1,912 SAR
+2026-07-31: 5 stock(s) passed the filters, MSFT stop -10.4 SAR, GE time -1.1 SAR. Balance 1,900 SAR
+2026-08-03: 5 stock(s) passed the filters, GOOGL stop -11.3 SAR, CRM stop -8.4 SAR, BA time +2.6 SAR. Balance 1,883 SAR
+2026-08-04: 5 stock(s) passed the filters, LLY stop -7.7 SAR, AAPL time +1.7 SAR, AVGO time +4.8 SAR. Balance 1,882 SAR
+2026-08-05: 5 stock(s) passed the filters, BAC time -2.7 SAR, HON stop -6.5 SAR, BA stop -4.6 SAR. Balance 1,868 SAR
+2026-08-06: 5 stock(s) passed the filters, UBER time +3.6 SAR, CSCO stop -6.6 SAR, MSFT time -2.6 SAR. Balance 1,863 SAR
+2026-08-07: 5 stock(s) passed the filters, LOW time -4.4 SAR, AMZN stop -7.3 SAR, HD time -5.1 SAR. Balance 1,846 SAR
+2026-08-10: 5 stock(s) passed the filters, BAC time -0.6 SAR, CRM time +2.9 SAR, MSFT time +0.3 SAR. Balance 1,848 SAR
+2026-08-11: 5 stock(s) passed the filters, MRK stop -9.0 SAR, CAT stop -7.2 SAR, HD time -0.7 SAR. Balance 1,831 SAR
+2026-08-12: 5 stock(s) passed the filters, WMT time +2.4 SAR, AMD time -3.7 SAR. Balance 1,830 SAR
+2026-08-13: 5 stock(s) passed the filters, INTC target +17.4 SAR, AVGO time -4.2 SAR, AMZN stop -5.7 SAR. Balance 1,838 SAR
+2026-08-14: 5 stock(s) passed the filters, XOM time -0.8 SAR, TSLA stop -7.4 SAR, AMD target +15.6 SAR. Balance 1,845 SAR
+2026-08-17: 5 stock(s) passed the filters, BAC stop -5.7 SAR, GE stop -5.1 SAR, MU time +1.2 SAR. Balance 1,835 SAR
+2026-08-18: 5 stock(s) passed the filters, PFE stop -3.8 SAR, ADBE target +6.1 SAR, ABBV stop -5.5 SAR. Balance 1,832 SAR
+2026-08-19: 5 stock(s) passed the filters, XOM time -4.4 SAR, PFE time -2.6 SAR, MRK time -2.0 SAR. Balance 1,823 SAR
+2026-08-20: 5 stock(s) passed the filters, XOM stop -5.1 SAR, CVX stop -3.8 SAR. Balance 1,814 SAR
+2026-08-21: 5 stock(s) passed the filters, BAC stop -3.7 SAR, PFE target +6.4 SAR, LLY target +4.6 SAR. Balance 1,822 SAR
+2026-08-24: 5 stock(s) passed the filters, V time -0.4 SAR, CRM stop -8.1 SAR, MCD stop -4.5 SAR. Balance 1,809 SAR
+2026-08-25: 5 stock(s) passed the filters, NVDA stop -5.7 SAR, CRM stop -8.0 SAR, NFLX time +1.6 SAR. Balance 1,797 SAR
+2026-08-26: 5 stock(s) passed the filters, GE time -0.5 SAR, AMD stop -10.3 SAR, CVX time +2.6 SAR. Balance 1,788 SAR
+2026-08-27: 5 stock(s) passed the filters, META stop -8.9 SAR, ADBE time +2.2 SAR, AVGO stop -7.4 SAR. Balance 1,774 SAR
+2026-08-28: 5 stock(s) passed the filters, INTC stop -10.4 SAR, MSFT stop -6.5 SAR, PEP time -1.1 SAR. Balance 1,756 SAR
+2026-08-31: 5 stock(s) passed the filters, TSLA time +11.1 SAR, QCOM stop -11.0 SAR, WMT time +0.9 SAR. Balance 1,757 SAR
+2026-09-01: 5 stock(s) passed the filters, AAPL target +7.7 SAR, PG time -1.3 SAR, UNH stop -5.9 SAR. Balance 1,758 SAR
+2026-09-02: 5 stock(s) passed the filters, META time -0.2 SAR, WFC target +6.6 SAR. Balance 1,764 SAR
+2026-09-03: 5 stock(s) passed the filters, TSLA stop -9.3 SAR, MSFT time -0.8 SAR, BAC time -1.1 SAR. Balance 1,753 SAR
+2026-09-04: 5 stock(s) passed the filters, NVDA stop -7.2 SAR, AMD time +0.6 SAR, QCOM stop -6.8 SAR. Balance 1,740 SAR
+2026-09-08: 5 stock(s) passed the filters, CAT stop -6.5 SAR, PEP time -2.2 SAR, CVX stop -4.0 SAR. Balance 1,727 SAR
+2026-09-09: 5 stock(s) passed the filters, WFC time +4.0 SAR, AMD time +2.6 SAR, META time -3.9 SAR. Balance 1,730 SAR
+2026-09-10: 5 stock(s) passed the filters, UNH stop -5.1 SAR, NOW stop -8.0 SAR, PEP stop -4.1 SAR. Balance 1,713 SAR
+2026-09-11: 5 stock(s) passed the filters, XOM target +3.4 SAR, INTC stop -11.1 SAR, SHOP stop -5.9 SAR. Balance 1,699 SAR
+2026-09-14: 5 stock(s) passed the filters, GOOGL stop -5.2 SAR, META stop -7.9 SAR, AAPL stop -4.8 SAR. Balance 1,681 SAR
+2026-09-15: 5 stock(s) passed the filters, AMD stop -6.6 SAR, META stop -10.5 SAR, TSLA stop -7.4 SAR. Balance 1,657 SAR
+2026-09-16: 5 stock(s) passed the filters, ORCL time -1.8 SAR, AMD time +1.5 SAR, MS time -2.4 SAR. Balance 1,654 SAR
+2026-09-17: 5 stock(s) passed the filters, MU time -2.5 SAR, GE stop -5.2 SAR, INTC target +12.7 SAR. Balance 1,659 SAR
+2026-09-18: 5 stock(s) passed the filters, AVGO stop -10.1 SAR, AMD stop -4.9 SAR, COIN target +16.8 SAR. Balance 1,661 SAR
+2026-09-21: 5 stock(s) passed the filters, NFLX target +4.7 SAR, JNJ time -4.2 SAR, TSLA time -5.3 SAR. Balance 1,656 SAR
+2026-09-22: 5 stock(s) passed the filters, GOOGL stop -5.5 SAR, AMD time -2.8 SAR, INTC stop -6.5 SAR. Balance 1,641 SAR
+2026-09-23: 5 stock(s) passed the filters, TSLA stop -6.3 SAR, META stop -6.5 SAR, BA time -0.2 SAR. Balance 1,628 SAR
+2026-09-24: 5 stock(s) passed the filters, LLY time +4.0 SAR, KO stop -3.2 SAR, PFE time -3.9 SAR. Balance 1,625 SAR
+2026-09-25: 5 stock(s) passed the filters, QCOM time +6.3 SAR, AMD stop -5.1 SAR, CAT stop -5.6 SAR. Balance 1,621 SAR
+2026-09-28: 5 stock(s) passed the filters, V stop -3.6 SAR, UNH stop -4.5 SAR, JNJ time -2.6 SAR. Balance 1,610 SAR
+2026-09-29: 5 stock(s) passed the filters, BA time -8.5 SAR, ORCL target +7.3 SAR, UBER stop -5.9 SAR. Balance 1,603 SAR
+2026-09-30: 5 stock(s) passed the filters, GOOGL time +3.5 SAR, AMZN target +2.7 SAR, AAPL target +4.7 SAR. Balance 1,614 SAR
+2026-10-01: 5 stock(s) passed the filters, COIN stop -9.1 SAR, NVDA stop -5.2 SAR, TSLA stop -4.5 SAR. Balance 1,595 SAR
 

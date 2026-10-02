@@ -25,6 +25,9 @@ from these files (pull the repo first).
   the top of `daytrader.py`).
 - Start a run by hand: POST `/repos/Mr-MTB/stock-assistant/actions/workflows/assistant.yml/dispatches`
   with `{"ref": "main", "inputs": {"mode": "backtest"}}` (or `"live"`).
+- Message the owner on Telegram: same POST with `{"ref": "main", "inputs": {"mode": "notify", "message": "..."}}`.
+  Start the text with "📋 Claude:" so it stands apart from the bot's own messages.
+- `reports/setup-stats.json` holds the past success rate shown with each pick; every backtest refreshes it.
 - Before pushing a change, run `python3 tests/scenarios.py` (fake Alpaca, fake clock,
   no network) and extend it for anything new.
 

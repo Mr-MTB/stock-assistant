@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "backtest or live"
+        description: "backtest, live or research"
         default: "backtest"
 
 permissions:
@@ -39,6 +39,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Reuse downloaded prices (research only)
+        if: inputs.mode == 'research'
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: minutes-${{ github.run_id }}
+          restore-keys: minutes-
       - name: Run bot
         env:
           ALPACA_KEY: ${{ secrets.ALPACA_KEY }}
@@ -47,7 +54,13 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GITHUB_TOKEN: ${{ github.token }}
           MODE: ${{ inputs.mode || 'live' }}
-        run: python daytrader.py "$MODE"
+        run: |
+          if [ "$MODE" = "research" ]; then
+            pip install --quiet numpy
+            python research.py
+          else
+            python daytrader.py "$MODE"
+          fi
       - name: Save trade log and reports
         if: always()
         run: |

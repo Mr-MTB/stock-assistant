@@ -21,9 +21,10 @@ class World:
         self.days = [d for d in days if d not in holidays]
         self.symbols = symbols
         self.close = close
-        self.minute, self.daily = {}, {s: [] for s in symbols + ["SPY"]}
+        everyone = list(dict.fromkeys(symbols + ["SPY"]))  # SPY once, even if listed in symbols
+        self.minute, self.daily = {}, {s: [] for s in everyone}
         start = days[0] - dt.timedelta(days=70)
-        for s in symbols + ["SPY"]:
+        for s in everyone:
             p = random.uniform(50, 300)
             d = start
             while d <= days[-1]:

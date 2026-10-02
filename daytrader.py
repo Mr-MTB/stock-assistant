@@ -1,30 +1,36 @@
 """
-Day Trader Bot v1.1 (PAPER trading)
+Day Trader Bot v2 (PAPER trading)
 Prepared by: Eng. Mohammed T. Basaqr
 
 Strategy: Opening Range Breakout, long only, every trade closed within 2 hours.
   1. 9:30-9:45 New York time: record each stock's first-15-minute high and low.
-  2. Pick up to 3 "stocks in play": unusually high volume, trading up on the day, above VWAP.
-  3. Buy when a 1-minute candle closes above the 15-minute high (until 11:30).
+  2. Watch the 5 busiest stocks that are up on the day and above their average price (VWAP).
+  3. Buy when a 1-minute candle closes just above its 15-minute high, any time until 1:55 PM,
+     but only while the overall market (S&P 500 / SPY) is not down more than 1% on the day.
   4. Stop = middle of the 15-minute range. Target = 2x the risk. Exit anyway after 2 hours.
-  5. Medium risk: lose at most ~3% of the account if the stop hits. Never borrows money.
-  6. One trade per day (a cash account can't reuse sale money until the next day).
+  5. Up to 3 trades a day, each with a third of the money, so they can run at the same time.
+     Never borrows money. Each pick shows the market, the stock's latest news and the
+     setup's past success rate.
 
 Modes:
-  python daytrader.py live      -> trades one day on the Alpaca PAPER account
-  python daytrader.py backtest  -> replays the rules on the last 60 trading days
-  python daytrader.py notify    -> sends the text in MESSAGE to Telegram (updates from Claude)
+  python daytrader.py live            -> trades one day on the Alpaca PAPER account
+  python daytrader.py backtest        -> replays the rules on the last 60 trading days
+  python daytrader.py notify          -> sends the text in MESSAGE to Telegram (updates from Claude)
+  python daytrader.py telegram_check  -> checks the Telegram settings
 
 Timing on GitHub: scheduled runs often start hours late, so the workflow has several
-wake-up calls. A run that starts too early for one 6-hour GitHub run to cover the trading
-day waits, then starts a fresh run at the right moment. A run that starts after the last
-entry time sends one notice. Any later run that day stops in a few seconds.
+wake-up calls, and one run can only last 6 hours. A run that starts long before the open
+waits, then starts a fresh run shortly before 9:30 AM. A run that reaches its time limit
+with work left saves the open trades and hands over to a fresh run, which checks what
+happened in between and carries on. A run that starts after the last entry time sends one
+notice. Any later run that day stops in a few seconds.
 
 Results are also saved in the repo: daytrades.json (account and trades) and the
 reports/ folder (one file per live day and per backtest).
 
 Paper trading and research only. Not financial advice.
 """
+import csv
 import datetime as dt
 import json
 import re
@@ -40,12 +46,15 @@ from zoneinfo import ZoneInfo
 START_SAR = 2000.0            # virtual (paper) account size
 SAR_PER_USD = 3.75
 LOCAL_TZ = "Asia/Riyadh"      # times in messages are shown in your local time
-RISK_PER_TRADE = 0.03         # medium risk (low = 0.01, high = 0.06)
-MAX_POSITION = 1.0            # at most 100% of the account in one trade (no borrowing)
-MAX_TRADES_PER_DAY = 1
+RISK_PER_TRADE = 0.03         # never risk more than 3% of the account on one trade
+MAX_TRADES_PER_DAY = 3        # up to 3 trades a day ...
+SLOTS = 3                     # ... each with a third of the day's money, so they can overlap
+CANDIDATES = 5                # watch the 5 busiest stocks that pass the morning filters
 MAX_HOLD_MIN = 120            # your 2-hour limit
 OR_MINUTES = 15               # opening range length
-LAST_ENTRY = dt.time(11, 30)  # no new trades after this (New York time)
+LAST_ENTRY = dt.time(13, 55)  # last new trade at 1:55 PM New York, so every exit is before the close
+MARKET_FLOOR = -0.01          # no new buys while the S&P 500 (SPY) is down more than 1% today
+NEWS_HOURS = 24               # headlines shown with each pick
 REWARD_RISK = 2.0             # target = 2x the distance to the stop
 MAX_STOP_PCT = 0.03           # skip trades whose stop is more than 3% away
 COMMISSION_PCT = 0.00105      # Sahm: 0.105% per order (buy and sell each)
@@ -56,6 +65,7 @@ NEAR_LEVEL = 0.75             # warn when price is 75% of the way to the target 
 TIME_WARNING_MIN = 15         # warn this many minutes before the 2-hour exit
 BACKTEST_DAYS = 60
 JOB_LIMIT_MIN = 340           # GitHub stops a run after 6 hours; the bot plans to finish within 340 min
+START_BEFORE_OPEN_MIN = 10    # the trading run should be up about 10 minutes before the open
 
 WATCHLIST = [
     "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AVGO", "JPM", "V",
@@ -70,6 +80,7 @@ WATCHLIST = [
 BOOK_FILE = "daytrades.json"
 REPORTS_DIR = "reports"
 STATS_FILE = "reports/setup-stats.json"  # past success rate, refreshed by every backtest
+JOURNAL_DIR = "journal"       # the practice database: every trade, every signal, every day
 NY = ZoneInfo("America/New_York")
 UTC = dt.timezone.utc
 TRADE_URL = "https://paper-api.alpaca.markets"
@@ -226,10 +237,10 @@ def stats_for_day(daily_bars, day):
 
 
 # ---------------- strategy (shared by live and backtest) ----------------
-def select_candidates(or_bars, stats):
+def select_candidates(or_bars, stats, n=CANDIDATES):
     cands = []
     for s, bars in or_bars.items():
-        if s not in stats or len(bars) < 10:
+        if s not in WATCHLIST or s not in stats or len(bars) < 10:
             continue
         hi = max(b["h"] for b in bars)
         lo = min(b["l"] for b in bars)
@@ -241,9 +252,10 @@ def select_candidates(or_bars, stats):
         rng = (hi - lo) / last
         if last > vwap and last > stats[s]["prev_close"] and 0.003 <= rng <= 0.03:
             cands.append({"symbol": s, "or_high": hi, "or_low": lo, "stop": (hi + lo) / 2,
-                          "rvol": vol / stats[s]["avg_vol"]})
+                          "rvol": vol / stats[s]["avg_vol"], "range_pct": rng * 100,
+                          "gap_pct": (bars[0]["o"] / stats[s]["prev_close"] - 1) * 100})
     cands.sort(key=lambda c: c["rvol"], reverse=True)
-    return cands[:3]
+    return cands[:n]
 
 
 def is_breakout(close, cand):
@@ -251,14 +263,52 @@ def is_breakout(close, cand):
     return cand["or_high"] < close <= cand["or_high"] + 0.5 * rng
 
 
-def plan_trade(cand, entry, balance):
+def plan_trade(cand, entry, slot_usd, balance):
+    """Size one trade: a slot of the day's money, never risking more than RISK_PER_TRADE."""
     stop = cand["stop"]
     risk_pct = (entry - stop) / entry
     if risk_pct < 0.001 or risk_pct > MAX_STOP_PCT:
         return None
-    notional = min(balance * MAX_POSITION, balance * RISK_PER_TRADE / risk_pct)
+    notional = min(slot_usd, balance * RISK_PER_TRADE / risk_pct)
     return {"symbol": cand["symbol"], "stop": stop, "notional": round(notional, 2),
             "target": entry + REWARD_RISK * (entry - stop)}
+
+
+def market_ok(change):
+    """change = S&P 500 (SPY) move today as a fraction; unknown counts as OK."""
+    return change is None or change > MARKET_FLOOR
+
+
+def market_text(change):
+    if change is None:
+        return "Market (S&P 500): not available right now."
+    if market_ok(change):
+        return f"Market (S&P 500): {change * 100:+.2f}% today ✅"
+    return f"Market (S&P 500): {change * 100:+.2f}% today ⛔ no new buys while it's down more than 1%"
+
+
+def headlines(symbol, now, limit=2):
+    """Latest headlines about a stock (Alpaca news). None if they couldn't be loaded."""
+    try:
+        r = api("GET", DATA_URL + "/v1beta1/news", {
+            "symbols": symbol, "start": iso(now - dt.timedelta(hours=NEWS_HOURS)), "end": iso(now),
+            "limit": limit, "sort": "desc"})
+        return [n["headline"].strip() for n in r.get("news", []) if n.get("headline")][:limit]
+    except Exception as e:
+        print(f"News for {symbol} unavailable: {e}")
+        return None
+
+
+def news_text(items):
+    if items is None:
+        return "📰 News: couldn't load it right now."
+    if not items:
+        return f"📰 No news about it in the last {NEWS_HOURS} hours."
+    return f"📰 News (last {NEWS_HOURS} hours):\n" + "\n".join(f"• {h}" for h in items)
+
+
+def day_label(day):
+    return f"{day:%a %b} {day.day}"
 
 
 def pnl_text(pnl_usd, invested_usd):
@@ -318,11 +368,6 @@ def job_deadline():
     return started + dt.timedelta(minutes=JOB_LIMIT_MIN)
 
 
-def work_end_time(day, session_close):
-    """Latest moment today's work can finish: last entry + 2-hour hold + a few minutes to sell."""
-    return trade_deadline(last_entry_time(day, session_close), session_close) + dt.timedelta(minutes=5)
-
-
 def start_fresh_run():
     """Ask GitHub to start this workflow again (live mode). Returns True if it accepted."""
     repo = os.environ.get("GITHUB_REPOSITORY")
@@ -348,17 +393,6 @@ def start_fresh_run():
     return False
 
 
-def wait_then_restart(work_end):
-    """Started too early: wait as long as this run may, then hand over to a fresh run."""
-    go = work_end - dt.timedelta(minutes=JOB_LIMIT_MIN)  # from here one run can cover the whole day
-    wake = min(go, job_deadline() - dt.timedelta(minutes=10))
-    print(f"Started too early for one GitHub run to cover the trading day. "
-          f"Waiting until {clock(wake)} New York, then starting a fresh run.")
-    sleep_until(wake)
-    if not start_fresh_run():
-        send("⚠️ The bot couldn't restart itself on GitHub this morning, so it may miss today's session.")
-
-
 def success_text():
     """How often this setup won in the latest backtest (written by `backtest` mode)."""
     try:
@@ -372,9 +406,13 @@ def success_text():
             f"({st['wins']} of {st['trades']} trades won, {st['from']} to {st['to']}).")
 
 
+def today_trades(book, today):
+    return [t for t in book["trades"] if t["date"] == today.isoformat()]
+
+
 def end_of_day_text(book, today):
-    todays = [t for t in book["trades"] if t["date"] == today.isoformat()]
-    lines = [f"📊 End of day {today}"]
+    todays = today_trades(book, today)
+    lines = [f"📊 End of day, {day_label(today)}"]
     if todays:
         pnl = sum(t["pnl_usd"] for t in todays)
         before = book["balance_usd"] - pnl
@@ -386,6 +424,50 @@ def end_of_day_text(book, today):
     lines.append(f"Balance: {sar(book['balance_usd'])} | Since start: {total * SAR_PER_USD:+.1f} SAR "
                  f"({total / book['start_usd'] * 100:+.1f}%), {record_text(book['trades'])}")
     return "\n".join(lines)
+
+
+# ---------------- practice database (journal/) ----------------
+TRADE_FIELDS = ["date", "symbol", "rank", "entry_time_ny", "exit_time_ny", "minutes", "entry", "exit", "stop",
+                "target", "invested_usd", "pnl_usd", "pnl_pct", "result", "exit_reason", "market_pct",
+                "had_news", "headlines", "rvol", "range_pct", "gap_pct"]
+SIGNAL_FIELDS = ["date", "time_ny", "symbol", "rank", "taken", "why_not", "market_pct", "rvol", "range_pct",
+                 "gap_pct", "would_exit", "would_pnl_pct", "would_result"]
+DAY_FIELDS = ["date", "market_pct", "candidates", "signals", "trades", "wins", "pnl_usd", "balance_usd"]
+
+
+def journal_add(name, fields, rows):
+    """Append rows to journal/<name>.csv (created with a header the first time)."""
+    if not rows:
+        return
+    os.makedirs(JOURNAL_DIR, exist_ok=True)
+    path = os.path.join(JOURNAL_DIR, f"{name}.csv")
+    new = not os.path.exists(path)
+    with open(path, "a", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+        if new:
+            w.writeheader()
+        for row in rows:
+            w.writerow({k: (f"{v:.4f}" if isinstance(v, float) else v) for k, v in row.items()})
+
+
+def signal_outcomes(signals, sess_close):
+    """What each breakout would have made under the bot's rules (bought or not), from 1-minute candles."""
+    for sig in signals:
+        bar_t = dt.datetime.fromisoformat(sig["bar_t"])
+        try:
+            bars = get_bars([sig["symbol"]], "1Min", bar_t, sess_close).get(sig["symbol"], [])
+        except Exception as e:
+            print(f"Couldn't load candles for {sig['symbol']}: {e}")
+            continue
+        if len(bars) < 2:
+            continue
+        entry = bars[1]["o"] * (1 + SLIPPAGE)
+        if entry <= sig["stop"]:
+            continue
+        target = entry + REWARD_RISK * (entry - sig["stop"])
+        _, exit_price, why = simulate_exit(bars, 1, sig["stop"], target, trade_deadline(bars[1]["t"], sess_close))
+        pct = net_pct(entry, exit_price)
+        sig.update(would_exit=why, would_pnl_pct=pct, would_result="win" if pct > 0 else "loss")
 
 
 # ---------------- trade log ----------------
@@ -429,9 +511,13 @@ def wait_fill(order_id, max_wait=60):
     return qty, price, o.get("status")
 
 
+def latest_prices(symbols):
+    r = api("GET", DATA_URL + "/v2/stocks/trades/latest", {"symbols": ",".join(symbols), "feed": "iex"})
+    return {s: float(t["p"]) for s, t in (r.get("trades") or {}).items()}
+
+
 def latest_price(symbol):
-    r = api("GET", DATA_URL + "/v2/stocks/trades/latest", {"symbols": symbol, "feed": "iex"})
-    return float(r["trades"][symbol]["p"])
+    return latest_prices([symbol])[symbol]
 
 
 def buy(symbol, notional, price):
@@ -462,6 +548,16 @@ def sell_all(symbol):
     return fill
 
 
+def spy_change(stats):
+    """S&P 500 (SPY) move today right now, as a fraction (None if unknown)."""
+    prev = stats.get("SPY", {}).get("prev_close")
+    try:
+        return latest_price("SPY") / prev - 1 if prev else None
+    except Exception as e:
+        print(f"Market price unavailable: {e}")
+        return None
+
+
 def run_live():
     now = now_ny()
     today = now.date()
@@ -471,36 +567,337 @@ def run_live():
         return
     _, sess_open, sess_close = days[0]
     book = load_book()
-    extra = todays_cutoff() != LAST_ENTRY  # a one-off extra session started by hand
-    done_today = [t for t in book["trades"] if t["date"] == today.isoformat()]
-    if book.get("last_run") == today.isoformat() and not extra:
+    book.setdefault("open", [])
+    if (book.get("day") or {}).get("date") != today.isoformat():
+        book["day"] = {"date": today.isoformat(), "start_usd": book["balance_usd"], "done": False}
+    day = book["day"]
+    if todays_cutoff() != LAST_ENTRY and day["done"] and not book["open"]:
+        day.update(done=False, announced=False)  # a one-off extra session started by hand
+    if day["done"] and not book["open"]:
         print("Today is already handled.")
         return
-    if len(done_today) >= MAX_TRADES_PER_DAY:
-        print("Today's trade limit is already used.")
-        return
     last_entry = last_entry_time(today, sess_close)
-    if now >= last_entry:
+    if now >= last_entry and not book["open"]:
         book["last_run"] = today.isoformat()
+        if day.get("announced"):  # the day had started; a hand-over landed after the last entry time
+            finish_day(book, today, sess_close)
+            return
+        day["done"] = True
         save_book(book)
-        send(f"⚠️ {today}: GitHub started the bot too late ({local(now)} your time), after the last "
-             f"entry time ({local(last_entry)}). No trade today.")
+        send(f"⚠️ {day_label(today)}: GitHub started the bot too late ({local(now)} your time), after the "
+             f"last entry time ({local(last_entry)}). No trade today.")
         return
-    work_end = work_end_time(today, sess_close)
-    if work_end > job_deadline():
-        wait_then_restart(work_end)
+    go = sess_open - dt.timedelta(minutes=START_BEFORE_OPEN_MIN)
+    if now < go and os.environ.get("GITHUB_ACTIONS"):
+        # Too early: wait, then let a fresh run (with a fresh 6-hour limit) do the day.
+        wake = min(go, job_deadline() - dt.timedelta(minutes=10))
+        print(f"Too early. Waiting until {clock(wake)} New York, then starting a fresh run.")
+        sleep_until(wake)
+        if not start_fresh_run():
+            send("⚠️ The bot couldn't restart itself on GitHub this morning, so it may miss today's session.")
         return
+    now = max(now, now_ny())
 
     book["last_run"] = today.isoformat()
     save_book(book)
     note(f"Run started at {clock(now)} New York ({local(now)} your time).")
     if book["paused"]:
+        day["done"] = True
+        save_book(book)
         send("⏸ Day trader is paused (account fell below the safety limit). Review before restarting.")
         return
+    try:
+        finished = work_day(book, today, sess_open, sess_close)
+    except Exception as e:
+        close_everything(book, today, f"something went wrong ({e})")
+        raise
+    if finished:
+        finish_day(book, today, sess_close)
 
-    trades_today = trade_one_day(book, today, sess_open, sess_close, MAX_TRADES_PER_DAY - len(done_today))
-    if trades_today is not None:
-        send(end_of_day_text(book, today))
+
+def work_day(book, today, sess_open, sess_close):
+    """Runs the trading day. True when the day is finished, False after handing over to a fresh run."""
+    day = book["day"]
+    or_end = sess_open + dt.timedelta(minutes=OR_MINUTES)
+    last_entry = last_entry_time(today, sess_close)
+    hand_over_at = job_deadline() - dt.timedelta(minutes=10)
+
+    sleep_until(min(or_end + dt.timedelta(seconds=10), hand_over_at))
+    if now_ny() >= hand_over_at:
+        return hand_over(book, today)
+
+    daily = get_bars(WATCHLIST + ["SPY"], "1Day", sess_open - dt.timedelta(days=45),
+                     sess_open - dt.timedelta(hours=10), adjustment="split")
+    stats = stats_for_day(daily, today)
+    day["spy_prev"] = stats.get("SPY", {}).get("prev_close")
+    or_bars = get_bars(WATCHLIST, "1Min", sess_open, or_end)
+    or_bars = {s: [b for b in bars if b["t"] < or_end] for s, bars in or_bars.items()}
+    cands = select_candidates(or_bars, stats)
+    seen = {x["symbol"] for x in day.get("signals", []) if x["why_not"] != "market"}
+    taken = {t["symbol"] for t in today_trades(book, today)} | {p["symbol"] for p in book["open"]} | seen
+    active = {c["symbol"]: c for c in cands if c["symbol"] not in taken}
+    rank = {c["symbol"]: i for i, c in enumerate(cands)}
+    day["candidates"] = len(cands)
+
+    if not day.get("announced"):
+        announce(book, today, cands, last_entry, spy_change(stats))
+        day["announced"] = True
+        save_book(book)
+    now = now_ny()
+    if day.get("scanning"):  # resuming after a hand-over: don't act on old signals
+        scan_from = max(or_end, now.replace(second=0, microsecond=0) - dt.timedelta(minutes=1))
+    else:
+        scan_from = or_end
+    day["scanning"] = True
+    check_gap(book, today)
+
+    while True:
+        now = now_ny()
+        watching = now < last_entry and bool(active)  # after the 3-trade limit it still records signals
+        if not book["open"] and not watching:
+            return True
+        if now >= hand_over_at:
+            return hand_over(book, today)
+        if book["open"]:
+            manage_positions(book, today)
+        if watching and now >= scan_from + dt.timedelta(minutes=1, seconds=5):
+            scan_from = scan_for_entries(book, today, sess_close, stats, active, rank, scan_from, last_entry)
+        sleep(20)
+
+
+def announce(book, today, cands, last_entry, change):
+    if not cands:
+        send(f"📊 {day_label(today)}: no stocks passed the morning filters, so no trades today.\n"
+             f"{market_text(change)}")
+        return
+    now = now_ny()
+    lines = [f"👀 {day_label(today)} picks: watching for breakouts until {local(last_entry)} (your time)",
+             market_text(change)]
+    marked = False
+    for i, c in enumerate(cands, 1):
+        news = headlines(c["symbol"], now, limit=1)
+        marked |= bool(news)
+        lines.append(f"{i}. {c['symbol']}: buy above ${c['or_high']:.2f} "
+                     f"(volume {c['rvol'] * 100:.0f}% of a normal day already){' 📰' if news else ''}")
+    lines.append(f"Up to {MAX_TRADES_PER_DAY} trades today, about {sar(book['day']['start_usd'] / SLOTS)} each. "
+                 "The first ones to break out get bought.")
+    if marked:
+        lines.append(f"📰 = news about the stock in the last {NEWS_HOURS} hours")
+    lines.append(success_text())
+    send("\n".join(lines))
+
+
+def scan_for_entries(book, today, sess_close, stats, active, rank, scan_from, last_entry):
+    """Look at the 1-minute candles finished since scan_from; buy breakouts while there is room.
+    Returns the time to scan from next."""
+    now = now_ny()
+    bars = get_bars(list(active) + ["SPY"], "1Min", scan_from, now)
+    done_by = now - dt.timedelta(minutes=1)
+    spy_prev = stats.get("SPY", {}).get("prev_close")
+    spy = [b for b in bars.get("SPY", []) if b["t"] <= done_by]
+
+    def change_at(t):
+        closes = [b["c"] for b in spy if b["t"] <= t]
+        return closes[-1] / spy_prev - 1 if closes and spy_prev else None
+
+    signals, latest = [], scan_from - dt.timedelta(minutes=1)
+    for s, c in active.items():
+        for b in bars.get(s, []):
+            if b["t"] < scan_from or b["t"] > done_by or b["t"] >= last_entry:
+                continue
+            latest = max(latest, b["t"])
+            if not is_breakout(b["c"], c):
+                continue
+            change = change_at(b["t"])
+            if market_ok(change):
+                signals.append((b["t"], rank[s], s, change))
+                break
+            skipped = book["day"].setdefault("skipped", [])
+            if s not in skipped:
+                skipped.append(s)
+                record_signal(book, c, rank[s], b["t"], change, "market")
+                send(f"⏸ {s} broke out at {local(b['t'] + dt.timedelta(minutes=1))} (your time), but the "
+                     f"S&P 500 is down {abs(change) * 100:.2f}% today, so no buy for now.")
+    for t, _, s, change in sorted(signals):
+        cand = active.pop(s)
+        if MAX_TRADES_PER_DAY - len(today_trades(book, today)) - len(book["open"]) <= 0:
+            record_signal(book, cand, rank[s], t, change, "limit")
+            continue
+        why_not = open_position(book, today, sess_close, cand, rank[s], change)
+        record_signal(book, cand, rank[s], t, change, why_not)
+    save_book(book)
+    return max(scan_from, latest + dt.timedelta(minutes=1))
+
+
+def record_signal(book, cand, rank, bar_t, change, why_not):
+    """Keep every breakout for the practice database; what it would have made is added at day end."""
+    book["day"].setdefault("signals", []).append({
+        "time_ny": clock(bar_t + dt.timedelta(minutes=1)), "bar_t": bar_t.isoformat(), "symbol": cand["symbol"],
+        "rank": rank + 1, "taken": "yes" if not why_not else "no", "why_not": why_not or "",
+        "market_pct": None if change is None else change * 100, "rvol": cand["rvol"],
+        "range_pct": cand.get("range_pct"), "gap_pct": cand.get("gap_pct"), "stop": cand["stop"]})
+
+
+def open_position(book, today, sess_close, cand, rank, change):
+    """Buy one breakout. Returns "" when bought, else why not ("plan" or "fill")."""
+    s = cand["symbol"]
+    price = latest_price(s)
+    plan = plan_trade(cand, price, book["day"]["start_usd"] / SLOTS, book["day"]["start_usd"])
+    if not plan:
+        note(f"Skipped {s}: its stop would be too close or too far.")
+        return "plan"
+    qty, entry = buy(s, plan["notional"], price)
+    if qty <= 0:
+        note(f"Skipped {s}: the buy order didn't fill.")
+        return "fill"
+    now = now_ny()
+    stop = plan["stop"]
+    target = entry + REWARD_RISK * (entry - stop)
+    deadline = trade_deadline(now, sess_close)
+    news = headlines(s, now)
+    book["open"].append({"symbol": s, "qty": qty, "entry": entry, "stop": stop, "target": target,
+                         "entry_time": now.isoformat(), "deadline": deadline.isoformat(), "warned": [],
+                         "context": {"rank": rank + 1, "market_pct": None if change is None else change * 100,
+                                     "had_news": "" if news is None else ("yes" if news else "no"),
+                                     "headlines": " | ".join(news or []), "rvol": cand["rvol"],
+                                     "range_pct": cand.get("range_pct"), "gap_pct": cand.get("gap_pct")}})
+    save_book(book)
+    number = len(today_trades(book, today)) + len(book["open"])
+    send(f"✅ BOUGHT {s} (trade {number} of {MAX_TRADES_PER_DAY} today): {qty:.4f} shares at ${entry:.2f} "
+         f"(≈ {sar(qty * entry)})\n"
+         f"Stop ${stop:.2f} | Target ${target:.2f} | Sell by {local(deadline)} (your time) at the latest\n"
+         f"{market_text(change)}\n{news_text(news)}\n{success_text()}")
+    return ""
+
+
+def manage_positions(book, today):
+    prices = latest_prices([p["symbol"] for p in book["open"]])
+    now = now_ny()
+    for p in list(book["open"]):
+        price = prices.get(p["symbol"])
+        if price is None:
+            continue
+        s, qty, entry, stop, target = p["symbol"], p["qty"], p["entry"], p["stop"], p["target"]
+        deadline = dt.datetime.fromisoformat(p["deadline"])
+        reason = ("stop" if price <= stop else "target" if price >= target
+                  else "time" if now >= deadline else None)
+        if reason:
+            close_position(book, today, p, reason)
+            continue
+        invested = qty * entry
+        open_pnl = qty * (price - entry) - fee(invested) - fee(qty * price)
+        if price >= entry + NEAR_LEVEL * (target - entry) and "target" not in p["warned"]:
+            p["warned"].append("target")
+            send(f"🔥 {s} is close to the TARGET: now ${price:.2f}, target ${target:.2f}\n"
+                 f"Profit right now: {pnl_text(open_pnl, invested)}")
+        elif price <= entry - NEAR_LEVEL * (entry - stop) and "stop" not in p["warned"]:
+            p["warned"].append("stop")
+            send(f"⚠️ {s} is close to the STOP: now ${price:.2f}, stop ${stop:.2f}\n"
+                 f"Loss right now: {pnl_text(open_pnl, invested)}")
+        if now >= deadline - dt.timedelta(minutes=TIME_WARNING_MIN) and "time" not in p["warned"]:
+            p["warned"].append("time")
+            send(f"⏳ {s}: {TIME_WARNING_MIN} minutes left before the 2-hour exit ({local(deadline)} your time).\n"
+                 f"Now ${price:.2f} | {'Profit' if open_pnl > 0 else 'Loss'} right now: "
+                 f"{pnl_text(open_pnl, invested)}")
+    save_book(book)
+
+
+def close_position(book, today, p, reason):
+    s = p["symbol"]
+    try:
+        exit_price = sell_all(s)
+    except Exception as e:
+        note(f"Selling {s} reported a problem: {e}")
+        exit_price = 0
+    if exit_price <= 0:
+        exit_price = latest_price(s)
+    qty, entry = p["qty"], p["entry"]
+    invested = qty * entry
+    pnl = qty * (exit_price - entry) - fee(invested) - fee(qty * exit_price)
+    book["balance_usd"] = round(book["balance_usd"] + pnl, 2)
+    minutes = round((now_ny() - dt.datetime.fromisoformat(p["entry_time"])).total_seconds() / 60)
+    book["open"].remove(p)
+    book["trades"].append({"date": today.isoformat(), "symbol": s, "entry": round(entry, 4),
+                           "exit": round(exit_price, 4), "qty": qty, "exit_reason": reason,
+                           "minutes": minutes, "pnl_usd": round(pnl, 2), "balance_usd": book["balance_usd"]})
+    save_book(book)
+    journal_add("trades", TRADE_FIELDS, [dict(p.get("context", {}), date=today.isoformat(), symbol=s,
+                entry_time_ny=clock(dt.datetime.fromisoformat(p["entry_time"])), exit_time_ny=clock(now_ny()),
+                minutes=minutes, entry=entry, exit=exit_price, stop=p["stop"], target=p["target"],
+                invested_usd=invested, pnl_usd=pnl, pnl_pct=pnl / invested * 100,
+                result="win" if pnl > 0 else "loss", exit_reason=reason)])
+    number = len(today_trades(book, today))
+    icon = {"target": "🎯", "stop": "🛑", "time": "⏰"}.get(reason, "⚠️")
+    label = {"target": "hit target", "stop": "hit stop", "time": "2 hours passed"}.get(reason, "closed for safety")
+    send(f"{icon} SOLD {s} at ${exit_price:.2f} ({label}) after {minutes} min, trade {number} of "
+         f"{MAX_TRADES_PER_DAY} today\n"
+         f"{'✅ WIN' if pnl > 0 else '❌ LOSS'}: {pnl_text(pnl, invested)}\n"
+         f"Balance: {sar(book['balance_usd'])} | Since start: {record_text(book['trades'])}")
+
+
+def check_gap(book, today):
+    """After a hand-over, see whether a stop or target was reached while no run was watching."""
+    now = now_ny()
+    for p in list(book["open"]):
+        since = dt.datetime.fromisoformat(p.get("checked") or p["entry_time"])
+        bars = get_bars([p["symbol"]], "1Min", since, now).get(p["symbol"], [])
+        for b in bars:
+            if b["l"] <= p["stop"]:
+                close_position(book, today, p, "stop")
+                break
+            if b["h"] >= p["target"]:
+                close_position(book, today, p, "target")
+                break
+
+
+def hand_over(book, today):
+    """Close to GitHub's 6-hour limit: save the open trades and start a fresh run to carry on."""
+    now = now_ny()
+    for p in book["open"]:
+        p["checked"] = now.isoformat()
+    save_book(book)
+    note(f"Handing over to a fresh run ({len(book['open'])} open trade(s)).")
+    if start_fresh_run():
+        return False
+    close_everything(book, today, "the bot couldn't hand over to a fresh run")
+    return True
+
+
+def close_everything(book, today, why):
+    """Safety net: never leave a trade open beyond its 2 hours."""
+    if not book["open"]:
+        return
+    send(f"⚠️ {why[:300]}. To stay safe, closing the open trades now.")
+    for p in list(book["open"]):
+        try:
+            close_position(book, today, p, "safety")
+        except Exception as e:
+            note(f"Could not close {p['symbol']}: {e}")
+    book["day"]["done"] = True
+    save_book(book)
+
+
+def finish_day(book, today, sess_close=None):
+    day = book["day"]
+    if not day.get("journaled"):
+        signals = day.get("signals", [])
+        if sess_close:
+            signal_outcomes(signals, sess_close)
+        journal_add("signals", SIGNAL_FIELDS, [dict(x, date=today.isoformat()) for x in signals])
+        todays = today_trades(book, today)
+        market = None
+        if day.get("spy_prev"):
+            try:
+                market = (latest_price("SPY") / day["spy_prev"] - 1) * 100
+            except Exception as e:
+                print(f"Market price unavailable: {e}")
+        journal_add("days", DAY_FIELDS, [{
+            "date": today.isoformat(), "market_pct": market, "candidates": day.get("candidates", 0),
+            "signals": len(signals), "trades": len(todays), "wins": sum(t["pnl_usd"] > 0 for t in todays),
+            "pnl_usd": float(sum(t["pnl_usd"] for t in todays)), "balance_usd": float(book["balance_usd"])}])
+        day["journaled"] = True
+    book["day"]["done"] = True
+    send(end_of_day_text(book, today))
     if book["balance_usd"] < book["start_usd"] * PAUSE_BELOW:
         book["paused"] = True
         send("⏸ Account fell below 75% of the start. Bot paused for review.")
@@ -512,175 +909,100 @@ def run_live():
              + "\nSince start:\n" + summary(book["trades"], book["start_usd"], book["balance_usd"]))
 
 
-def trade_one_day(book, today, sess_open, sess_close, allowed=MAX_TRADES_PER_DAY):
-    """Returns the list of trades made today (None if the bot couldn't run)."""
-    or_end = sess_open + dt.timedelta(minutes=OR_MINUTES)
-    last_entry = last_entry_time(today, sess_close)
-    sleep_until(or_end + dt.timedelta(seconds=10))
-    if now_ny() >= last_entry:
-        send("⚠️ Day trader started too late today (GitHub delay). No trades.")
-        return None
-
-    daily = get_bars(WATCHLIST, "1Day", sess_open - dt.timedelta(days=45),
-                     sess_open - dt.timedelta(hours=10), adjustment="split")
-    stats = stats_for_day(daily, today)
-    or_bars = get_bars(WATCHLIST, "1Min", sess_open, or_end)
-    or_bars = {s: [b for b in bars if b["t"] < or_end] for s, bars in or_bars.items()}
-    cands = select_candidates(or_bars, stats)
-    if not cands:
-        send(f"📊 {today}: no stocks passed the filters.")
-        return []
-    send(f"👀 {today} — watching for breakouts until {local(last_entry)} (your time):\n" + "\n".join(
-        f"{c['symbol']}: buy above ${c['or_high']:.2f} (volume {c['rvol'] * 100:.0f}% of a normal day already)"
-        for c in cands) + f"\nThe first one to break out is today's pick.\n{success_text()}")
-
-    active = {c["symbol"]: c for c in cands}
-    trades_today = []
-    while active and len(trades_today) < allowed and now_ny() < last_entry:
-        nxt = now_ny().replace(second=5, microsecond=0) + dt.timedelta(minutes=1)
-        sleep_until(nxt)
-        now = now_ny()
-        bars = get_bars(list(active), "1Min", or_end, now)
-        signal = None
-        for s, c in active.items():
-            done = [b for b in bars.get(s, []) if b["t"] >= or_end and b["t"] + dt.timedelta(minutes=1) <= now]
-            if done and is_breakout(done[-1]["c"], c):
-                signal = c
-                break
-        if not signal:
-            continue
-
-        s = signal["symbol"]
-        price = latest_price(s)
-        plan = plan_trade(signal, price, book["balance_usd"])
-        if not plan:
-            active.pop(s)
-            continue
-        qty, entry = buy(s, plan["notional"], price)
-        if qty <= 0:
-            active.pop(s)
-            continue
-        entry_t = now_ny()
-        stop = plan["stop"]
-        target = entry + REWARD_RISK * (entry - stop)
-        deadline = trade_deadline(entry_t, sess_close)
-        send(f"✅ BOUGHT {s}: {qty:.4f} shares at ${entry:.2f} (${qty * entry:.2f} ≈ {sar(qty * entry)})\n"
-             f"Stop ${stop:.2f} | Target ${target:.2f} | Sell by {local(deadline)} (your time) at the latest\n"
-             f"{success_text()}")
-
-        invested = qty * entry
-        near_target = entry + NEAR_LEVEL * (target - entry)
-        near_stop = entry - NEAR_LEVEL * (entry - stop)
-        warned = set()
-        reason = None
-        try:
-            while reason is None:
-                sleep(20)
-                p = latest_price(s)
-                if p <= stop:
-                    reason = "stop"
-                elif p >= target:
-                    reason = "target"
-                elif now_ny() >= deadline:
-                    reason = "time"
-                else:
-                    open_pnl = qty * (p - entry) - fee(invested) - fee(qty * p)
-                    if p >= near_target and "target" not in warned:
-                        warned.add("target")
-                        send(f"🔥 {s} is close to the TARGET: now ${p:.2f}, target ${target:.2f}\n"
-                             f"Profit right now: {pnl_text(open_pnl, invested)}")
-                    elif p <= near_stop and "stop" not in warned:
-                        warned.add("stop")
-                        send(f"⚠️ {s} is close to the STOP: now ${p:.2f}, stop ${stop:.2f}\n"
-                             f"Loss right now: {pnl_text(open_pnl, invested)}")
-                    if (now_ny() >= deadline - dt.timedelta(minutes=TIME_WARNING_MIN)
-                            and "time" not in warned):
-                        warned.add("time")
-                        send(f"⏳ {s}: {TIME_WARNING_MIN} minutes left before the 2-hour exit ({local(deadline)} your time).\n"
-                             f"Now ${p:.2f} | {'Profit' if open_pnl > 0 else 'Loss'} right now: "
-                             f"{pnl_text(open_pnl, invested)}")
-        finally:
-            exit_price = sell_all(s)
-        if exit_price <= 0:
-            exit_price = latest_price(s)
-        pnl = qty * (exit_price - entry) - fee(qty * entry) - fee(qty * exit_price)
-        book["balance_usd"] = round(book["balance_usd"] + pnl, 2)
-        trade = {"date": today.isoformat(), "symbol": s, "entry": round(entry, 4),
-                 "exit": round(exit_price, 4), "qty": qty, "exit_reason": reason,
-                 "minutes": round((now_ny() - entry_t).total_seconds() / 60),
-                 "pnl_usd": round(pnl, 2), "balance_usd": book["balance_usd"]}
-        book["trades"].append(trade)
-        trades_today.append(trade)
-        save_book(book)
-        icon = {"target": "🎯", "stop": "🛑", "time": "⏰"}[reason]
-        label = {"target": "hit target", "stop": "hit stop", "time": "2 hours passed"}[reason]
-        verdict = "✅ WIN" if pnl > 0 else "❌ LOSS"
-        send(f"{icon} SOLD {s} at ${exit_price:.2f} ({label}) after {trade['minutes']} min\n"
-             f"{verdict}: {pnl_text(pnl, invested)}\n"
-             f"Balance: {sar(book['balance_usd'])} | Since start: {record_text(book['trades'])}")
-        active.pop(s)
-    return trades_today
-
-
 # ---------------- backtest ----------------
+def simulate_exit(bars, k, stop, target, deadline):
+    """Buy at the open of bars[k]; returns (entry, exit price, reason) under the bot's exit rules."""
+    entry = bars[k]["o"] * (1 + SLIPPAGE)
+    for b in bars[k:]:
+        if b["t"] >= deadline:
+            return entry, b["o"] * (1 - SLIPPAGE), "time"
+        if b["l"] <= stop:
+            return entry, min(stop, b["o"]) * (1 - SLIPPAGE), "stop"
+        if b["h"] >= target:
+            return entry, max(target, b["o"]) * (1 - SLIPPAGE), "target"
+    last = [b for b in bars if b["t"] < deadline][-1]
+    return entry, last["c"] * (1 - SLIPPAGE), "time"
+
+
+def net_pct(entry, exit_price):
+    """Result of one trade after Sahm fees, as % of the money put in."""
+    return ((exit_price / entry - 1) - COMMISSION_PCT - COMMISSION_PCT * exit_price / entry) * 100
+
+
 def simulate_day(day_bars, stats, balance, day, sess_open, sess_close):
+    """Replays one day with the live rules: each watched stock's first breakout while the market
+    is OK, earliest first, up to MAX_TRADES_PER_DAY trades with a slot of the money each."""
     or_end = sess_open + dt.timedelta(minutes=OR_MINUTES)
-    or_bars = {s: [b for b in bars if b["t"] < or_end] for s, bars in day_bars.items()}
+    or_bars = {s: [b for b in bars if b["t"] < or_end] for s, bars in day_bars.items() if s in WATCHLIST}
     cands = select_candidates(or_bars, stats)
     last_entry = last_entry_time(day, sess_close)
-    trades = []
-    busy_until = or_end
-    active = {c["symbol"]: c for c in cands}
-    while active and len(trades) < MAX_TRADES_PER_DAY:
-        # earliest breakout candle after busy_until
-        best = None
-        for s, c in active.items():
-            for i, b in enumerate(day_bars[s]):
-                if b["t"] < busy_until or b["t"] >= last_entry:
-                    continue
-                if is_breakout(b["c"], c):
-                    if best is None or b["t"] < best[2]["t"]:
-                        best = (s, i, b)
-                    break
-        if best is None:
+    spy_prev = stats.get("SPY", {}).get("prev_close")
+    spy = day_bars.get("SPY", [])
+
+    def change_at(t):
+        closes = [b["c"] for b in spy if b["t"] <= t]
+        return closes[-1] / spy_prev - 1 if closes and spy_prev else None
+
+    signals = []
+    for rank, c in enumerate(cands):
+        for i, b in enumerate(day_bars[c["symbol"]]):
+            if b["t"] < or_end or b["t"] >= last_entry:
+                continue
+            if is_breakout(b["c"], c) and market_ok(change_at(b["t"])):
+                signals.append((b["t"], rank, c, i))
+                break
+    signals.sort(key=lambda x: (x[0], x[1]))
+
+    slot, trades, day_pnl = balance / SLOTS, [], 0.0
+    for _, _, c, i in signals:
+        if len(trades) >= MAX_TRADES_PER_DAY:
             break
-        s, i, sig = best
-        bars = day_bars[s]
+        s, bars = c["symbol"], day_bars[c["symbol"]]
         if i + 1 >= len(bars):
-            active.pop(s)
             continue
         eb = bars[i + 1]
         entry = eb["o"] * (1 + SLIPPAGE)
-        plan = plan_trade(active[s], entry, balance)
+        plan = plan_trade(c, entry, slot, balance)
         if not plan:
-            active.pop(s)
             continue
         stop = plan["stop"]
         target = entry + REWARD_RISK * (entry - stop)
-        deadline = trade_deadline(eb["t"], sess_close)
-        exit_price, reason, exit_t = None, None, None
-        for b in bars[i + 1:]:
-            if b["t"] >= deadline:
-                exit_price, reason, exit_t = b["o"] * (1 - SLIPPAGE), "time", b["t"]
-                break
-            if b["l"] <= stop:
-                exit_price, reason, exit_t = min(stop, b["o"]) * (1 - SLIPPAGE), "stop", b["t"]
-                break
-            if b["h"] >= target:
-                exit_price, reason, exit_t = max(target, b["o"]) * (1 - SLIPPAGE), "target", b["t"]
-                break
-        if exit_price is None:
-            last = [b for b in bars if b["t"] < deadline][-1]
-            exit_price, reason, exit_t = last["c"] * (1 - SLIPPAGE), "time", last["t"]
+        _, exit_price, reason = simulate_exit(bars, i + 1, stop, target, trade_deadline(eb["t"], sess_close))
         qty = plan["notional"] / entry
         pnl = qty * (exit_price - entry) - fee(qty * entry) - fee(qty * exit_price)
         trades.append({"date": day.isoformat(), "symbol": s, "entry": round(entry, 2),
                        "exit": round(exit_price, 2), "exit_reason": reason,
-                       "pnl_usd": round(pnl, 2), "pct_of_account": pnl / balance})
-        balance += pnl
-        busy_until = exit_t + dt.timedelta(minutes=1)
-        active.pop(s)
-    return trades, balance, len(cands)
+                       "pnl_usd": round(pnl, 2), "pct_of_account": pnl / balance,
+                       "time": eb["t"].isoformat(), "market": change_at(bars[i]["t"])})
+        day_pnl += pnl
+    return trades, balance + day_pnl, len(cands)
+
+
+def what_helped(trades):
+    """Win rate of the backtest's trades with vs without news before entry, and by market direction.
+    Each group is also shown for the older and newer half of the period, to see if it holds."""
+    for t in trades:
+        when = dt.datetime.fromisoformat(t["time"])
+        items = headlines(t["symbol"], when, limit=1)
+        t["news"] = None if items is None else bool(items)
+    half = len(trades) // 2
+    groups = [(f"News in the {NEWS_HOURS} hours before buying", lambda t: t["news"] is True),
+              ("No news", lambda t: t["news"] is False),
+              ("Market (S&P 500) up at entry", lambda t: t["market"] is not None and t["market"] > 0),
+              ("Market flat or down at entry", lambda t: t["market"] is not None and t["market"] <= 0)]
+    lines = []
+    for label, keep in groups:
+        parts = []
+        for name, chunk in (("all", trades), ("older half", trades[:half]), ("newer half", trades[half:])):
+            g = [t for t in chunk if keep(t)]
+            if g:
+                wins = sum(t["pnl_usd"] > 0 for t in g)
+                avg = sum(t["pct_of_account"] for t in g) / len(g) * 100
+                parts.append(f"{name}: {len(g)} trades, {wins / len(g) * 100:.0f}% winners, avg {avg:+.2f}%")
+            else:
+                parts.append(f"{name}: no trades")
+        lines.append(f"{label}: " + " | ".join(parts))
+    return lines
 
 
 def run_backtest():
@@ -694,8 +1016,7 @@ def run_backtest():
     trades, peak, max_dd, quiet, no_cands, day_lines = [], balance, 0.0, 0, 0, []
     for day, sess_open, sess_close in days:
         stats = stats_for_day(daily, day)
-        end = min(sess_open + dt.timedelta(hours=4, minutes=30), sess_close)
-        bars = get_bars(WATCHLIST, "1Min", sess_open, end)
+        bars = get_bars(WATCHLIST + ["SPY"], "1Min", sess_open, sess_close)
         day_trades, balance, n_cands = simulate_day(bars, stats, balance, day, sess_open, sess_close)
         trades += day_trades
         quiet += 0 if day_trades else 1
@@ -710,8 +1031,10 @@ def run_backtest():
     spy = [b for b in daily.get("SPY", []) if b["t"].date() <= days[-1][0]]
     spy_before = [b for b in spy if b["t"].date() < days[0][0]]
     spy_ret = (spy[-1]["c"] / spy_before[-1]["c"] - 1) * 100 if spy and spy_before else float("nan")
-    lines = [f"🧪 Day-trading backtest: last {len(days)} trading days "
-             f"({days[0][0]} to {days[-1][0]}), medium risk, max 2-hour hold", ""]
+    lines = [f"🧪 Day-trading backtest: last {len(days)} trading days ({days[0][0]} to {days[-1][0]})",
+             f"Rules: up to {MAX_TRADES_PER_DAY} trades a day with a third of the money each, entries until "
+             f"{clock(dt.datetime.combine(days[0][0], LAST_ENTRY))} New York, no buys when the S&P 500 is down "
+             f"more than {abs(MARKET_FLOOR) * 100:g}%, max 2-hour hold", ""]
     lines.append(summary(trades, start, balance))
     if trades:
         pcts = [t["pct_of_account"] * 100 for t in trades]
@@ -726,6 +1049,8 @@ def run_backtest():
     report += [f"{t['date']} {t['symbol']:<5} ${t['entry']:.2f} -> ${t['exit']:.2f} {t['exit_reason']:<6} "
                f"{t['pnl_usd'] * SAR_PER_USD:+.1f} SAR ({t['pct_of_account'] * 100:+.2f}% of account)"
                for t in trades] or ["(none)"]
+    report += ["", "Did news or the market make a difference? (same trades, split into groups)"]
+    report += what_helped(trades)
     report += ["", "Day by day:"] + day_lines
     path = write_report(f"backtest-{today}.txt", report, mode="w")
     wins = sum(t["pnl_usd"] > 0 for t in trades)

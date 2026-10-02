@@ -6,10 +6,15 @@ the owner's Telegram. Any real-money trades are placed by hand in the Sahm app, 
 this code.
 
 ## Fixed rules (change only when the owner asks)
-- Long only, opening-range breakout, at most one trade per day.
-- Every trade closes within 2 hours. Medium risk: about 3% of the account lost at the stop.
-- Fees: Sahm 0.105% per order. Messages show Saudi time (Asia/Riyadh).
-- Paper trading only. Never add real-money order placement.
+- Long only, opening-range breakout on the 5 busiest stocks of the morning.
+- Up to 3 trades a day, a third of the day's money each (they may overlap); entries until
+  1:55 PM New York; no new buys while the S&P 500 (SPY) is down more than 1% on the day.
+- Every trade closes within 2 hours and before the close. Never more than 3% of the account at risk.
+- Each pick shows the market, the stock's latest headlines and the setup's past success rate.
+- Fees: Sahm 0.105% per order. Messages show Saudi time (Asia/Riyadh) in 12-hour format.
+- Paper trading only, starting from 2,000 SAR. Never add real-money order placement.
+- A GitHub run lasts at most 6 hours: runs hand open trades over to a fresh run (saved in
+  daytrades.json under "open"); keep the live loop and `simulate_day` making the same trades.
 
 ## Where results live
 - `daytrades.json`: paper account balance and every live trade.

@@ -1,0 +1,124 @@
+🔬 Research: 1286 rule variations, 250 trading days (2025-10-03 to 2026-10-01)
+Tuning months: 2025-10-03 to 2026-06-15 (175 days). Test months (never used to choose): 2026-06-16 to 2026-10-01 (75 days).
+Costs: Sahm 0.105% per order + 0.05% slippage each way. Max 2-hour hold, one trade per day, medium risk sizing.
+
+== Where the current rules lose (whole year) ==
+240 trades |  38% winners |  -47.0% | avg -0.26%/trade | worst drop 47.5%
+Exits: 32 reached the target, 104 hit the stop, 104 closed at 2 hours.
+Average winner +0.89%, average loser -0.95% of the account.
+Same trades with no fees and no slippage: +11.7% (45% winners).
+Losing trades that were at least +0.3% up at some point: 63 of 150.
+Market above its VWAP at entry: 145 trades, 34% winners, -36.8%
+Market below its VWAP at entry: 95 trades, 43% winners, -16.1%
+Entries 09:45-10:15 New York: 226 trades, 38% winners, -47.6%
+Entries 10:15-11:00 New York: 13 trades, 38% winners, +1.5%
+Entries 11:00-13:30 New York: 1 trades, 0% winners, -0.3%
+
+Current rules, tuning months: 167 trades |  41% winners |  -27.9% | avg -0.19%/trade | worst drop 30.2%
+Current rules, test months:    73 trades |  30% winners |  -26.4% | avg -0.41%/trade | worst drop 26.4%
+
+== Rules with 80%+ winners in the tuning months (at least 40 trades): 27 found ==
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -2%, until 11:30, only stocks in an uptrend
+   tuning: 101 trades |  84% winners |  -25.5% | avg -0.29%/trade | worst drop 25.6%
+   TEST:    41 trades |  68% winners |  -16.2% | avg -0.43%/trade | worst drop 16.4%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -2%, until 11:30, only when market is OK, only stocks in an uptrend
+   tuning:  96 trades |  83% winners |  -25.7% | avg -0.31%/trade | worst drop 25.7%
+   TEST:    40 trades |  68% winners |  -16.3% | avg -0.44%/trade | worst drop 16.4%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -3%, until 11:30, only stocks in an uptrend
+   tuning: 101 trades |  85% winners |  -27.0% | avg -0.31%/trade | worst drop 27.1%
+   TEST:    41 trades |  68% winners |  -20.1% | avg -0.54%/trade | worst drop 20.3%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -3%, until 11:30, only when market is OK, only stocks in an uptrend
+   tuning:  96 trades |  84% winners |  -27.2% | avg -0.33%/trade | worst drop 27.3%
+   TEST:    40 trades |  68% winners |  -20.2% | avg -0.56%/trade | worst drop 20.4%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -2%, until 11:30
+   tuning: 128 trades |  84% winners |  -32.2% | avg -0.30%/trade | worst drop 32.2%
+   TEST:    53 trades |  72% winners |  -19.8% | avg -0.41%/trade | worst drop 19.9%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -2%, until 11:30, only when market is OK
+   tuning: 123 trades |  83% winners |  -32.4% | avg -0.31%/trade | worst drop 32.4%
+   TEST:    53 trades |  72% winners |  -19.8% | avg -0.41%/trade | worst drop 19.9%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -3%, until 11:30
+   tuning: 128 trades |  84% winners |  -34.0% | avg -0.32%/trade | worst drop 34.0%
+   TEST:    53 trades |  72% winners |  -24.5% | avg -0.52%/trade | worst drop 24.6%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -2%, until 13:30, only stocks in an uptrend
+   tuning: 120 trades |  80% winners |  -34.1% | avg -0.34%/trade | worst drop 34.2%
+   TEST:    49 trades |  67% winners |  -18.8% | avg -0.42%/trade | worst drop 18.9%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -3%, until 11:30, only when market is OK
+   tuning: 123 trades |  84% winners |  -34.1% | avg -0.33%/trade | worst drop 34.2%
+   TEST:    53 trades |  72% winners |  -24.5% | avg -0.52%/trade | worst drop 24.6%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -3%, until 13:30, only when market is OK, only stocks in an uptrend
+   tuning: 115 trades |  80% winners |  -34.7% | avg -0.37%/trade | worst drop 34.8%
+   TEST:    48 trades |  67% winners |  -23.1% | avg -0.54%/trade | worst drop 23.2%
+Dip below VWAP: 2% below VWAP, target +0.3%, stop -3%, until 13:30, only stocks in an uptrend
+   tuning: 120 trades |  81% winners |  -34.8% | avg -0.35%/trade | worst drop 34.9%
+   TEST:    49 trades |  67% winners |  -23.0% | avg -0.53%/trade | worst drop 23.2%
+Dip below VWAP: 0.75% below VWAP, target +0.3%, stop -2%, until 11:30
+   tuning: 175 trades |  81% winners |  -39.0% | avg -0.28%/trade | worst drop 39.2%
+   TEST:    75 trades |  79% winners |  -24.4% | avg -0.37%/trade | worst drop 24.6%
+Of 0 with 80%+ winners AND profit in the tuning months, 0 kept both in the test months.
+
+== Most profitable rules in the tuning months (any win rate) ==
+Gap-down recovery: gap down 2%+, stop 5-min low, target half the gap, only stocks in an uptrend
+   tuning:  43 trades |  58% winners |   -0.1% | avg +0.00%/trade | worst drop  3.6%
+   TEST:    24 trades |  54% winners |   -9.3% | avg -0.40%/trade | worst drop 10.3%
+Gap-down recovery: gap down 2%+, stop -1.5%, target half the gap, only stocks in an uptrend
+   tuning:  46 trades |  59% winners |   -0.9% | avg -0.01%/trade | worst drop  5.0%
+   TEST:    25 trades |  56% winners |   -7.6% | avg -0.31%/trade | worst drop  8.6%
+Gap-down recovery: gap down 2%+, stop -1%, target half the gap, only stocks in an uptrend
+   tuning:  46 trades |  52% winners |   -4.3% | avg -0.09%/trade | worst drop  6.3%
+   TEST:    25 trades |  56% winners |   -4.6% | avg -0.18%/trade | worst drop  5.6%
+Gap-down recovery: gap down 2%+, stop -1%, target half the gap
+   tuning:  69 trades |  57% winners |   -6.2% | avg -0.09%/trade | worst drop  7.4%
+   TEST:    37 trades |  43% winners |  -11.0% | avg -0.31%/trade | worst drop 11.3%
+Gap-down recovery: gap down 2%+, stop -1.5%, target half the gap
+   tuning:  69 trades |  61% winners |   -6.4% | avg -0.09%/trade | worst drop  8.8%
+   TEST:    37 trades |  46% winners |  -13.4% | avg -0.38%/trade | worst drop 13.6%
+Gap-down recovery: gap down 2%+, stop 5-min low, target half the gap
+   tuning:  68 trades |  57% winners |   -9.6% | avg -0.14%/trade | worst drop 11.8%
+   TEST:    36 trades |  44% winners |  -15.1% | avg -0.45%/trade | worst drop 15.3%
+Gap-down recovery: gap down 1%+, stop 5-min low, target half the gap, only stocks in an uptrend
+   tuning:  76 trades |  54% winners |   -9.9% | avg -0.13%/trade | worst drop 11.5%
+   TEST:    46 trades |  46% winners |  -17.5% | avg -0.41%/trade | worst drop 18.4%
+Gap-down recovery: gap down 1%+, stop -1.5%, target half the gap, only stocks in an uptrend
+   tuning:  78 trades |  55% winners |  -10.0% | avg -0.13%/trade | worst drop 10.2%
+   TEST:    48 trades |  50% winners |  -14.0% | avg -0.31%/trade | worst drop 14.9%
+Gap-down recovery: gap down 3%+, stop -1.5%, target half the gap
+   tuning:  40 trades |  45% winners |  -12.4% | avg -0.32%/trade | worst drop 14.3%
+   TEST:    24 trades |  54% winners |   -8.3% | avg -0.35%/trade | worst drop 10.7%
+Gap-down recovery: gap down 1%+, stop -1%, target half the gap, only stocks in an uptrend
+   tuning:  78 trades |  51% winners |  -12.5% | avg -0.17%/trade | worst drop 12.5%
+   TEST:    48 trades |  50% winners |  -12.1% | avg -0.27%/trade | worst drop 12.8%
+Gap-down recovery: gap down 3%+, stop -1%, target half the gap
+   tuning:  40 trades |  40% winners |  -13.1% | avg -0.35%/trade | worst drop 15.0%
+   TEST:    24 trades |  54% winners |   -4.0% | avg -0.17%/trade | worst drop  7.0%
+Gap-down recovery: gap down 2%+, stop -1%, target +0.5%
+   tuning:  83 trades |  71% winners |  -13.6% | avg -0.17%/trade | worst drop 15.1%
+   TEST:    52 trades |  54% winners |  -18.0% | avg -0.38%/trade | worst drop 19.8%
+Of 1276 rules with enough trades, 0 made money in the test months.
+
+== Trades of the top rule in the test months ==
+Gap-down recovery: gap down 2%+, stop 5-min low, target half the gap, only stocks in an uptrend
+2026-06-23 GS    target +0.33%
+2026-06-26 TXN   time   -0.93%
+2026-07-01 MU    stop   -3.02%
+2026-07-08 COIN  stop   -1.63%
+2026-07-09 NOW   target +0.17%
+2026-07-13 AMD   target +1.05%
+2026-07-14 ACN   target +0.35%
+2026-07-17 AMZN  target -0.14%
+2026-07-23 GS    stop   -1.09%
+2026-07-27 XOM   target +0.07%
+2026-07-28 COIN  stop   -1.75%
+2026-07-29 PG    target +0.65%
+2026-07-30 ABBV  stop   -1.74%
+2026-08-04 XOM   target +0.74%
+2026-08-05 AMD   stop   -3.10%
+2026-08-06 ACN   target +1.87%
+2026-08-18 NVDA  stop   -1.13%
+2026-08-20 COST  time   -0.24%
+2026-08-26 COIN  target +0.56%
+2026-09-08 COIN  time   +0.13%
+2026-09-10 ORCL  stop   -1.47%
+2026-09-14 QCOM  target +0.60%
+2026-09-24 MU    target +0.05%
+2026-09-28 MSFT  time   +0.15%
+

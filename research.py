@@ -11,10 +11,13 @@ Downloaded prices are cached in data/ on GitHub (never committed).
 """
 import bisect
 import concurrent.futures as cf
+import csv
 import datetime as dt
+import io
 import itertools
 import os
 import sys
+import urllib.request
 
 import numpy as np
 
@@ -173,6 +176,8 @@ def breakout(F, p):
         hit = (cc > hi[s]) & (cc <= hi[s] + 0.5 * (hi[s] - lo[s]))
         if p["mkt"]:
             hit &= mkt
+        if "floor" in p:  # the bot's market brake: no buys while the S&P 500 is down more than this today
+            hit &= F.c[F.spy, n_or:cut] / F.prev_close[F.spy] - 1 > p["floor"]
         if hit.any():
             stop = (hi[s] + lo[s]) / 2 if p["stop"] == "mid" else lo[s]
             sigs.append((n_or + int(np.argmax(hit)), rank, s, ("abs", stop), ("R", p["tgt"])))
@@ -290,7 +295,7 @@ def simulate_signal(F, m, s, stop_spec, tgt_spec, fee=FEE, slip=SLIP, cap=D.MAX_
     best = F.h[s, k0:k_exit + 1].max() / entry - 1  # best price reached while holding
     return {"day": F.day, "stock": s, "minute": m, "entry": entry, "exit": exit_, "why": why,
             "ret": ret, "gross": size * (raw / F.o[s, k0] - 1), "best": best, "stop": stop, "target": target,
-            "mkt_up": F.c[F.spy, m] > F.vwap[F.spy, m]}
+            "mkt_up": F.c[F.spy, m] > F.vwap[F.spy, m], "k_exit": k_exit, "size": size}
 
 
 def trade_for_day(F, sigs, fee=FEE, slip=SLIP):
@@ -680,10 +685,214 @@ def market_research():
     print(f"Saved {path}")
 
 
+# ---------------- would the losing trades have won if held longer? ----------------
+V2 = {"or": 15, "stop": "mid", "tgt": 2, "mkt": False, "trend": False, "until": 265, "top": 5, "floor": -0.01}
+HOLDS = [("2h", "No stop, 2 hours"), ("close", "No stop, until the day's close"),
+         (1, "No stop, up to 1 more day"), (3, "No stop, up to 3 more days"), (5, "No stop, up to 5 more days")]
+
+
+def clock12(t):
+    return t.strftime("%I:%M %p").lstrip("0")
+
+
+def v2_day(F):
+    """The bot's current rules on one day (daytrader v2): each of the 5 busiest morning stocks' first
+    breakout while the S&P 500 isn't down more than 1%, earliest first, at most 3, a third of the money each."""
+    out = []
+    for m, _, s, stop_spec, tgt_spec in sorted(breakout(F, V2), key=lambda x: (x[0], x[1])):
+        if len(out) >= 3:
+            break
+        t = simulate_signal(F, m, s, stop_spec, tgt_spec, cap=1 / 3)
+        if t:
+            out.append(t)
+    return out
+
+
+def net(entry, raw_exit):
+    """Result after slippage and Sahm fees, as a fraction of the money put into the trade."""
+    x = raw_exit * (1 - SLIP)
+    return (x / entry - 1) - FEE - FEE * x / entry
+
+
+def break_even(entry):
+    """Price at which selling gives back exactly what went in, after slippage and fees."""
+    return entry * (1 + FEE) / ((1 - SLIP) * (1 - FEE))
+
+
+def daily_ohlc(symbols, feats):
+    start = dt.datetime.combine(feats[0].day, dt.time(9, 30), D.NY) - dt.timedelta(days=5)
+    end = dt.datetime.combine(feats[-1].day, dt.time(16, 0), D.NY)
+    bars = D.get_bars(symbols, "1Day", start, end, adjustment="split")
+    return {s: {b["t"].date(): (b["o"], b["h"], b["l"], b["c"]) for b in bars.get(s, [])} for s in symbols}
+
+
+def hold_outcomes(feats, i, t, ohlc, name):
+    """For one trade: its result under each 'hold longer, no stop' rule (None if the data runs out),
+    and, after the bot actually sold, whether the price came back above break-even."""
+    F = feats[i]
+    s, k0, entry, target = t["stock"], t["minute"] + 1, t["entry"], t["target"]
+    rest = F.h[s, k0:F.n] >= target
+    first_hit = k0 + int(np.argmax(rest)) if rest.any() else None
+    res = {}
+    for key, _ in HOLDS:
+        if key in ("2h", "close"):
+            end = min(k0 + HOLD, F.n - 5) if key == "2h" else F.n - 5
+            res[key] = net(entry, max(target, F.o[s, first_hit]) if first_hit is not None and first_hit < end
+                           else F.o[s, end])
+            continue
+        if first_hit is not None:
+            res[key] = net(entry, max(target, F.o[s, first_hit]))
+            continue
+        if i + key >= len(feats):
+            res[key] = None
+            continue
+        raw, last = None, None
+        for d in range(1, key + 1):
+            bar = ohlc[name].get(feats[i + d].day)
+            if bar is None:
+                continue
+            o, h, _, c = bar
+            if h >= target:
+                raw = max(target, o)
+                break
+            last = c
+        res[key] = net(entry, raw if raw is not None else last) if (raw or last) else None
+
+    be = break_even(entry)
+    kx = t["k_exit"]
+    end2h = min(k0 + HOLD, F.n - 5)
+    back = {"2h": bool((F.h[s, kx + 1:end2h] >= be).any()) if kx + 1 < end2h else None,
+            "close": bool((F.h[s, kx + 1:F.n] >= be).any())}
+    for d in (1, 3, 5):
+        if back["close"]:
+            back[d] = True
+        elif i + d >= len(feats):
+            back[d] = None
+        else:
+            back[d] = any((ohlc[name].get(feats[i + j].day) or (0, 0, 0, 0))[1] >= be for j in range(1, d + 1))
+    return res, back
+
+
+def fetch_live_trades():
+    """The bot's live paper trades so far (journal/trades.csv on main)."""
+    repo = os.environ.get("GITHUB_REPOSITORY", "Mr-MTB/stock-assistant")
+    headers = {"Accept": "application/vnd.github.raw"}
+    if os.environ.get("GITHUB_TOKEN"):
+        headers["Authorization"] = f"Bearer {os.environ['GITHUB_TOKEN']}"
+    url = f"https://api.github.com/repos/{repo}/contents/journal/trades.csv?ref=main"
+    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as r:
+        return list(csv.DictReader(io.StringIO(r.read().decode())))
+
+
+def live_after_sale(rows):
+    """For each live trade: what the price did after the bot sold, until the close (or now)."""
+    lines, now = [], D.now_ny()
+    for r in rows:
+        day = dt.date.fromisoformat(r["date"])
+        cal = D.calendar(day, day)
+        if not cal:
+            continue
+        close = cal[0][2]
+        sold = dt.datetime.combine(day, dt.datetime.strptime(r["exit_time_ny"], "%I:%M %p").time(), D.NY)
+        end = min(close, now)
+        entry, exit_, target = float(r["entry"]), float(r["exit"]), float(r["target"])
+        bars = [b for b in D.get_bars([r["symbol"]], "1Min", sold, end).get(r["symbol"], []) if b["t"] >= sold]
+        head = (f"{r['symbol']} ({r['date']}): bought ${entry:.2f}, sold {r['exit_time_ny']} at ${exit_:.2f} "
+                f"({r['exit_reason']}), {float(r['pnl_pct']):+.2f}% → {r['result'].upper()}")
+        if not bars:
+            lines += [head, "   (no prices after the sale yet)"]
+            continue
+        be = break_even(entry)
+        hi = max(bars, key=lambda b: b["h"])
+        back = next((b for b in bars if b["h"] >= be), None)
+        tgt = next((b for b in bars if b["h"] >= target), None)
+        last = bars[-1]["c"]
+        held = net(entry, max(target, tgt["o"]) if tgt else last)
+        until = "the close (4:00 PM)" if now >= close else f"now ({clock12(now)} New York, market still open)"
+        lines += [head,
+                  f"   After the sale: highest ${hi['h']:.2f} at {clock12(hi['t'])}; price at {until}: ${last:.2f}",
+                  f"   Back above break-even (${be:.2f})? " + (f"yes, at {clock12(back['t'])}" if back else "no"),
+                  f"   Reached the target (${target:.2f})? " + (f"yes, at {clock12(tgt['t'])}" if tgt else "no"),
+                  f"   Holding with no stop until {until.split(' (')[0]}: {held * 100:+.2f}% "
+                  f"(instead of {float(r['pnl_pct']):+.2f}%)"]
+    return lines or ["(no live trades yet)"]
+
+
+def hold_research(live_rows=None):
+    symbols, today, feats, tune, test = load_study()
+    ohlc = daily_ohlc(symbols, feats)
+    split_day = test[0].day
+    rows = []
+    for i, F in enumerate(feats):
+        for t in v2_day(F):
+            res, back = hold_outcomes(feats, i, t, ohlc, symbols[t["stock"]])
+            rows.append({"day": F.day, "part": "test" if F.day >= split_day else "tuning", "t": t,
+                         "now": t["ret"] / t["size"], "res": res, "back": back})
+
+    lines = [f"⏳ Would the losing trades have won if held longer? The bot's current rules on "
+             f"{len(feats)} trading days ({feats[0].day} to {feats[-1].day}), Sahm costs included.", ""]
+    lines += ["== Today's live paper trades: what happened after the bot sold =="]
+    try:
+        lines += live_after_sale(live_rows if live_rows is not None else fetch_live_trades())
+    except Exception as e:
+        lines.append(f"(Couldn't check the live trades: {e})")
+
+    losers = [x for x in rows if x["now"] <= 0]
+    stops = [x for x in losers if x["t"]["why"] == "stop"]
+    lines += ["", f"== The past year: {len(rows)} trades, {len(rows) - len(losers)} winners, "
+                  f"{len(losers)} losers ({len(stops)} hit the stop, {len(losers) - len(stops)} closed at 2 hours) =="]
+
+    def share(group, key):
+        known = [x for x in group if x["back"][key] is not None]
+        k = sum(x["back"][key] for x in known)
+        return f"{k} of {len(known)} ({k / len(known) * 100:.0f}%)" if known else "no data"
+
+    lines += [f"Stop-outs that came back above break-even before the 2 hours were up: {share(stops, '2h')}",
+              f"Losers that came back above break-even later the same day: {share(losers, 'close')}",
+              f"... within 1 more day: {share(losers, 1)} | 3 more days: {share(losers, 3)} | "
+              f"5 more days: {share(losers, 5)}",
+              "('Came back' means the price touched that level at some moment; you'd have had to sell exactly then.)"]
+    lines += ["", "If the bot had kept its losing trades instead of selling (no stop, same target):"]
+    for key, label in HOLDS:
+        known = [x for x in losers if x["res"][key] is not None]
+        if known:
+            won = sum(x["res"][key] > 0 for x in known)
+            avg = np.mean([x["res"][key] for x in known]) * 100
+            lines.append(f"  {label}: {won} of {len(known)} losers would have ended as wins ({won / len(known) * 100:.0f}%); "
+                         f"the losers' average would be {avg:+.2f}% instead of "
+                         f"{np.mean([x['now'] for x in known]) * 100:+.2f}%")
+
+    full = [x for x in rows if all(x["res"][k] is not None for k, _ in HOLDS)]
+    lines += ["", f"== Fair test: the same rule for EVERY trade (winners too), {len(full)} trades with 5 days of data after them ==",
+              "(per trade: % of the money in that trade; total: % of the whole account, added up)"]
+    for part in ("tuning", "test"):
+        group = [x for x in full if x["part"] == part]
+        if not group:
+            continue
+        a, b = group[0]["day"], group[-1]["day"]
+        lines.append(f"{'Older' if part == 'tuning' else 'Newer'} months ({a} to {b}, {len(group)} trades):")
+        for key, label in [(None, "Bot's rules now (stop, target, 2 hours)")] + HOLDS:
+            r = np.array([x["now"] if key is None else x["res"][key] for x in group])
+            acct = np.array([x["t"]["size"] for x in group]) * r
+            lines.append(f"  {label:<40} {(r > 0).mean() * 100:3.0f}% winners | avg {r.mean() * 100:+.2f}% | "
+                         f"worst {r.min() * 100:+.1f}% | total {acct.sum() * 100:+.1f}% of the account")
+    window = [x for x in rows if dt.date(2026, 7, 9) <= x["day"] <= dt.date(2026, 10, 1)]
+    if window:
+        lines += ["", f"Check: same rules, Jul 9 to Oct 1: {len(window)} trades, "
+                      f"{sum(x['now'] > 0 for x in window) / len(window) * 100:.0f}% winners "
+                      "(the bot's own backtest of those days: 172 trades, 30%)."]
+
+    path = D.write_report(f"research-hold-{today}.txt", lines, mode="w")
+    print("\n".join(lines))
+    print(f"Saved {path}")
+    D.send(f"⏳ Hold-longer study finished. Full report saved in the repo ({path}).")
+
+
 if __name__ == "__main__":
     job = sys.argv[1] if len(sys.argv) > 1 else "research"
     try:
-        {"research_ai": ai_research, "research_market": market_research}.get(job, research)()
+        {"research_ai": ai_research, "research_market": market_research,
+         "research_hold": hold_research}.get(job, research)()
     except Exception as e:
         D.send(f"⚠️ Research error: {e}")
         raise

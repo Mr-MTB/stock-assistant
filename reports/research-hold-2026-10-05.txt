@@ -1,0 +1,51 @@
+⏳ Would the losing trades have won if held longer? The bot's current rules on 250 trading days (2025-10-06 to 2026-10-02), Sahm costs included.
+
+== Today's live paper trades: what happened after the bot sold ==
+INTU (2026-10-05): bought $290.47, sold 10:15 AM at $284.86 (stop), -2.14% → LOSS
+   After the sale: highest $286.08 at 10:41 AM; price at now (2:04 PM New York, market still open): $282.48
+   Back above break-even ($291.23)? no
+   Reached the target ($301.20)? no
+   Holding with no stop until now: -3.01% (instead of -2.14%)
+TSLA (2026-10-05): bought $372.06, sold 11:46 AM at $377.65 (time), +1.29% → WIN
+   After the sale: highest $381.12 at 1:43 PM; price at now (2:04 PM New York, market still open): $379.69
+   Back above break-even ($373.03)? yes, at 11:46 AM
+   Reached the target ($379.43)? yes, at 12:55 PM
+   Holding with no stop until now: +1.72% (instead of +1.29%)
+UBER (2026-10-05): bought $69.60, sold 12:10 PM at $69.49 (time), -0.37% → LOSS
+   After the sale: highest $70.00 at 12:57 PM; price at now (2:04 PM New York, market still open): $69.50
+   Back above break-even ($69.78)? yes, at 12:40 PM
+   Reached the target ($70.78)? no
+   Holding with no stop until now: -0.41% (instead of -0.37%)
+
+== The past year: 718 trades, 245 winners, 473 losers (307 hit the stop, 166 closed at 2 hours) ==
+Stop-outs that came back above break-even before the 2 hours were up: 46 of 305 (15%)
+Losers that came back above break-even later the same day: 198 of 473 (42%)
+... within 1 more day: 311 of 471 (66%) | 3 more days: 376 of 469 (80%) | 5 more days: 389 of 465 (84%)
+('Came back' means the price touched that level at some moment; you'd have had to sell exactly then.)
+
+If the bot had kept its losing trades instead of selling (no stop, same target):
+  No stop, 2 hours: 24 of 473 losers would have ended as wins (5%); the losers' average would be -0.91% instead of -0.89%
+  No stop, until the day's close: 105 of 473 losers would have ended as wins (22%); the losers' average would be -0.93% instead of -0.89%
+  No stop, up to 1 more day: 176 of 470 losers would have ended as wins (37%); the losers' average would be -0.91% instead of -0.89%
+  No stop, up to 3 more days: 249 of 467 losers would have ended as wins (53%); the losers' average would be -0.88% instead of -0.89%
+  No stop, up to 5 more days: 285 of 462 losers would have ended as wins (62%); the losers' average would be -0.82% instead of -0.89%
+
+== Fair test: the same rule for EVERY trade (winners too), 706 trades with 5 days of data after them ==
+(per trade: % of the money in that trade; total: % of the whole account, added up)
+Older months (2025-10-06 to 2026-06-16, 501 trades):
+  Bot's rules now (stop, target, 2 hours)   35% winners | avg -0.29% | worst -2.2% | total -47.8% of the account
+  No stop, 2 hours                          38% winners | avg -0.32% | worst -7.1% | total -53.9% of the account
+  No stop, until the day's close            42% winners | avg -0.34% | worst -8.6% | total -56.3% of the account
+  No stop, up to 1 more day                 53% winners | avg -0.35% | worst -22.4% | total -58.7% of the account
+  No stop, up to 3 more days                65% winners | avg -0.31% | worst -25.5% | total -51.5% of the account
+  No stop, up to 5 more days                69% winners | avg -0.36% | worst -27.2% | total -60.1% of the account
+Newer months (2026-06-17 to 2026-09-30, 205 trades):
+  Bot's rules now (stop, target, 2 hours)   34% winners | avg -0.29% | worst -1.9% | total -20.0% of the account
+  No stop, 2 hours                          38% winners | avg -0.25% | worst -4.3% | total -17.3% of the account
+  No stop, until the day's close            42% winners | avg -0.31% | worst -3.9% | total -21.1% of the account
+  No stop, up to 1 more day                 51% winners | avg -0.24% | worst -8.2% | total -16.6% of the account
+  No stop, up to 3 more days                63% winners | avg -0.12% | worst -17.4% | total -8.2% of the account
+  No stop, up to 5 more days                71% winners | avg +0.05% | worst -18.9% | total +3.1% of the account
+
+Check: same rules, Jul 9 to Oct 1: 172 trades, 29% winners (the bot's own backtest of those days: 172 trades, 30%).
+

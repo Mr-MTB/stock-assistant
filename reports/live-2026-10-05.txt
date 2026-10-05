@@ -1,0 +1,52 @@
+[9:20 AM New York | 4:20 PM your time] Run started at 9:20 AM New York (4:20 PM your time).
+[9:45 AM New York | 4:45 PM your time] 👀 Mon Oct 5 picks: watching for breakouts until 8:55 PM (your time)
+Market (S&P 500): +0.15% today ✅
+1. MSFT: buy above $531.79 (volume 19% of a normal day already) 📰
+2. INTU: buy above $289.37 (volume 19% of a normal day already) 📰
+3. NVDA: buy above $237.81 (volume 15% of a normal day already) 📰
+4. UBER: buy above $69.61 (volume 13% of a normal day already)
+5. TSLA: buy above $371.77 (volume 10% of a normal day already) 📰
+Up to 3 trades today, about 667 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 30% (51 of 172 trades won, 2026-07-09 to 2026-10-01).
+[9:46 AM New York | 4:46 PM your time] ✅ BOUGHT TSLA (trade 1 of 3 today): 0.4778 shares at $372.06 (≈ 667 SAR)
+Stop $368.38 | Target $379.43 | Sell by 6:46 PM (your time) at the latest
+Market (S&P 500): +0.12% today ✅
+📰 News (last 24 hours):
+• Elon Musk's Tesla Delivered More Cars Than Wall Street Expected — So Why Is This Top Analyst Still Wary of TSLA Stock?
+• Elon Musk Agrees Tesla's Early Custom AI Chit Bet May be More Important Than Ever, Backs TSLA Engineer's Warning: ‘Current Compute Shortage Is Only the Tip of the Iceberg’
+Past success rate of this setup: 30% (51 of 172 trades won, 2026-07-09 to 2026-10-01).
+[9:47 AM New York | 4:47 PM your time] ✅ BOUGHT INTU (trade 2 of 3 today): 0.6120 shares at $290.47 (≈ 667 SAR)
+Stop $285.11 | Target $301.20 | Sell by 6:47 PM (your time) at the latest
+Market (S&P 500): +0.10% today ✅
+📰 News (last 24 hours):
+• Axios Reported Earlier Sunday, Nvidia-Backed Reflection Prepares Powerful Open-Weight AI System To Challenge Chinese Upstarts, U.S. AI Giants
+Past success rate of this setup: 30% (51 of 172 trades won, 2026-07-09 to 2026-10-01).
+[10:01 AM New York | 5:01 PM your time] ⚠️ INTU is close to the STOP: now $286.44, stop $285.11
+Loss right now: -10.6 SAR (-1.59%)
+[10:06 AM New York | 5:06 PM your time] 🔥 TSLA is close to the TARGET: now $378.14, target $379.43
+Profit right now: +9.5 SAR (+1.42%)
+[10:10 AM New York | 5:10 PM your time] ✅ BOUGHT UBER (trade 3 of 3 today): 2.5542 shares at $69.60 (≈ 667 SAR)
+Stop $69.01 | Target $70.78 | Sell by 7:10 PM (your time) at the latest
+Market (S&P 500): +0.28% today ✅
+📰 No news about it in the last 24 hours.
+Past success rate of this setup: 30% (51 of 172 trades won, 2026-07-09 to 2026-10-01).
+[10:15 AM New York | 5:15 PM your time] 🛑 SOLD INTU at $284.86 (hit stop) after 29 min, trade 1 of 3 today
+❌ LOSS: -14.3 SAR (-2.14%)
+Balance: 1,986 SAR | Since start: 0 wins, 1 loss, net -14.3 SAR
+[10:19 AM New York | 5:19 PM your time] ⚠️ UBER is close to the STOP: now $69.11, stop $69.01
+Loss right now: -6.1 SAR (-0.91%)
+[11:31 AM New York | 6:31 PM your time] ⏳ TSLA: 15 minutes left before the 2-hour exit (6:46 PM your time).
+Now $377.89 | Profit right now: +9.0 SAR (+1.35%)
+[11:46 AM New York | 6:46 PM your time] ⏰ SOLD TSLA at $377.65 (2 hours passed) after 120 min, trade 2 of 3 today
+✅ WIN: +8.6 SAR (+1.29%)
+Balance: 1,994 SAR | Since start: 1 win, 1 loss, net -5.7 SAR
+[11:55 AM New York | 6:55 PM your time] ⏳ UBER: 15 minutes left before the 2-hour exit (7:10 PM your time).
+Now $69.62 | Loss right now: -1.2 SAR (-0.18%)
+[12:10 PM New York | 7:10 PM your time] ⏰ SOLD UBER at $69.49 (2 hours passed) after 120 min, trade 3 of 3 today
+❌ LOSS: -2.5 SAR (-0.37%)
+Balance: 1,992 SAR | Since start: 1 win, 2 losses, net -8.1 SAR
+[1:55 PM New York | 8:55 PM your time] 📊 End of day, Mon Oct 5
+Today: 3 trades, -8.1 SAR (-0.41%)
+Balance: 1,992 SAR | Since start: -8.1 SAR (-0.4%), 1 win, 2 losses, net -8.1 SAR
+

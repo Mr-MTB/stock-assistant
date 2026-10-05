@@ -1,7 +1,118 @@
 {
   "start_usd": 533.33,
-  "balance_usd": 533.33,
+  "balance_usd": 531.16,
   "paused": false,
-  "last_run": "2026-10-02",
-  "trades": []
+  "last_run": "2026-10-05",
+  "trades": [
+    {
+      "date": "2026-10-05",
+      "symbol": "INTU",
+      "entry": 290.47,
+      "exit": 284.856,
+      "qty": 0.612008124,
+      "exit_reason": "stop",
+      "minutes": 29,
+      "pnl_usd": -3.81,
+      "balance_usd": 529.52
+    },
+    {
+      "date": "2026-10-05",
+      "symbol": "TSLA",
+      "entry": 372.064,
+      "exit": 377.646,
+      "qty": 0.477794142,
+      "exit_reason": "time",
+      "minutes": 120,
+      "pnl_usd": 2.29,
+      "balance_usd": 531.81
+    },
+    {
+      "date": "2026-10-05",
+      "symbol": "UBER",
+      "entry": 69.6,
+      "exit": 69.49,
+      "qty": 2.554166666,
+      "exit_reason": "time",
+      "minutes": 120,
+      "pnl_usd": -0.65,
+      "balance_usd": 531.16
+    }
+  ],
+  "open": [],
+  "day": {
+    "date": "2026-10-05",
+    "start_usd": 533.33,
+    "done": true,
+    "spy_prev": 769.65,
+    "candidates": 5,
+    "announced": true,
+    "scanning": true,
+    "signals": [
+      {
+        "time_ny": "9:46 AM",
+        "bar_t": "2026-10-05T09:45:00-04:00",
+        "symbol": "TSLA",
+        "rank": 5,
+        "taken": "yes",
+        "why_not": "",
+        "market_pct": 0.12473202104852366,
+        "rvol": 0.09503413109108168,
+        "range_pct": 1.8241007291022016,
+        "gap_pct": -0.6853011007986076,
+        "stop": 368.38,
+        "would_exit": "time",
+        "would_pnl_pct": 1.071806165020583,
+        "would_result": "win"
+      },
+      {
+        "time_ny": "9:47 AM",
+        "bar_t": "2026-10-05T09:46:00-04:00",
+        "symbol": "INTU",
+        "rank": 2,
+        "taken": "yes",
+        "why_not": "",
+        "market_pct": 0.10004547521600404,
+        "rvol": 0.18811375003322323,
+        "range_pct": 2.9487002212389486,
+        "gap_pct": 0.1850599665468522,
+        "stop": 285.105,
+        "would_exit": "stop",
+        "would_pnl_pct": -2.3029009532323483,
+        "would_result": "loss"
+      },
+      {
+        "time_ny": "10:10 AM",
+        "bar_t": "2026-10-05T10:09:00-04:00",
+        "symbol": "UBER",
+        "rank": 4,
+        "taken": "yes",
+        "why_not": "",
+        "market_pct": 0.2812966933021688,
+        "rvol": 0.13355461858978962,
+        "range_pct": 1.741581153345857,
+        "gap_pct": 0.4698972099853371,
+        "stop": 69.01249999999999,
+        "would_exit": "time",
+        "would_pnl_pct": -0.5033020837011088,
+        "would_result": "loss"
+      },
+      {
+        "time_ny": "1:45 PM",
+        "bar_t": "2026-10-05T13:44:00-04:00",
+        "symbol": "NVDA",
+        "rank": 3,
+        "taken": "no",
+        "why_not": "limit",
+        "market_pct": 0.6749821347365792,
+        "rvol": 0.14737321909777754,
+        "range_pct": 1.0961036775225188,
+        "gap_pct": 0.9166666666666767,
+        "stop": 236.5025,
+        "would_exit": "time",
+        "would_pnl_pct": -0.36649084412530725,
+        "would_result": "loss"
+      }
+    ],
+    "journaled": true
+  }
 }

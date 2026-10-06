@@ -3,3 +3,5 @@ date,time_ny,symbol,rank,taken,why_not,market_pct,rvol,range_pct,gap_pct,would_e
 2026-10-05,9:47 AM,INTU,2,yes,,0.1000,0.1881,2.9487,0.1851,stop,-2.3029,loss
 2026-10-05,10:10 AM,UBER,4,yes,,0.2813,0.1336,1.7416,0.4699,time,-0.5033,loss
 2026-10-05,1:45 PM,NVDA,3,no,limit,0.6750,0.1474,1.0961,0.9167,time,-0.3665,loss
+2026-10-06,9:51 AM,MA,5,yes,,0.5342,0.0932,0.5830,-0.1682,stop,-0.6321,loss
+2026-10-06,10:06 AM,MU,1,yes,,0.6329,0.1554,2.2789,0.0762,stop,-1.6138,loss

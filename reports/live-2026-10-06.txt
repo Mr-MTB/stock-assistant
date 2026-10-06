@@ -1,0 +1,43 @@
+[9:20 AM New York | 4:20 PM your time] Run started at 9:20 AM New York (4:20 PM your time).
+[9:45 AM New York | 4:45 PM your time] 👀 Tue Oct 6 picks: watching for breakouts until 8:55 PM (your time)
+Market (S&P 500): +0.48% today ✅
+1. MU: buy above $1070.72 (volume 16% of a normal day already) 📰
+2. PLTR: buy above $194.52 (volume 12% of a normal day already) 📰
+3. NOW: buy above $140.58 (volume 11% of a normal day already) 📰
+4. SHOP: buy above $166.19 (volume 11% of a normal day already) 📰
+5. MA: buy above $565.84 (volume 9% of a normal day already) 📰
+Up to 3 trades today, about 664 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 30% (51 of 172 trades won, 2026-07-09 to 2026-10-01).
+[9:51 AM New York | 4:51 PM your time] ✅ BOUGHT MA (trade 1 of 3 today): 0.3129 shares at $565.88 (≈ 664 SAR)
+Stop $564.19 | Target $569.26 | Sell by 6:51 PM (your time) at the latest
+Market (S&P 500): +0.53% today ✅
+📰 News (last 24 hours):
+• JPMorgan’s October Stock Picks Hint at 3 ETF Trades: Value, AI Power, Health Care
+• Mastercard To Resell Rezolve AI Software Worldwide
+Past success rate of this setup: 30% (51 of 172 trades won, 2026-07-09 to 2026-10-01).
+[10:03 AM New York | 5:03 PM your time] 🔥 MA is close to the TARGET: now $568.58, target $569.26
+Profit right now: +1.8 SAR (+0.27%)
+[10:06 AM New York | 5:06 PM your time] ✅ BOUGHT MU (trade 2 of 3 today): 0.1649 shares at $1073.39 (≈ 664 SAR)
+Stop $1058.58 | Target $1103.02 | Sell by 7:06 PM (your time) at the latest
+Market (S&P 500): +0.63% today ✅
+📰 News (last 24 hours):
+• Netlist, Micron Agrees To Resolve Previous Pending Legal Proceedings; Micron To Pay $30M Per Quarter to Netlist From Q4 2026 Through Q3 2031
+• Nvidia, Broadcom May Be Surprisingly Safe From a 32-GW Hole in the AI Boom, Morgan Stanley Says
+Past success rate of this setup: 30% (51 of 172 trades won, 2026-07-09 to 2026-10-01).
+[10:22 AM New York | 5:22 PM your time] ⚠️ MU is close to the STOP: now $1061.86, stop $1058.58
+Loss right now: -8.5 SAR (-1.28%)
+[10:28 AM New York | 5:28 PM your time] ⚠️ MA is close to the STOP: now $564.60, stop $564.19
+Loss right now: -2.9 SAR (-0.44%)
+[10:29 AM New York | 5:29 PM your time] 🛑 SOLD MA at $564.18 (hit stop) after 38 min, trade 1 of 3 today
+❌ LOSS: -3.4 SAR (-0.51%)
+Balance: 1,988 SAR | Since start: 1 win, 3 losses, net -11.5 SAR
+[11:51 AM New York | 6:51 PM your time] ⏳ MU: 15 minutes left before the 2-hour exit (7:06 PM your time).
+Now $1066.13 | Loss right now: -5.9 SAR (-0.89%)
+[12:06 PM New York | 7:06 PM your time] ⏰ SOLD MU at $1065.66 (2 hours passed) after 120 min, trade 2 of 3 today
+❌ LOSS: -6.2 SAR (-0.93%)
+Balance: 1,982 SAR | Since start: 1 win, 4 losses, net -17.7 SAR
+[1:55 PM New York | 8:55 PM your time] 📊 End of day, Tue Oct 6
+Today: 2 trades, -9.6 SAR (-0.48%)
+Balance: 1,982 SAR | Since start: -17.7 SAR (-0.9%), 1 win, 4 losses, net -17.7 SAR
+

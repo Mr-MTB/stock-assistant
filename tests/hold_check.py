@@ -138,6 +138,37 @@ check("live: reports the highest price after the sale",
       any(f"highest ${max(b['h'] for b in after):.2f}" in x for x in lines), lines)
 check("live: reports the price at the close", any(f"4:00 PM): ${after[-1]['c']:.2f}" in x for x in lines), lines)
 
+# 3b. Hold-until-close test: its copy of today's rules must give the same trades as v2_day
+same, total = 0, 0
+for F_ in feats:
+    a = R.v2_day(F_)
+    b = R.exits_day(F_, 15, 265, R.NOW_RULE, None)
+    total += 1
+    same += [(t["stock"], round(t["entry"], 6), round(t["ret"] / t["size"], 9)) for t in a] == \
+            [(t["stock"], round(t["entry"], 6), round(t["net"], 9)) for t in b]
+check("exits: its 'bot today' version matches v2_day on every day", same == total, f"{same}/{total}")
+
+# 3c. Hand-made exit paths: break-even move and trailing stop
+F2 = feats[i0 + 2]
+s2 = symbols.index("MSFT")
+path = [100.0] * F2.n
+path[25:30] = [100.5, 101.2, 101.5, 101.0, 100.4]   # +1.5R, then back down
+path[30:] = [99.5] * (F2.n - 30)
+for k in range(F2.n):  # each minute opens at the previous close, so prices move through levels, not past them
+    F2.o[s2, k] = path[k - 1] if k else path[0]
+    F2.c[s2, k] = path[k]
+    F2.h[s2, k], F2.l[s2, k] = max(F2.o[s2, k], path[k]), min(F2.o[s2, k], path[k])
+raw, why = R.walk_exit(F2, s2, 20, 100.0, 99.0, 103.0, F2.n - 5, be_at=1)
+check("exits: break-even move turns a stop-out into a scratch", why == "protect" and
+      abs(raw - R.break_even(100.0)) < 1e-9, (raw, why))
+raw, why = R.walk_exit(F2, s2, 20, 100.0, 99.0, None, F2.n - 5, trail=1)
+check("exits: trailing stop follows the best price (101.5 - 1R = 100.5)", why == "protect" and
+      abs(raw - 100.5) < 1e-9, (raw, why))
+raw, why = R.walk_exit(F2, s2, 20, 100.0, 99.6, None, F2.n - 5)
+check("exits: plain stop is hit later", why == "stop" and abs(raw - 99.6) < 1e-9, (raw, why))
+raw, why = R.walk_exit(F2, s2, 20, 100.0, None, None, F2.n - 40)
+check("exits: no stop, no target: sold at the end time", why == "end" and abs(raw - 99.5) < 1e-9, (raw, why))
+
 # 4. Full study
 world.now = None
 D.now_ny = lambda: dt.datetime.combine(days[-1] + dt.timedelta(days=3), dt.time(8), NY)
@@ -150,6 +181,17 @@ check("study: report has every section", all(k in text for k in (
     "Today's live paper trades", "The past year", "came back above break-even", "If the bot had kept",
     "Fair test", "Bot's rules now")), text[:500])
 check("study: Telegram note sent", any("Hold-longer study finished" in m for m in F.SENT), F.SENT[-1:])
+
+# 5. Hold-until-close test runs end to end
+F.SENT.clear()
+R.exits_research()
+path = f"reports/research-exits-{D.now_ny().date()}.txt"
+text = open(path).read() if os.path.exists(path) else ""
+check("exits: report has every section", all(k in text for k in (
+    "The bot today", "Hold-until-close versions", "Highest win rate", "Every version")), text[:400])
+check("exits: every version listed", text.count(": ") and
+      sum(1 for x in text.splitlines() if x.startswith(("15-min", "5-min")) and "|" in x) == len(R.exit_versions()),
+      len(R.exit_versions()))
 
 print("\nALL PASSED" if ok_all else "\nSOME CHECKS FAILED")
 sys.exit(0 if ok_all else 1)

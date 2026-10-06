@@ -151,8 +151,9 @@ class Day:
         self.ok[self.spy] = False  # SPY is only used as the market filter
 
 
-def cutoff(F, minute):
-    return min(minute, F.n - (HOLD + 5))
+def cutoff(F, minute, hold=HOLD):
+    """Last minute a trade may start: never so late that its hold would run past the close."""
+    return min(minute, F.n - (hold + 5))
 
 
 # ---------------- rule families ----------------
@@ -160,7 +161,7 @@ def cutoff(F, minute):
 # stop/target: ("abs", price) | ("pct", fraction) | ("R", multiple of risk) | ("high", None)
 def breakout(F, p):
     """Opening range breakout (the current bot when or=15, stop=mid, tgt=2R, until 11:30, no filters)."""
-    n_or, cut = p["or"], cutoff(F, p["until"])
+    n_or, cut = p["or"], cutoff(F, p["until"], p.get("hold", HOLD))
     hi, lo = F.h[:, :n_or].max(1), F.l[:, :n_or].min(1)
     last, vol = F.c[:, n_or - 1], F.v[:, :n_or].sum(1)
     rng = (hi - lo) / last
@@ -888,11 +889,144 @@ def hold_research(live_rows=None):
     D.send(f"⏳ Hold-longer study finished. Full report saved in the repo ({path}).")
 
 
+# ---------------- hold until (just before) the close: which stop, target, start and times work best? ----------------
+EXIT_RULES = [  # (name, stop at, target in R (None = ride to the end), move stop to break-even at +R, trail R)
+    ("stop mid, target 2R", "mid", 2, None, None),
+    ("stop mid, target 3R", "mid", 3, None, None),
+    ("stop mid, no target", "mid", None, None, None),
+    ("wide stop (range low), target 2R", "low", 2, None, None),
+    ("wide stop (range low), no target", "low", None, None, None),
+    ("stop mid, target 3R, break-even at +1R", "mid", 3, 1, None),
+    ("stop mid, trailing 1R after +1R", "mid", None, None, 1),
+    ("no stop, target 2R", None, 2, None, None),
+]
+NOW_RULE = ("stop mid, target 2R, 2 hours", "mid", 2, None, None)
+LAST_ENTRIES = {"1:55 PM": 265, "2:50 PM": 320}
+EXIT_TIMES = {"3:20 PM": 40, "3:55 PM": 5}  # minutes before the close
+
+
+def walk_exit(F, s, k0, entry, stop, target, end, be_at=None, trail=None):
+    """Minute by minute from k0 until `end`; returns (raw exit price, reason). Same minute: stop before target."""
+    risk = entry - stop if stop is not None else None
+    cur, best = stop, entry
+    lo, hi, op = F.l[s], F.h[s], F.o[s]
+    for k in range(k0, end):
+        if cur is not None and lo[k] <= cur:
+            return min(cur, op[k]), "stop" if cur == stop else "protect"
+        if target is not None and hi[k] >= target:
+            return max(target, op[k]), "target"
+        best = max(best, hi[k])
+        if risk:
+            if be_at and best >= entry + be_at * risk:
+                cur = max(cur, break_even(entry))
+            if trail and best >= entry + risk:
+                cur = max(cur, best - trail * risk)
+    return op[end], "end"
+
+
+def exits_day(F, n_or, until, rule, before_close):
+    """One day: the bot's v2 entries (first breakouts of the 5 busiest morning stocks while the S&P 500 isn't
+    down more than 1%, earliest first, at most 3, a third of the money each) with this rule's exits.
+    before_close None = the bot today (2-hour hold); otherwise exit everything that many minutes before the close."""
+    _, stop_kind, tgt_r, be_at, trail = rule
+    hold = HOLD if before_close is None else before_close + 25  # last entry at least 30 min before the exit
+    p = dict(V2, **{"or": n_or, "until": until, "stop": stop_kind or "mid", "hold": hold})
+    out = []
+    for m, _, s, (_, stop), _ in sorted(breakout(F, p), key=lambda x: (x[0], x[1])):
+        if len(out) >= 3:
+            break
+        k0 = m + 1
+        if k0 >= F.n - 5:
+            continue
+        entry = F.o[s, k0] * (1 + SLIP)
+        risk = (entry - stop) / entry
+        if risk < 0.001 or risk > MAX_STOP + 1e-9:
+            continue
+        size = min(1 / 3, RISK / risk)
+        end = min(k0 + HOLD, F.n - 5) if before_close is None else F.n - before_close
+        target = entry + tgt_r * (entry - stop) if tgt_r else None
+        raw, why = walk_exit(F, s, k0, entry, stop if stop_kind else None, target, end, be_at, trail)
+        r = net(entry, raw)
+        out.append({"day": F.day, "stock": s, "minute": m, "entry": entry, "raw": raw, "why": why,
+                    "net": r, "acct": size * r})
+    return out
+
+
+def exit_stats(trades):
+    if not trades:
+        return {"n": 0, "wr": 0.0, "total": 0.0}
+    r = np.array([t["net"] for t in trades])
+    acct = np.array([t["acct"] for t in trades])
+    win, loss = r[r > 0], r[r <= 0]
+    return {"n": len(r), "wr": (r > 0).mean(), "avg": r.mean(), "win": win.mean() if len(win) else 0.0,
+            "loss": loss.mean() if len(loss) else 0.0, "worst": r.min(), "total": acct.sum()}
+
+
+def exit_line(st):
+    if not st["n"]:
+        return "no trades"
+    return (f"{st['n']:3d} trades | {st['wr'] * 100:3.0f}% winners | avg win {st['win'] * 100:+.2f}% | "
+            f"avg loss {st['loss'] * 100:+.2f}% | worst {st['worst'] * 100:+.1f}% | "
+            f"total {st['total'] * 100:+6.1f}% of the account")
+
+
+def exit_versions():
+    out = [(15, "1:55 PM", NOW_RULE, None)]
+    for n_or in (15, 5):
+        for until in LAST_ENTRIES:
+            for exit_label in EXIT_TIMES:
+                for rule in EXIT_RULES:
+                    out.append((n_or, until, rule, exit_label))
+    return out
+
+
+def exits_research():
+    symbols, today, feats, tune, test = load_study()
+    results = []
+    for n_or, until, rule, exit_label in exit_versions():
+        before = None if exit_label is None else EXIT_TIMES[exit_label]
+        a = [t for F in tune for t in exits_day(F, n_or, LAST_ENTRIES[until], rule, before)]
+        b = [t for F in test for t in exits_day(F, n_or, LAST_ENTRIES[until], rule, before)]
+        results.append((n_or, until, rule, exit_label, exit_stats(a), exit_stats(b)))
+    print(f"Tested {len(results)} versions.")
+
+    def name(x):
+        hold = "2-hour hold" if x[3] is None else f"sell everything at {x[3]}"
+        return f"{x[0]}-min start, last entry {x[1]}, {hold}: {x[2][0]}"
+
+    now = results[0]
+    lines = [f"🕐 Hold until the close: {len(results)} versions of the bot's rules on {len(feats)} trading days "
+             f"({feats[0].day} to {feats[-1].day}). Sahm costs included. Per trade: % of the money in that trade. "
+             "Total: % of the whole account, added up. Times are New York.",
+             f"Older months (used to choose): {tune[0].day} to {tune[-1].day}. "
+             f"Newer months (never used to choose): {test[0].day} to {test[-1].day}.", "",
+             "== The bot today ==", name(now), f"   older: {exit_line(now[4])}", f"   NEWER: {exit_line(now[5])}", ""]
+    held = [x for x in results[1:] if x[4]["n"] >= 100]
+    lines.append("== Hold-until-close versions, best total in the older months first ==")
+    for x in sorted(held, key=lambda x: -x[4]["total"])[:15]:
+        lines += [name(x), f"   older: {exit_line(x[4])}", f"   NEWER: {exit_line(x[5])}"]
+    lines += ["", "== Highest win rate in the older months =="]
+    for x in sorted(held, key=lambda x: -x[4]["wr"])[:8]:
+        lines += [name(x), f"   older: {exit_line(x[4])}", f"   NEWER: {exit_line(x[5])}"]
+    lines += ["", f"Of {len(held)} hold-until-close versions, {sum(x[4]['total'] > 0 for x in held)} made money in "
+                  f"the older months, {sum(x[5]['total'] > 0 for x in held)} in the newer months, "
+                  f"{sum(x[4]['total'] > 0 and x[5]['total'] > 0 for x in held)} in both."]
+    lines += ["", "== Every version (older | NEWER: winners, total) =="]
+    for x in results:
+        lines.append(f"{name(x)}: {x[4]['wr'] * 100:.0f}%, {x[4]['total'] * 100:+.1f}% | "
+                     f"{x[5]['wr'] * 100:.0f}%, {x[5]['total'] * 100:+.1f}%")
+
+    path = D.write_report(f"research-exits-{today}.txt", lines, mode="w")
+    print("\n".join(lines))
+    print(f"Saved {path}")
+    D.send(f"🕐 Hold-until-close test finished ({len(results)} versions). Full report saved in the repo ({path}).")
+
+
 if __name__ == "__main__":
     job = sys.argv[1] if len(sys.argv) > 1 else "research"
     try:
         {"research_ai": ai_research, "research_market": market_research,
-         "research_hold": hold_research}.get(job, research)()
+         "research_hold": hold_research, "research_exits": exits_research}.get(job, research)()
     except Exception as e:
         D.send(f"⚠️ Research error: {e}")
         raise

@@ -181,9 +181,10 @@ def run_main(mode="live"):
 class ScriptWorld(World):
     """Market days written to order.
 
-    script: {symbol: (breakout_minute, outcome)} with outcome "target", "stop" or "time"
-    (breakout_minute None = a strong morning but no breakout). Scripted stocks gap up 1% and rise
-    for 15 minutes on heavy volume, then sit just under their 15-minute high until the breakout.
+    script: {symbol: (breakout_minute, outcome)} with outcome "up" (or "target"), "stop" or "time"
+    (breakout_minute None = a strong morning but no breakout). Scripted stocks gap up 1% and rise about
+    1% during the opening range (D.OR_MINUTES) on heavy volume, then sit just under their opening-range
+    high until the breakout. After it: "up" keeps rising, "stop" falls through the stop, "time" stays flat.
     Other stocks stay flat (they never pass the morning filters). spy: "up" or "down" (-2%).
     """
 
@@ -192,6 +193,7 @@ class ScriptWorld(World):
         super().__init__(days, list(dict.fromkeys(symbols + ["SPY"])), **kw)
 
     def make_day(self, s, d, prev, scenario):
+        n_or = D.OR_MINUTES
         t = dt.datetime.combine(d, dt.time(9, 30), NY)
         n = int((dt.datetime.combine(d, self.close) - dt.datetime.combine(d, dt.time(9, 30))).total_seconds() // 60)
         closes, vols = [], []
@@ -205,17 +207,17 @@ class ScriptWorld(World):
         else:
             bo, outcome = self.script[s]
             p0 = prev * 1.01
-            for i in range(15):
-                closes.append(p0 * (1 + 0.0005 * (i + 1)))
+            for i in range(n_or):
+                closes.append(p0 * (1 + 0.01 / n_or * (i + 1)))
                 vols.append(60_000)
             top = max(closes) * 1.0005
-            for i in range(15, n):
+            for i in range(n_or, n):
                 if bo is None or i < bo:
                     c = top * 0.998
                 elif i == bo:
                     c = top * 1.001
-                elif outcome == "target":
-                    c = top * 1.001 * (1 + 0.0005 * (i - bo))
+                elif outcome in ("up", "target"):
+                    c = top * 1.001 * (1 + 0.0002 * (i - bo))
                 elif outcome == "stop":
                     c = top * 1.001 * (1 - 0.0005 * (i - bo))
                 else:

@@ -1,19 +1,16 @@
 """
-Day Trader Bot v3 (PAPER trading)
+Day Trader Bot v2 (PAPER trading)
 Prepared by: Eng. Mohammed T. Basaqr
 
-Strategy: Opening Range Breakout, long only, held until shortly before the close (never overnight).
-  1. 9:30-9:35 AM New York: record each stock's first-5-minute high and low.
+Strategy: Opening Range Breakout, long only, every trade closed within 2 hours.
+  1. 9:30-9:45 New York time: record each stock's first-15-minute high and low.
   2. Watch the 5 busiest stocks that are up on the day and above their average price (VWAP).
-  3. Buy when a 1-minute candle closes just above its 5-minute high, any time until 2:50 PM,
+  3. Buy when a 1-minute candle closes just above its 15-minute high, any time until 1:55 PM,
      but only while the overall market (S&P 500 / SPY) is not down more than 1% on the day.
-  4. Stop = middle of the 5-minute range. No fixed target: a trade rides until 3:20 PM unless
-     the stop is hit, then everything is sold (40 minutes before the 4:00 PM close).
+  4. Stop = middle of the 15-minute range. Target = 2x the risk. Exit anyway after 2 hours.
   5. Up to 3 trades a day, each with a third of the money, so they can run at the same time.
-     Never borrows money or risks more than 3% of the account on one trade. Each pick shows the
-     market, the stock's latest news and the setup's past success rate.
-  Chosen on Oct 6, 2026 from 64 hold-until-close versions tested on a year of minute data
-  (reports/research-exits-2026-10-06.txt on the claude/research branch).
+     Never borrows money. Each pick shows the market, the stock's latest news and the
+     setup's past success rate.
 
 Modes:
   python daytrader.py live            -> trades one day on the Alpaca PAPER account
@@ -23,13 +20,13 @@ Modes:
 
 Timing on GitHub: scheduled runs often start hours late, so the workflow has several
 wake-up calls, and one run can only last 6 hours. A run that starts long before the open
-waits, then starts a fresh run at 9:28 AM, which covers the whole day (exit at 3:20 PM) in one
-go. If a run would still reach its time limit with work left, it saves the open trades and
-hands over to a fresh run, which checks what happened in between and carries on. A run that
-starts after the last entry time sends one notice. Any later run that day stops in a few seconds.
+waits, then starts a fresh run shortly before 9:30 AM. A run that reaches its time limit
+with work left saves the open trades and hands over to a fresh run, which checks what
+happened in between and carries on. A run that starts after the last entry time sends one
+notice. Any later run that day stops in a few seconds.
 
-Results are also saved in the repo: daytrades.json (account and trades), the reports/ folder
-(one file per live day and per backtest) and the journal/ folder (the practice database).
+Results are also saved in the repo: daytrades.json (account and trades) and the
+reports/ folder (one file per live day and per backtest).
 
 Paper trading and research only. Not financial advice.
 """
@@ -53,25 +50,22 @@ RISK_PER_TRADE = 0.03         # never risk more than 3% of the account on one tr
 MAX_TRADES_PER_DAY = 3        # up to 3 trades a day ...
 SLOTS = 3                     # ... each with a third of the day's money, so they can overlap
 CANDIDATES = 5                # watch the 5 busiest stocks that pass the morning filters
-OR_MINUTES = 5                # opening range: the first 5 minutes (first entries from 9:35 AM New York)
-LAST_ENTRY = dt.time(14, 50)  # last new trade at 2:50 PM New York ...
-ENTRY_BEFORE_EXIT_MIN = 30    # ... and never later than 30 minutes before the end-of-day sale
-EXIT_BEFORE_CLOSE_MIN = 40    # sell everything 40 minutes before the close (3:20 PM New York)
+MAX_HOLD_MIN = 120            # your 2-hour limit
+OR_MINUTES = 15               # opening range length
+LAST_ENTRY = dt.time(13, 55)  # last new trade at 1:55 PM New York, so every exit is before the close
 MARKET_FLOOR = -0.01          # no new buys while the S&P 500 (SPY) is down more than 1% today
 NEWS_HOURS = 24               # headlines shown with each pick
-REWARD_RISK = None            # no fixed target: trades ride until the end-of-day sale (a number = target in R)
+REWARD_RISK = 2.0             # target = 2x the distance to the stop
 MAX_STOP_PCT = 0.03           # skip trades whose stop is more than 3% away
 COMMISSION_PCT = 0.00105      # Sahm: 0.105% per order (buy and sell each)
 MIN_FEE_USD = 0.0             # minimum fee per order, if your broker has one
 SLIPPAGE = 0.0005             # backtest only: 0.05% worse fill on market orders
 PAUSE_BELOW = 0.75            # pause if the account falls below 75% of start
-NEAR_LEVEL = 0.75             # warn when price is 75% of the way to the stop (or target, if there is one)
-TIME_WARNING_MIN = 15         # warn this many minutes before the end-of-day sale
+NEAR_LEVEL = 0.75             # warn when price is 75% of the way to the target or stop
+TIME_WARNING_MIN = 15         # warn this many minutes before the 2-hour exit
 BACKTEST_DAYS = 60
-JOB_LIMIT_MIN = 357           # GitHub stops a run after 6 hours (360 min); the bot plans within 357 min
-HAND_OVER_MARGIN_MIN = 3      # hand over to a fresh run this long before that limit, if still busy
-START_BEFORE_OPEN_MIN = 2     # the trading run starts at 9:28 AM, so one run covers the day until 3:20 PM
-LATE_START_MIN = 2            # a run that starts later than this after 9:35 AM skips older breakouts
+JOB_LIMIT_MIN = 340           # GitHub stops a run after 6 hours; the bot plans to finish within 340 min
+START_BEFORE_OPEN_MIN = 10    # the trading run should be up about 10 minutes before the open
 
 WATCHLIST = [
     "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AVGO", "JPM", "V",
@@ -246,7 +240,7 @@ def stats_for_day(daily_bars, day):
 def select_candidates(or_bars, stats, n=CANDIDATES):
     cands = []
     for s, bars in or_bars.items():
-        if s not in WATCHLIST or s not in stats or len(bars) < max(3, int(OR_MINUTES * 0.6)):
+        if s not in WATCHLIST or s not in stats or len(bars) < 10:
             continue
         hi = max(b["h"] for b in bars)
         lo = min(b["l"] for b in bars)
@@ -277,12 +271,7 @@ def plan_trade(cand, entry, slot_usd, balance):
         return None
     notional = min(slot_usd, balance * RISK_PER_TRADE / risk_pct)
     return {"symbol": cand["symbol"], "stop": stop, "notional": round(notional, 2),
-            "target": target_price(entry, stop)}
-
-
-def target_price(entry, stop):
-    """Fixed target (REWARD_RISK x the risk above the entry), or None when trades ride to the end of day."""
-    return None if REWARD_RISK is None else entry + REWARD_RISK * (entry - stop)
+            "target": entry + REWARD_RISK * (entry - stop)}
 
 
 def market_ok(change):
@@ -349,8 +338,7 @@ def fee(order_value):
 
 
 def trade_deadline(entry_t, session_close):
-    """Every trade is sold at the end-of-day sale: EXIT_BEFORE_CLOSE_MIN before the close."""
-    return session_close - dt.timedelta(minutes=EXIT_BEFORE_CLOSE_MIN)
+    return min(entry_t + dt.timedelta(minutes=MAX_HOLD_MIN), session_close - dt.timedelta(minutes=5))
 
 
 def todays_cutoff():
@@ -367,7 +355,7 @@ def todays_cutoff():
 
 def last_entry_time(day, session_close):
     return min(dt.datetime.combine(day, todays_cutoff(), NY),
-               trade_deadline(None, session_close) - dt.timedelta(minutes=ENTRY_BEFORE_EXIT_MIN))
+               session_close - dt.timedelta(minutes=MAX_HOLD_MIN + 5))
 
 
 # ---------------- timing on GitHub ----------------
@@ -476,7 +464,7 @@ def signal_outcomes(signals, sess_close):
         entry = bars[1]["o"] * (1 + SLIPPAGE)
         if entry <= sig["stop"]:
             continue
-        target = target_price(entry, sig["stop"])
+        target = entry + REWARD_RISK * (entry - sig["stop"])
         _, exit_price, why = simulate_exit(bars, 1, sig["stop"], target, trade_deadline(bars[1]["t"], sess_close))
         pct = net_pct(entry, exit_price)
         sig.update(would_exit=why, would_pnl_pct=pct, would_result="win" if pct > 0 else "loss")
@@ -632,7 +620,7 @@ def work_day(book, today, sess_open, sess_close):
     day = book["day"]
     or_end = sess_open + dt.timedelta(minutes=OR_MINUTES)
     last_entry = last_entry_time(today, sess_close)
-    hand_over_at = job_deadline() - dt.timedelta(minutes=HAND_OVER_MARGIN_MIN)
+    hand_over_at = job_deadline() - dt.timedelta(minutes=10)
 
     sleep_until(min(or_end + dt.timedelta(seconds=10), hand_over_at))
     if now_ny() >= hand_over_at:
@@ -656,11 +644,8 @@ def work_day(book, today, sess_open, sess_close):
         day["announced"] = True
         save_book(book)
     now = now_ny()
-    late = now > or_end + dt.timedelta(minutes=LATE_START_MIN, seconds=30)
-    if day.get("scanning") or late:  # resuming after a hand-over, or a late start: don't chase old breakouts
+    if day.get("scanning"):  # resuming after a hand-over: don't act on old signals
         scan_from = max(or_end, now.replace(second=0, microsecond=0) - dt.timedelta(minutes=1))
-        if late and not day.get("scanning"):
-            note(f"Started late, so breakouts before {clock(scan_from)} New York are skipped.")
     else:
         scan_from = or_end
     day["scanning"] = True
@@ -767,7 +752,7 @@ def open_position(book, today, sess_close, cand, rank, change):
         return "fill"
     now = now_ny()
     stop = plan["stop"]
-    target = target_price(entry, stop)
+    target = entry + REWARD_RISK * (entry - stop)
     deadline = trade_deadline(now, sess_close)
     news = headlines(s, now)
     book["open"].append({"symbol": s, "qty": qty, "entry": entry, "stop": stop, "target": target,
@@ -780,11 +765,8 @@ def open_position(book, today, sess_close, cand, rank, change):
     number = len(today_trades(book, today)) + len(book["open"])
     send(f"✅ BOUGHT {s} (trade {number} of {MAX_TRADES_PER_DAY} today): {qty:.4f} shares at ${entry:.2f} "
          f"(≈ {sar(qty * entry)})\n"
-         + (f"Stop ${stop:.2f} | Target ${target:.2f} | Sold by {local(deadline)} (your time) at the latest\n"
-            if target is not None else
-            f"Stop ${stop:.2f} | No fixed target: it rides until {local(deadline)} (your time) unless the stop "
-            "is hit\n")
-         + f"{market_text(change)}\n{news_text(news)}\n{success_text()}")
+         f"Stop ${stop:.2f} | Target ${target:.2f} | Sell by {local(deadline)} (your time) at the latest\n"
+         f"{market_text(change)}\n{news_text(news)}\n{success_text()}")
     return ""
 
 
@@ -797,14 +779,14 @@ def manage_positions(book, today):
             continue
         s, qty, entry, stop, target = p["symbol"], p["qty"], p["entry"], p["stop"], p["target"]
         deadline = dt.datetime.fromisoformat(p["deadline"])
-        reason = ("stop" if price <= stop else "target" if target is not None and price >= target
+        reason = ("stop" if price <= stop else "target" if price >= target
                   else "time" if now >= deadline else None)
         if reason:
             close_position(book, today, p, reason)
             continue
         invested = qty * entry
         open_pnl = qty * (price - entry) - fee(invested) - fee(qty * price)
-        if target is not None and price >= entry + NEAR_LEVEL * (target - entry) and "target" not in p["warned"]:
+        if price >= entry + NEAR_LEVEL * (target - entry) and "target" not in p["warned"]:
             p["warned"].append("target")
             send(f"🔥 {s} is close to the TARGET: now ${price:.2f}, target ${target:.2f}\n"
                  f"Profit right now: {pnl_text(open_pnl, invested)}")
@@ -814,7 +796,7 @@ def manage_positions(book, today):
                  f"Loss right now: {pnl_text(open_pnl, invested)}")
         if now >= deadline - dt.timedelta(minutes=TIME_WARNING_MIN) and "time" not in p["warned"]:
             p["warned"].append("time")
-            send(f"⏳ {s}: {TIME_WARNING_MIN} minutes left before the end-of-day sale ({local(deadline)} your time).\n"
+            send(f"⏳ {s}: {TIME_WARNING_MIN} minutes left before the 2-hour exit ({local(deadline)} your time).\n"
                  f"Now ${price:.2f} | {'Profit' if open_pnl > 0 else 'Loss'} right now: "
                  f"{pnl_text(open_pnl, invested)}")
     save_book(book)
@@ -841,12 +823,12 @@ def close_position(book, today, p, reason):
     save_book(book)
     journal_add("trades", TRADE_FIELDS, [dict(p.get("context", {}), date=today.isoformat(), symbol=s,
                 entry_time_ny=clock(dt.datetime.fromisoformat(p["entry_time"])), exit_time_ny=clock(now_ny()),
-                minutes=minutes, entry=entry, exit=exit_price, stop=p["stop"], target=p.get("target") or "",
+                minutes=minutes, entry=entry, exit=exit_price, stop=p["stop"], target=p["target"],
                 invested_usd=invested, pnl_usd=pnl, pnl_pct=pnl / invested * 100,
                 result="win" if pnl > 0 else "loss", exit_reason=reason)])
     number = len(today_trades(book, today))
     icon = {"target": "🎯", "stop": "🛑", "time": "⏰"}.get(reason, "⚠️")
-    label = {"target": "hit target", "stop": "hit stop", "time": "end-of-day sale"}.get(reason, "closed for safety")
+    label = {"target": "hit target", "stop": "hit stop", "time": "2 hours passed"}.get(reason, "closed for safety")
     send(f"{icon} SOLD {s} at ${exit_price:.2f} ({label}) after {minutes} min, trade {number} of "
          f"{MAX_TRADES_PER_DAY} today\n"
          f"{'✅ WIN' if pnl > 0 else '❌ LOSS'}: {pnl_text(pnl, invested)}\n"
@@ -863,7 +845,7 @@ def check_gap(book, today):
             if b["l"] <= p["stop"]:
                 close_position(book, today, p, "stop")
                 break
-            if p.get("target") is not None and b["h"] >= p["target"]:
+            if b["h"] >= p["target"]:
                 close_position(book, today, p, "target")
                 break
 
@@ -882,7 +864,7 @@ def hand_over(book, today):
 
 
 def close_everything(book, today, why):
-    """Safety net: never leave a trade open when the bot can't keep watching it."""
+    """Safety net: never leave a trade open beyond its 2 hours."""
     if not book["open"]:
         return
     send(f"⚠️ {why[:300]}. To stay safe, closing the open trades now.")
@@ -936,7 +918,7 @@ def simulate_exit(bars, k, stop, target, deadline):
             return entry, b["o"] * (1 - SLIPPAGE), "time"
         if b["l"] <= stop:
             return entry, min(stop, b["o"]) * (1 - SLIPPAGE), "stop"
-        if target is not None and b["h"] >= target:
+        if b["h"] >= target:
             return entry, max(target, b["o"]) * (1 - SLIPPAGE), "target"
     last = [b for b in bars if b["t"] < deadline][-1]
     return entry, last["c"] * (1 - SLIPPAGE), "time"
@@ -984,7 +966,7 @@ def simulate_day(day_bars, stats, balance, day, sess_open, sess_close):
         if not plan:
             continue
         stop = plan["stop"]
-        target = target_price(entry, stop)
+        target = entry + REWARD_RISK * (entry - stop)
         _, exit_price, reason = simulate_exit(bars, i + 1, stop, target, trade_deadline(eb["t"], sess_close))
         qty = plan["notional"] / entry
         pnl = qty * (exit_price - entry) - fee(qty * entry) - fee(qty * exit_price)
@@ -1050,11 +1032,9 @@ def run_backtest():
     spy_before = [b for b in spy if b["t"].date() < days[0][0]]
     spy_ret = (spy[-1]["c"] / spy_before[-1]["c"] - 1) * 100 if spy and spy_before else float("nan")
     lines = [f"🧪 Day-trading backtest: last {len(days)} trading days ({days[0][0]} to {days[-1][0]})",
-             f"Rules: up to {MAX_TRADES_PER_DAY} trades a day with a third of the money each, {OR_MINUTES}-minute "
-             f"opening range, entries until {clock(dt.datetime.combine(days[0][0], LAST_ENTRY))} New York, no buys "
-             f"when the S&P 500 is down more than {abs(MARKET_FLOOR) * 100:g}%, "
-             + (f"target {REWARD_RISK:g}x the risk, " if REWARD_RISK is not None else "no fixed target, ")
-             + f"everything sold {EXIT_BEFORE_CLOSE_MIN} minutes before the close", ""]
+             f"Rules: up to {MAX_TRADES_PER_DAY} trades a day with a third of the money each, entries until "
+             f"{clock(dt.datetime.combine(days[0][0], LAST_ENTRY))} New York, no buys when the S&P 500 is down "
+             f"more than {abs(MARKET_FLOOR) * 100:g}%, max 2-hour hold", ""]
     lines.append(summary(trades, start, balance))
     if trades:
         pcts = [t["pct_of_account"] * 100 for t in trades]

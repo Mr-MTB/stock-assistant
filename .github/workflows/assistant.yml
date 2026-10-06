@@ -37,7 +37,7 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 355
+    timeout-minutes: 360   # GitHub's maximum: one run covers 9:28 AM to the 3:20 PM sale
     steps:
       - name: Note start time
         run: echo "JOB_START=$(date +%s)" >> "$GITHUB_ENV"

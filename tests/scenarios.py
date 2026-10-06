@@ -51,8 +51,10 @@ DAY = dt.date(2026, 10, 5)  # a Monday (New York summer time)
 SLOT_USD = 2000 / D.SAR_PER_USD / 3
 
 # A normal day: four stocks break out (10:10, 10:30, 11:00, 11:30); a fifth never does.
-NORMAL = {"NVDA": (40, "target"), "AAPL": (60, "stop"), "MSFT": (90, "time"), "AMD": (120, "target"),
+# NVDA keeps rising, AAPL falls through its stop, MSFT goes flat, AMD would rise.
+NORMAL = {"NVDA": (40, "up"), "AAPL": (60, "stop"), "MSFT": (90, "time"), "AMD": (120, "up"),
           "KO": (None, "time")}
+GO = (9, 28, 30)  # the trading run is up at 9:28 AM
 
 # 1. Cron run on time at 1:41 AM: wait, hand over once, send nothing, save nothing.
 fresh_dir()
@@ -70,27 +72,38 @@ check("1 early run: uses the run's token", w.dispatches and w.dispatches[0]["aut
 check("1 early run: silent, nothing saved", not F.SENT and not os.path.exists("daytrades.json"), F.SENT)
 first = w.dispatches[0]["at"]
 
-# 2. The fresh run (7:11 AM) waits until 9:20 AM and hands over again.
+# 2. The fresh run (7:28 AM) waits until 9:28 AM and hands over again.
 w.dispatches.clear()
 F.install(w, first + dt.timedelta(seconds=40))
 F.run_main()
-check("2 second hop: restart at 9:20 AM", len(w.dispatches) == 1 and
-      abs((w.dispatches[0]["at"] - at(DAY, 9, 20)).total_seconds()) < 31, w.dispatches)
+check("2 second hop: restart at 9:28 AM", len(w.dispatches) == 1 and
+      abs((w.dispatches[0]["at"] - at(DAY, 9, 28)).total_seconds()) < 31, w.dispatches)
 check("2 second hop: silent", not F.SENT, F.SENT)
 
-# 3. The 9:20 AM run trades the day: first 3 breakouts, a third of the money each, overlapping.
+# 3. The 9:28 AM run trades the day: first 3 breakouts, a third of the money each, held to the 3:20 PM sale.
 w.dispatches.clear()
 w.news = {"NVDA": ["Nvidia unveils a new AI chip", "Analysts raise Nvidia targets"]}
-start3 = at(DAY, 9, 20, 30)
+start3 = at(DAY, *GO)
 F.install(w, start3)
 F.run_main()
 book = D.load_book()
 trades = book["trades"]
 check("3 normal day: no hand-over needed", not w.dispatches, w.dispatches)
-check("3 normal day: bought the first 3 breakouts", [t["symbol"] for t in trades] == ["NVDA", "AAPL", "MSFT"],
-      [t["symbol"] for t in trades])
-check("3 normal day: target, stop and 2-hour exits", [t["exit_reason"] for t in trades] == ["target", "stop", "time"],
-      [t["exit_reason"] for t in trades])
+by_stock = {t["symbol"]: t for t in trades}  # trades are logged in the order they close
+check("3 normal day: bought the first 3 breakouts, in order",
+      [m.split()[2] for m in sent("BOUGHT")] == ["NVDA", "AAPL", "MSFT"], sent("BOUGHT"))
+check("3 normal day: AAPL stopped out, NVDA and MSFT sold at the end of the day",
+      {k: v["exit_reason"] for k, v in by_stock.items()} == {"NVDA": "time", "AAPL": "stop", "MSFT": "time"},
+      {k: v["exit_reason"] for k, v in by_stock.items()})
+check("3 normal day: the riser wins, the faller and the flat one lose",
+      {k: v["pnl_usd"] > 0 for k, v in by_stock.items()} == {"NVDA": True, "AAPL": False, "MSFT": False},
+      {k: v["pnl_usd"] for k, v in by_stock.items()})
+check("3 normal day: end-of-day sales at 3:20 PM (10:20 PM your time)",
+      len(sent("(end-of-day sale)")) == 2 and len(sent("SOLD NVDA")) == 1 and
+      "[3:20 PM New York" in [x for x in open(f"reports/live-{DAY}.txt").read().split("\n") if "SOLD NVDA" in x][0],
+      sent("SOLD"))
+check("3 normal day: 15-minute warning before the sale",
+      any("15 minutes left before the end-of-day sale (10:20 PM your time)" in m for m in F.SENT), sent("⏳"))
 check("3 normal day: AMD skipped (3 trades already)", not sent("BOUGHT AMD"))
 check("3 normal day: each trade about a third of the money",
       all(abs(t["qty"] * t["entry"] - SLOT_USD) < 0.02 for t in trades), [t["qty"] * t["entry"] for t in trades])
@@ -101,13 +114,14 @@ check("3 normal day: balance adds up",
       abs(book["balance_usd"] - (book["start_usd"] + sum(t["pnl_usd"] for t in trades))) < 0.02)
 watch = sent("picks: watching for breakouts")
 check("3 normal day: one watchlist, 12-hour times, 5 picks, market and success rate",
-      len(watch) == 1 and "until 8:55 PM (your time)" in watch[0] and "5. KO" in watch[0]
+      len(watch) == 1 and "until 9:50 PM (your time)" in watch[0] and "5. KO" in watch[0]
       and "Market (S&P 500): +" in watch[0] and "Past success rate" in watch[0], watch)
 check("3 normal day: news mark on NVDA only", watch and "NVDA: buy above" in watch[0] and
       watch[0].split("\n")[2].endswith("📰") and not watch[0].split("\n")[3].endswith("📰"), watch)
 b_nvda, b_aapl = sent("BOUGHT NVDA"), sent("BOUGHT AAPL")
-check("3 normal day: buy message has trade number, market, headlines, success rate",
+check("3 normal day: buy message has trade number, no fixed target, market, headlines, success rate",
       b_nvda and "(trade 1 of 3 today)" in b_nvda[0] and "Market (S&P 500)" in b_nvda[0]
+      and "No fixed target: it rides until 10:20 PM (your time) unless the stop is hit" in b_nvda[0]
       and "• Nvidia unveils a new AI chip" in b_nvda[0] and "Past success rate" in b_nvda[0], b_nvda)
 check("3 normal day: no-news message", b_aapl and "No news about it in the last 24 hours" in b_aapl[0], b_aapl)
 eod = sent("End of day")
@@ -115,35 +129,37 @@ check("3 normal day: one end-of-day message with 3 trades",
       len(eod) == 1 and "Mon Oct 5" in eod[0] and "Today: 3 trades," in eod[0], eod)
 rep = open(f"reports/live-{DAY}.txt").read()
 check("3 normal day: report has start time and all trades",
-      all(k in rep for k in ("Run started at 9:20 AM", "SOLD NVDA", "SOLD AAPL", "SOLD MSFT")), rep[:300])
+      all(k in rep for k in ("Run started at 9:28 AM", "SOLD NVDA", "SOLD AAPL", "SOLD MSFT")), rep[:300])
 check("3 normal day: finished inside the 6-hour limit", w.now <= start3 + dt.timedelta(minutes=D.JOB_LIMIT_MIN))
 jt, js, jd = journal("trades"), journal("signals"), journal("days")
 check("3 database: every trade with its context",
-      [(r["symbol"], r["result"], r["exit_reason"]) for r in jt] == [("NVDA", "win", "target"), ("AAPL", "loss", "stop"),
-                                                                   ("MSFT", "loss", "time")]
-      and jt[0]["had_news"] == "yes" and "Nvidia unveils" in jt[0]["headlines"] and jt[1]["had_news"] == "no"
+      sorted((r["symbol"], r["result"], r["exit_reason"]) for r in jt) ==
+      [("AAPL", "loss", "stop"), ("MSFT", "loss", "time"), ("NVDA", "win", "time")]
+      and [r for r in jt if r["symbol"] == "NVDA"][0]["had_news"] == "yes"
+      and "Nvidia unveils" in [r for r in jt if r["symbol"] == "NVDA"][0]["headlines"]
+      and [r for r in jt if r["symbol"] == "AAPL"][0]["had_news"] == "no"
       and all(r["market_pct"] and r["rvol"] and r["range_pct"] and r["entry_time_ny"] for r in jt), jt)
 check("3 database: every breakout, bought or not, with what it would have made",
       [(r["symbol"], r["taken"], r["why_not"], r["would_exit"]) for r in js] ==
-      [("NVDA", "yes", "", "target"), ("AAPL", "yes", "", "stop"), ("MSFT", "yes", "", "time"),
-       ("AMD", "no", "limit", "target")], js)
+      [("NVDA", "yes", "", "time"), ("AAPL", "yes", "", "stop"), ("MSFT", "yes", "", "time"),
+       ("AMD", "no", "limit", "time")] and js[3]["would_result"] == "win", js)
 check("3 database: one row for the day", len(jd) == 1 and jd[0]["candidates"] == "5" and jd[0]["signals"] == "4"
       and jd[0]["trades"] == "3" and jd[0]["wins"] == "1", jd)
 
 # 4. A late wake-up the same afternoon stops silently.
 before = open("daytrades.json").read()
-F.install(w, at(DAY, 15, 2))
+F.install(w, at(DAY, 15, 40))
 F.run_main()
 check("4 later run same day: silent, no restart, log unchanged",
       not F.SENT and not w.dispatches and open("daytrades.json").read() == before, F.SENT)
 
-# 5. Every run late (after 1:55 PM): one notice, then silence.
+# 5. Every run late (after 2:50 PM): one notice, then silence.
 fresh_dir()
 w = F.ScriptWorld([DAY], SYMS, NORMAL, seed=4)
-F.install(w, at(DAY, 14, 27))
+F.install(w, at(DAY, 15, 0))
 F.run_main()
 check("5 too late: one notice in 12-hour Saudi time",
-      len(F.SENT) == 1 and "too late (9:27 PM your time)" in F.SENT[0] and "(8:55 PM)" in F.SENT[0], F.SENT)
+      len(F.SENT) == 1 and "too late (10:00 PM your time)" in F.SENT[0] and "(9:50 PM)" in F.SENT[0], F.SENT)
 F.install(w, at(DAY, 15, 10))
 F.run_main()
 check("5 too late: second late run is silent", not F.SENT, F.SENT)
@@ -151,60 +167,61 @@ check("5 too late: second late run is silent", not F.SENT, F.SENT)
 # 6. Market down more than 1%: no buys, one note per stock that broke out.
 fresh_dir()
 w = F.ScriptWorld([DAY], SYMS, NORMAL, spy="down", seed=4)
-F.install(w, at(DAY, 9, 20, 30))
+F.install(w, at(DAY, *GO))
 F.run_main()
 book = D.load_book()
 check("6 market down: no trades", book["trades"] == [] and not sent("BOUGHT"), book["trades"])
 skips = sent("so no buy for now")
 check("6 market down: one note per breakout", len(skips) == 4 and len({m.split()[1] for m in skips}) == 4, skips)
-check("6 market down: watchlist warns", sent("⛔ no new buys"), sent("picks"))
+check("6 market down: watchlist shows the market", sent("picks") and "Market (S&P 500): -0.50% today" in sent("picks")[0],
+      sent("picks"))
 check("6 market down: end of day says no trade", sent("Today: no trade, so no gain or loss."))
 check("6 database: skipped breakouts recorded with the reason",
       [(r["taken"], r["why_not"]) for r in journal("signals")] == [("no", "market")] * 4
       and journal("days")[0]["trades"] == "0", journal("signals"))
 
-# 7. Hand-over: the run reaches its 6-hour limit with a trade open; the next run carries on.
-LATE = {"NVDA": (200, "time")}  # buys 12:50 PM, closes at the 2-hour limit (2:50 PM)
+# 7. Hand-over: a run that started early reaches its 6-hour limit with a trade open; the next run carries on.
+LATE = {"NVDA": (200, "time")}  # buys 12:51 PM, held to the 3:20 PM sale
 fresh_dir()
 w = F.ScriptWorld([DAY], SYMS, LATE, seed=4)
-F.install(w, at(DAY, 9, 20, 30), job_start=at(DAY, 7, 30))  # limit reached about 1:00 PM
+F.install(w, at(DAY, *GO), job_start=at(DAY, 7, 30))  # limit reached about 1:27 PM
 F.run_main()
 book = D.load_book()
-check("7 hand-over: fresh run requested", len(w.dispatches) == 1 and w.dispatches[0]["at"] < at(DAY, 13, 10),
+check("7 hand-over: fresh run requested", len(w.dispatches) == 1 and w.dispatches[0]["at"] < at(DAY, 13, 30),
       w.dispatches)
 check("7 hand-over: open trade saved", [p["symbol"] for p in book["open"]] == ["NVDA"] and "checked" in book["open"][0],
       book.get("open"))
 check("7 hand-over: no end of day yet", not sent("End of day"))
 w.dispatches.clear()
-F.install(w, at(DAY, 13, 2))
+F.install(w, at(DAY, 13, 30))
 F.run_main()
 book = D.load_book()
-check("7 resume: trade closed at its 2-hour limit", [(t["symbol"], t["exit_reason"]) for t in book["trades"]]
+check("7 resume: trade sold at the end-of-day sale", [(t["symbol"], t["exit_reason"]) for t in book["trades"]]
       == [("NVDA", "time")] and book["open"] == [], book["trades"])
 check("7 resume: no second watchlist, one end of day",
       not sent("picks: watching") and len(sent("End of day")) == 1, F.SENT)
-check("7 resume: closed by 2:51 PM", w.now < at(DAY, 14, 52), w.now)
+check("7 resume: sold by 3:21 PM", w.now < at(DAY, 15, 21), w.now)
 check("7 database: written once, across the hand-over",
       len(journal("trades")) == 1 and len(journal("signals")) == 1 and len(journal("days")) == 1,
       (journal("trades"), journal("signals"), journal("days")))
 
-# 7b. Hand-over with nothing open, and the next run only starts after 1:55 PM: it wraps up the day.
+# 7b. Hand-over with nothing open, and the next run only starts after 2:50 PM: it wraps up the day.
 fresh_dir()
 w = F.ScriptWorld([DAY], SYMS, {"NVDA": (None, "time")}, seed=4)
-F.install(w, at(DAY, 9, 20, 30), job_start=at(DAY, 7, 30))
+F.install(w, at(DAY, *GO), job_start=at(DAY, 7, 30))
 F.run_main()
 check("7b hand-over before the last entry time", len(w.dispatches) == 1 and not D.load_book()["open"], w.dispatches)
-F.install(w, at(DAY, 14, 5))
+F.install(w, at(DAY, 15, 0))
 F.run_main()
 check("7b late resume: one end-of-day, no 'too late' notice",
       len(sent("End of day")) == 1 and not sent("too late"), F.SENT)
 
 # 8. Stop reached during the hand-over gap: the next run sees it and sells.
 fresh_dir()
-w = F.ScriptWorld([DAY], SYMS, LATE, dip_at={"NVDA": 211}, seed=4)  # dip at 1:01 PM
-F.install(w, at(DAY, 9, 20, 30), job_start=at(DAY, 7, 30))
+w = F.ScriptWorld([DAY], SYMS, LATE, dip_at={"NVDA": 238}, seed=4)  # dip at 1:28 PM, while no run is watching
+F.install(w, at(DAY, *GO), job_start=at(DAY, 7, 30))
 F.run_main()
-F.install(w, at(DAY, 13, 3))
+F.install(w, at(DAY, 13, 31))
 F.run_main()
 book = D.load_book()
 check("8 gap: stop hit while no run was watching is caught",
@@ -213,7 +230,7 @@ check("8 gap: stop hit while no run was watching is caught",
 # 9. Hand-over refused by GitHub: close the trade for safety.
 fresh_dir()
 w = F.ScriptWorld([DAY], SYMS, LATE, seed=4)
-F.install(w, at(DAY, 9, 20, 30), job_start=at(DAY, 7, 30))
+F.install(w, at(DAY, *GO), job_start=at(DAY, 7, 30))
 orig = F.urllib.request.urlopen
 
 
@@ -236,7 +253,7 @@ check("9 hand-over refused: owner told", sent("couldn't hand over") and sent("En
 # 10. Something breaks mid-day: open trades are closed, then the error is reported.
 fresh_dir()
 w = F.ScriptWorld([DAY], SYMS, {"NVDA": (40, "time")}, seed=4)
-F.install(w, at(DAY, 9, 20, 30))
+F.install(w, at(DAY, *GO))
 real_api = D.api
 
 
@@ -271,16 +288,19 @@ F.install(w, at(DAY, 9, 20))
 F.run_main()
 check("11 holiday: silent", not F.SENT and not w.dispatches and not os.path.exists("daytrades.json"))
 
-# 12. Early close (1:00 PM): last entry 10:55 AM, everything closed before the close.
+# 12. Early close (1:00 PM): sale at 12:20 PM, last entry 11:50 AM.
 HALF = dt.date(2026, 11, 27)
 fresh_dir()
 w = F.ScriptWorld([HALF], SYMS, NORMAL, close=dt.time(13, 0), seed=4)
-F.install(w, at(HALF, 9, 20, 30))
+F.install(w, at(HALF, *GO))
 F.run_main()
 book = D.load_book()
-check("12 half day: last entry 10:55", D.last_entry_time(HALF, at(HALF, 13, 0)) == at(HALF, 10, 55))
-check("12 half day: breakouts after 10:55 (MSFT 11:00, AMD 11:30) not bought, all closed before 1 PM",
-      [t["symbol"] for t in book["trades"]] == ["NVDA", "AAPL"] and w.now <= at(HALF, 13, 0), book["trades"])
+check("12 half day: last entry 11:50 AM, sale at 12:20 PM",
+      D.last_entry_time(HALF, at(HALF, 13, 0)) == at(HALF, 11, 50)
+      and D.trade_deadline(None, at(HALF, 13, 0)) == at(HALF, 12, 20))
+check("12 half day: 3 trades, all sold by 12:21 PM",
+      [t["symbol"] for t in book["trades"]] == ["AAPL", "NVDA", "MSFT"] and w.now <= at(HALF, 12, 21),
+      (book["trades"], w.now))
 
 # 13. On your own computer: no restarts, it just waits and trades.
 fresh_dir()
@@ -293,7 +313,7 @@ check("13 own computer: waited and traded", not w.dispatches and len(D.load_book
 fresh_dir()
 w = F.ScriptWorld([DAY], SYMS, NORMAL, seed=4)
 w.news_down = True
-F.install(w, at(DAY, 9, 20, 30))
+F.install(w, at(DAY, *GO))
 F.run_main()
 check("14 news down: still trades, says so", len(D.load_book()["trades"]) == 3 and
       sent("News: couldn't load it right now."), F.SENT[:2])
@@ -324,7 +344,7 @@ for seed in range(12):
     one = [dt.date(2026, 9, 21)]
     world = F.World(one, SYMS + ["SPY"], seed=seed)
     fresh_dir()
-    F.install(world, at(one[0], 9, 20, 30))
+    F.install(world, at(one[0], *GO))
     F.run_main()
     live = [(t["symbol"], t["exit_reason"]) for t in D.load_book()["trades"]]
     world.now = None
@@ -407,6 +427,17 @@ F.ORIG_SEND("hello")
 check("17 failed send is recorded without the token",
       any("(Telegram failed: Unauthorized)" in x for x in D.LOG) and not any(D.TG_TOKEN in x for x in D.LOG), D.LOG)
 D.RAW_TG_TOKEN = D.TG_TOKEN = D.RAW_TG_CHAT = D.TG_CHAT = ""
+
+# 18b. Late start: breakouts that happened before the run started are skipped, later ones are taken.
+fresh_dir()
+w = F.ScriptWorld([DAY], SYMS, NORMAL, seed=4)
+F.install(w, at(DAY, 10, 35))  # NVDA (10:10) and AAPL (10:30) broke out before; NVDA has run too far since
+F.run_main()
+book = D.load_book()
+check("18b late start: earlier breakouts skipped, later ones bought",
+      sorted(t["symbol"] for t in book["trades"]) == ["AMD", "MSFT"] and sent("picks: watching"),
+      [t["symbol"] for t in book["trades"]])
+check("18b late start: noted in the report", "Started late" in open(f"reports/live-{DAY}.txt").read())
 
 # 18. 12-hour clock.
 check("18 12-hour times", [D.clock(dt.datetime(2026, 1, 1, h, m)) for h, m in ((9, 5), (12, 0), (0, 30), (20, 55))]

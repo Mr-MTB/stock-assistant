@@ -6,20 +6,27 @@ the owner's Telegram. Any real-money trades are placed by hand in the Sahm app, 
 this code.
 
 ## Fixed rules (change only when the owner asks)
-- Long only, opening-range breakout on the 5 busiest stocks of the morning.
+- Long only, opening-range breakout on the 5 busiest stocks of the morning, using the first
+  5 minutes (9:30-9:35 AM New York) as the opening range.
 - Up to 3 trades a day, a third of the day's money each (they may overlap); entries until
-  1:55 PM New York; no new buys while the S&P 500 (SPY) is down more than 1% on the day.
-- Every trade closes within 2 hours and before the close. Never more than 3% of the account at risk.
+  2:50 PM New York; no new buys while the S&P 500 (SPY) is down more than 1% on the day.
+- Stop at the middle of the opening range, no fixed target: every trade rides until the
+  end-of-day sale at 3:20 PM New York (40 minutes before the close) unless the stop is hit.
+  Never held overnight. Never more than 3% of the account at risk on one trade.
+  (Owner's request on Oct 5, 2026: "hold longer, from the opening till before closing".
+  Version chosen from 64 tested: reports/research-exits-2026-10-06.txt on claude/research.)
 - Each pick shows the market, the stock's latest headlines and the setup's past success rate.
 - Fees: Sahm 0.105% per order. Messages show Saudi time (Asia/Riyadh) in 12-hour format.
 - Paper trading only, starting from 2,000 SAR. Never add real-money order placement.
-- A GitHub run lasts at most 6 hours: runs hand open trades over to a fresh run (saved in
+- GitHub runs last at most 6 hours: the trading run starts at 9:28 AM so one run covers the
+  day. If a run must stop with trades open, it hands them over to a fresh run (saved in
   daytrades.json under "open"); keep the live loop and `simulate_day` making the same trades.
 
 ## Where results live
 - `daytrades.json`: paper account balance and every live trade.
 - `reports/live-YYYY-MM-DD.txt`: everything the bot reported that day, with times.
 - `reports/backtest-YYYY-MM-DD.txt`: backtest summary, every trade, day by day.
+- `journal/`: the practice database (every trade, every breakout signal, every day).
 
 Claude cloud sessions can't reach Alpaca, Telegram or the Actions logs, so read results
 from these files (pull the repo first).

@@ -1,0 +1,50 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Wed Oct 7 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): -0.47% today ✅
+1. NOW: buy above $140.47 (volume 6% of a normal day already) 📰
+2. INTC: buy above $114.31 (volume 4% of a normal day already) 📰
+3. NFLX: buy above $69.19 (volume 3% of a normal day already) 📰
+4. ACN: buy above $197.28 (volume 3% of a normal day already)
+5. LLY: buy above $1179.35 (volume 3% of a normal day already) 📰
+Up to 3 trades today, about 661 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[9:43 AM New York | 4:43 PM your time] ✅ BOUGHT LLY (trade 1 of 3 today): 0.1491 shares at $1181.31 (≈ 661 SAR)
+Stop $1174.01 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.55% today ✅
+📰 News (last 24 hours):
+• Cathie Wood's $22M Biotech Shuffle, Dumps One Stock for 21st Straight Session While Other Bets Pile Up
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[10:17 AM New York | 5:17 PM your time] ✅ BOUGHT INTC (trade 2 of 3 today): 1.5406 shares at $114.37 (≈ 661 SAR)
+Stop $112.72 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.62% today ✅
+📰 News (last 24 hours):
+• Nvidia Inside: Microsoft's New Laptop Runs AI Agents Without the Cloud
+• Jim Cramer Says Investors Are Overlooking Elon Musk’s $40 Billion ‘Pot of Gold’ For Nvidia — Intel Terafab Exit Rumors ‘Squashed,’ Dismisses ‘Weakness’ In Korea’s Kospi
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[11:50 AM New York | 6:50 PM your time] ✅ BOUGHT ACN (trade 3 of 3 today): 0.8922 shares at $197.48 (≈ 661 SAR)
+Stop $196.20 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.36% today ✅
+📰 No news about it in the last 24 hours.
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[12:17 PM New York | 7:17 PM your time] ⚠️ INTC is close to the STOP: now $113.13, stop $112.72
+Loss right now: -8.5 SAR (-1.29%)
+[1:47 PM New York | 8:47 PM your time] ⚠️ ACN is close to the STOP: now $196.48, stop $196.20
+Loss right now: -4.7 SAR (-0.72%)
+[1:54 PM New York | 8:54 PM your time] 🛑 SOLD INTC at $112.71 (hit stop) after 218 min, trade 1 of 3 today
+❌ LOSS: -10.9 SAR (-1.66%)
+Balance: 1,971 SAR | Since start: 1 win, 5 losses, net -28.6 SAR
+[3:05 PM New York | 10:05 PM your time] ⏳ LLY: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $1193.00 | Profit right now: +5.1 SAR (+0.78%)
+[3:05 PM New York | 10:05 PM your time] ⏳ ACN: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $197.72 | Loss right now: -0.6 SAR (-0.09%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD LLY at $1188.56 (end-of-day sale) after 337 min, trade 2 of 3 today
+✅ WIN: +2.7 SAR (+0.40%)
+Balance: 1,974 SAR | Since start: 2 wins, 5 losses, net -26.0 SAR
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD ACN at $197.88 (end-of-day sale) after 210 min, trade 3 of 3 today
+❌ LOSS: -0.1 SAR (-0.01%)
+Balance: 1,974 SAR | Since start: 2 wins, 6 losses, net -26.1 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Wed Oct 7
+Today: 3 trades, -8.4 SAR (-0.42%)
+Balance: 1,974 SAR | Since start: -26.1 SAR (-1.3%), 2 wins, 6 losses, net -26.1 SAR
+

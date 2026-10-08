@@ -1,0 +1,127 @@
+📰 News test for the current rules (5-minute start, entries until 2:50 PM, stop in the middle, everything sold at 3:20 PM), 250 trading days (2025-10-09 to 2026-10-07). Sahm costs included. Per trade: % of the money in that trade. Total: % of the whole account, added up.
+Older months (used to choose): 2025-10-09 to 2026-06-22. Newer months (never used to choose): 2026-06-23 to 2026-10-07.
+Breakouts studied: 1031 (728 older, 303 newer); news missing for 0. Headlines: Benzinga via Alpaca, only those published before the buy.
+
+== The bot today (no news filter) ==
+   older: 514 trades |  33% winners | avg win +1.48% | avg loss -0.98% | worst -2.4% | total  -30.1% of the account | avg trade -0.18%
+   NEWER: 222 trades |  32% winners | avg win +1.58% | avg loss -1.05% | worst -2.2% | total  -14.5% of the account | avg trade -0.20%
+
+== The bot with each news filter (it buys the first 3 breakouts a day that pass) ==
+No news in the 24 hours before
+   older: 144 trades |  36% winners | avg win +1.15% | avg loss -0.85% | worst -2.4% | total   -6.2% of the account | avg trade -0.13%
+   NEWER:  71 trades |  27% winners | avg win +1.04% | avg loss -0.87% | worst -1.9% | total   -8.4% of the account | avg trade -0.36%
+S&P 500 up AND positive headlines
+   older: 187 trades |  33% winners | avg win +1.66% | avg loss -0.99% | worst -2.3% | total   -7.0% of the account | avg trade -0.11%
+   NEWER:  75 trades |  31% winners | avg win +2.27% | avg loss -1.07% | worst -2.3% | total   -1.2% of the account | avg trade -0.05%
+Analyst upgrade or higher price target
+   older: 103 trades |  30% winners | avg win +1.61% | avg loss -1.04% | worst -2.3% | total   -8.5% of the account | avg trade -0.25%
+   NEWER:  39 trades |  18% winners | avg win +2.56% | avg loss -0.95% | worst -2.3% | total   -4.2% of the account | avg trade -0.32%
+No fresh news since the last close
+   older: 201 trades |  37% winners | avg win +1.15% | avg loss -0.89% | worst -2.4% | total   -9.1% of the account | avg trade -0.14%
+   NEWER:  81 trades |  31% winners | avg win +1.24% | avg loss -0.87% | worst -1.9% | total   -6.0% of the account | avg trade -0.22%
+Negative headlines (tone below 0)
+   older:  72 trades |  22% winners | avg win +1.24% | avg loss -0.97% | worst -2.3% | total  -11.6% of the account | avg trade -0.48%
+   NEWER:  44 trades |  41% winners | avg win +1.30% | avg loss -1.01% | worst -2.2% | total   -0.9% of the account | avg trade -0.06%
+S&P 500 up AND not negative headlines
+   older: 306 trades |  31% winners | avg win +1.64% | avg loss -0.94% | worst -2.3% | total  -14.5% of the account | avg trade -0.14%
+   NEWER: 124 trades |  38% winners | avg win +1.97% | avg loss -1.05% | worst -2.3% | total   +3.9% of the account | avg trade +0.10%
+Earnings news
+   older: 147 trades |  31% winners | avg win +1.41% | avg loss -1.08% | worst -2.3% | total  -14.8% of the account | avg trade -0.30%
+   NEWER:  80 trades |  32% winners | avg win +1.93% | avg loss -0.96% | worst -1.9% | total   -0.5% of the account | avg trade -0.02%
+S&P 500 up AND fresh news
+   older: 273 trades |  30% winners | avg win +1.69% | avg loss -0.96% | worst -2.3% | total  -15.2% of the account | avg trade -0.17%
+   NEWER: 117 trades |  37% winners | avg win +2.05% | avg loss -1.01% | worst -2.2% | total   +4.4% of the account | avg trade +0.11%
+S&P 500 up AND news in 24 hours
+   older: 288 trades |  30% winners | avg win +1.71% | avg loss -0.97% | worst -2.3% | total  -17.4% of the account | avg trade -0.18%
+   NEWER: 120 trades |  38% winners | avg win +2.10% | avg loss -1.03% | worst -2.2% | total   +5.8% of the account | avg trade +0.14%
+S&P 500 up at the buy
+   older: 319 trades |  29% winners | avg win +1.67% | avg loss -0.95% | worst -2.3% | total  -18.8% of the account | avg trade -0.18%
+   NEWER: 131 trades |  39% winners | avg win +1.78% | avg loss -1.02% | worst -2.2% | total   +2.9% of the account | avg trade +0.07%
+Not negative headlines (tone 0 or more)
+   older: 499 trades |  34% winners | avg win +1.49% | avg loss -0.97% | worst -2.4% | total  -20.7% of the account | avg trade -0.12%
+   NEWER: 212 trades |  31% winners | avg win +1.70% | avg loss -1.03% | worst -2.3% | total  -12.8% of the account | avg trade -0.18%
+Fresh news AND positive headlines
+   older: 253 trades |  31% winners | avg win +1.46% | avg loss -1.02% | worst -2.4% | total  -21.5% of the account | avg trade -0.26%
+   NEWER: 109 trades |  26% winners | avg win +1.93% | avg loss -1.06% | worst -2.3% | total  -10.6% of the account | avg trade -0.29%
+Positive headlines (tone above 0)
+   older: 270 trades |  31% winners | avg win +1.51% | avg loss -1.02% | worst -2.4% | total  -21.7% of the account | avg trade -0.24%
+   NEWER: 111 trades |  26% winners | avg win +2.01% | avg loss -1.06% | worst -2.3% | total   -9.4% of the account | avg trade -0.25%
+Fresh news AND not negative
+   older: 410 trades |  33% winners | avg win +1.54% | avg loss -0.98% | worst -2.4% | total  -21.7% of the account | avg trade -0.16%
+   NEWER: 164 trades |  29% winners | avg win +2.08% | avg loss -1.05% | worst -2.3% | total   -8.2% of the account | avg trade -0.15%
+No earnings news
+   older: 468 trades |  34% winners | avg win +1.44% | avg loss -0.95% | worst -2.4% | total  -22.7% of the account | avg trade -0.15%
+   NEWER: 192 trades |  31% winners | avg win +1.65% | avg loss -0.99% | worst -2.2% | total  -11.4% of the account | avg trade -0.18%
+3 or more headlines in 24 hours
+   older: 343 trades |  29% winners | avg win +1.67% | avg loss -1.06% | worst -2.4% | total  -29.0% of the account | avg trade -0.25%
+   NEWER: 159 trades |  31% winners | avg win +2.13% | avg loss -1.02% | worst -2.0% | total   -1.6% of the account | avg trade -0.03%
+News in the 24 hours before
+   older: 474 trades |  32% winners | avg win +1.49% | avg loss -0.99% | worst -2.4% | total  -29.1% of the account | avg trade -0.18%
+   NEWER: 197 trades |  31% winners | avg win +1.87% | avg loss -1.04% | worst -2.2% | total   -8.0% of the account | avg trade -0.12%
+Fresh news since the last close
+   older: 445 trades |  31% winners | avg win +1.52% | avg loss -0.99% | worst -2.4% | total  -29.3% of the account | avg trade -0.20%
+   NEWER: 193 trades |  30% winners | avg win +1.92% | avg loss -1.04% | worst -2.2% | total   -9.5% of the account | avg trade -0.15%
+No analyst downgrade or lower target
+   older: 503 trades |  33% winners | avg win +1.43% | avg loss -0.98% | worst -2.4% | total  -30.2% of the account | avg trade -0.18%
+   NEWER: 218 trades |  31% winners | avg win +1.59% | avg loss -1.03% | worst -2.2% | total  -16.3% of the account | avg trade -0.22%
+
+== Better average trade than the bot today in BOTH periods (at least 60 older / 25 newer trades) ==
+No earnings news: older -0.15% vs -0.18% | NEWER -0.18% vs -0.20%
+Not negative headlines (tone 0 or more): older -0.12% vs -0.18% | NEWER -0.18% vs -0.20%
+S&P 500 up AND fresh news: older -0.17% vs -0.18% | NEWER +0.11% vs -0.20%
+S&P 500 up AND not negative headlines: older -0.14% vs -0.18% | NEWER +0.10% vs -0.20%
+S&P 500 up AND positive headlines: older -0.11% vs -0.18% | NEWER -0.05% vs -0.20%
+Fresh news AND not negative: older -0.16% vs -0.18% | NEWER -0.15% vs -0.20%
+
+== Made money in BOTH periods ==
+none
+
+== Every breakout, bought or not (no 3-a-day limit): average trade by news group ==
+Everything: older: 728 trades, 33% winners, avg -0.19% (± 0.05) | newer: 303 trades, 31% winners, avg -0.16% (± 0.09)
+News in the 24 hours before: older: 583 trades, 32% winners, avg -0.20% (± 0.06) | newer: 232 trades, 32% winners, avg -0.10% (± 0.12)
+No news in the 24 hours before: older: 145 trades, 36% winners, avg -0.13% (± 0.10) | newer: 71 trades, 27% winners, avg -0.36% (± 0.12)
+Fresh news since the last close: older: 524 trades, 31% winners, avg -0.21% (± 0.06) | newer: 222 trades, 31% winners, avg -0.13% (± 0.12)
+No fresh news since the last close: older: 204 trades, 36% winners, avg -0.14% (± 0.08) | newer: 81 trades, 31% winners, avg -0.22% (± 0.13)
+3 or more headlines in 24 hours: older: 379 trades, 30% winners, avg -0.24% (± 0.08) | newer: 174 trades, 32% winners, avg -0.07% (± 0.14)
+Earnings news: older: 148 trades, 31% winners, avg -0.30% (± 0.11) | newer: 81 trades, 32% winners, avg -0.03% (± 0.20)
+No earnings news: older: 580 trades, 33% winners, avg -0.16% (± 0.06) | newer: 222 trades, 31% winners, avg -0.20% (± 0.10)
+Analyst upgrade or higher price target: older: 103 trades, 30% winners, avg -0.25% (± 0.15) | newer: 39 trades, 18% winners, avg -0.32% (± 0.29)
+No analyst downgrade or lower target: older: 683 trades, 33% winners, avg -0.20% (± 0.05) | newer: 283 trades, 30% winners, avg -0.17% (± 0.10)
+Positive headlines (tone above 0): older: 282 trades, 30% winners, avg -0.26% (± 0.09) | newer: 113 trades, 27% winners, avg -0.22% (± 0.17)
+Not negative headlines (tone 0 or more): older: 656 trades, 34% winners, avg -0.16% (± 0.05) | newer: 259 trades, 29% winners, avg -0.17% (± 0.10)
+Negative headlines (tone below 0): older: 72 trades, 22% winners, avg -0.48% (± 0.13) | newer: 44 trades, 41% winners, avg -0.06% (± 0.21)
+S&P 500 up at the buy: older: 436 trades, 30% winners, avg -0.20% (± 0.07) | newer: 175 trades, 37% winners, avg +0.07% (± 0.14)
+S&P 500 up AND news in 24 hours: older: 353 trades, 30% winners, avg -0.19% (± 0.08) | newer: 142 trades, 37% winners, avg +0.10% (± 0.16)
+S&P 500 up AND fresh news: older: 323 trades, 30% winners, avg -0.18% (± 0.08) | newer: 137 trades, 36% winners, avg +0.09% (± 0.17)
+S&P 500 up AND not negative headlines: older: 394 trades, 31% winners, avg -0.17% (± 0.07) | newer: 152 trades, 36% winners, avg +0.08% (± 0.15)
+S&P 500 up AND positive headlines: older: 196 trades, 32% winners, avg -0.14% (± 0.11) | newer: 77 trades, 32% winners, avg +0.00% (± 0.24)
+Fresh news AND positive headlines: older: 262 trades, 30% winners, avg -0.28% (± 0.09) | newer: 110 trades, 26% winners, avg -0.27% (± 0.17)
+Fresh news AND not negative: older: 460 trades, 33% winners, avg -0.17% (± 0.07) | newer: 180 trades, 29% winners, avg -0.13% (± 0.14)
+
+== Examples, to check how headlines were read ==
+earnings (229 breakouts):
+   2026-09-18 COIN tone +0: 'Failure of Clarity Act Turns Crypto Industry Focus to Federal Regulators' - WSJ Exclusive
+   2026-06-03 META tone +1: NVIDIA's Jensen Huang Wants To Reinvent PC That Has Not Changed In 40 Years
+   2026-08-24 GOOGL tone +2: Jim Cramer Pushes Back on Nvidia Skeptics Ahead of Earnings — Dan Ives Says Chip Demand Is Crushing Supply 15-
+   2026-07-02 WMT tone -2: Amazon, Walmart and Other Large Employers Could Face New Costs As New Jersey Targets Companies With Medicaid W
+analyst up (142 breakouts):
+   2025-10-20 GOOGL tone +2: Alphabet To Rally More Than 10%? Here Are 10 Top Analyst Forecasts For Monday
+   2025-12-08 MSFT tone +2: Instacart Launches First Fully Integrated Shopping App On ChatGPT, Offering Instant Checkout From 1,800+ Retai
+   2026-01-08 BAC tone +0: 'Regulator Finds Bank of America Shared Confidential Information Ahead of Block Trade'- WSJ
+   2026-01-06 AMZN tone +1: Goldman's 2026 Call: S&P 500 To 7,600 — But Valuations Are The Wild Card
+analyst down (65 breakouts):
+   2026-10-07 NFLX tone -1: Barclays Maintains Equal-Weight on Netflix, Lowers Price Target to $70
+   2025-12-17 NOW tone -1: BTIG Assumes ServiceNow at Buy, Announces Price Target of $1000
+   2026-07-13 PFE tone -1: BMO Capital Maintains Outperform on Pfizer, Lowers Price Target to $30
+   2026-03-31 META tone +1: Performance Comparison: Meta Platforms And Competitors In Interactive Media &amp; Services Industry
+positive (395 breakouts):
+   2026-06-26 JNJ tone +1: Johnson & Johnson's TECVAYLI Receives Committee For Medicinal Products For Human Use Approval Recommendation T
+   2026-01-15 INTC tone +1: 'AI Is Real': Taiwan Semiconductor CEO Silences Skeptics As Profits Rocket 35%
+   2026-01-09 META tone +3: US Economy Adds 50,000 Jobs In December, Unemployment Rate Drops To 4.4% (UPDATED)
+   2026-01-28 MU tone +2: 10 Information Technology Stocks Whale Activity In Today's Session
+negative (116 breakouts):
+   2026-04-01 GOOGL tone -2: Apple Turns 50: From Garage Startup To $3.73 Trillion Giant—Here's How Much A $1,000 Investment At Its IPO Wou
+   2026-04-17 GE tone -1: Massive Ford Recall: About 1.4 Million F-150 Trucks Hit By Gearshift Glitch
+   2026-05-06 GE tone -1: 'Big Short' Idol Steve Eisman Warns Iran War Could End Tomorrow, But 'The Financial Event Is Not Ending'
+   2026-05-22 CSCO tone -1: Nasdaq 100 Drops After Nvidia's Earnings, Oil Reclaims $100: Stock Market Today
+

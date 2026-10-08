@@ -1,0 +1,39 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Thu Oct 8 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): -0.27% today ✅
+1. PLTR: buy above $203.38 (volume 10% of a normal day already) 📰
+2. NOW: buy above $142.18 (volume 5% of a normal day already)
+3. XOM: buy above $167.95 (volume 4% of a normal day already) 📰
+4. META: buy above $724.77 (volume 4% of a normal day already) 📰
+5. INTU: buy above $299.26 (volume 4% of a normal day already)
+Up to 3 trades today, about 658 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[9:38 AM New York | 4:38 PM your time] ✅ BOUGHT XOM (trade 1 of 3 today): 1.0446 shares at $167.96 (≈ 658 SAR)
+Stop $167.49 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.32% today ✅
+📰 News (last 24 hours):
+• Trump EPA Moves To Roll Back Biden-Era Methane Rules, Says Changes Could Save Oil and Gas Producers $45 Billion
+• ExxonMobil Targets Nine FlexRobotics Systems to Improve Drilling Safety
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[10:12 AM New York | 5:12 PM your time] ⚠️ XOM is close to the STOP: now $167.60, stop $167.49
+Loss right now: -2.8 SAR (-0.42%)
+[10:25 AM New York | 5:25 PM your time] 🛑 SOLD XOM at $167.35 (hit stop) after 48 min, trade 1 of 3 today
+❌ LOSS: -3.8 SAR (-0.57%)
+Balance: 1,970 SAR | Since start: 2 wins, 7 losses, net -29.8 SAR
+[1:18 PM New York | 8:18 PM your time] ✅ BOUGHT INTU (trade 2 of 3 today): 0.5854 shares at $299.73 (≈ 658 SAR)
+Stop $297.09 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.60% today ✅
+📰 No news about it in the last 24 hours.
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[1:51 PM New York | 8:51 PM your time] ⚠️ INTU is close to the STOP: now $297.72, stop $297.09
+Loss right now: -5.8 SAR (-0.88%)
+[3:05 PM New York | 10:05 PM your time] ⏳ INTU: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $301.47 | Profit right now: +2.4 SAR (+0.37%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD INTU at $301.55 (end-of-day sale) after 122 min, trade 2 of 3 today
+✅ WIN: +2.6 SAR (+0.40%)
+Balance: 1,973 SAR | Since start: 3 wins, 7 losses, net -27.2 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Thu Oct 8
+Today: 2 trades, -1.1 SAR (-0.06%)
+Balance: 1,973 SAR | Since start: -27.2 SAR (-1.4%), 3 wins, 7 losses, net -27.2 SAR
+

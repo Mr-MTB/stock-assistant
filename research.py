@@ -15,8 +15,11 @@ import csv
 import datetime as dt
 import io
 import itertools
+import json
 import os
+import re
 import sys
+import time
 import urllib.request
 
 import numpy as np
@@ -1022,11 +1025,223 @@ def exits_research():
     D.send(f"🕐 Hold-until-close test finished ({len(results)} versions). Full report saved in the repo ({path}).")
 
 
+# ---------------- news study for the current rules (v3: hold until the 3:20 PM sale) ----------------
+NEWS_FILE = os.path.join(DATA_DIR, "news.json")
+V3_OR, V3_UNTIL, V3_BEFORE = 5, 320, 40  # 5-minute range, entries until 2:50 PM, everything sold at 3:20 PM
+NEWS_PAUSE = 0.9  # seconds between news requests per thread: 3 threads stay under Alpaca's 200 a minute
+EARN = re.compile(r"earnings|\bEPS\b|guidance|outlook|estimates|\bQ[1-4]\b|quarterly|fiscal (year|quarter)|"
+                  r"revenue|results", re.I)
+UP = re.compile(r"upgrade|(raises?|boosts?|lifts?|hikes?) (its |the )?(price )?(target|PT)\b|price target (raised|boosted)"
+                r"|initiat\w+ .{0,40}(buy|outperform|overweight)", re.I)
+DOWN = re.compile(r"downgrade|(cuts?|lowers?|slashes?|trims?) (its |the )?(price )?(target|PT)\b"
+                  r"|price target (cut|lowered)|underperform|underweight|sell rating", re.I)
+POS = re.compile(r"\b(beats?|tops|surges?|soars?|jumps?|rall(y|ies)|gains?|record|strong(er)?|upgrades?|raises?|"
+                 r"boosts?|wins?|approv(al|ed|es)|expands?|growth|higher|bullish|outperform|rises?|climbs?|"
+                 r"rebounds?|profit)\b", re.I)
+NEG = re.compile(r"\b(miss(es)?|falls?|plunges?|drops?|sinks?|slumps?|tumbles?|cuts?|downgrades?|weak(er)?|"
+                 r"lawsuit|sued|probe|investigation|recalls?|delays?|lowers?|warns?|warning|loss(es)?|bearish|"
+                 r"underperform|declines?|layoffs?|fraud|halt(s|ed)?)\b", re.I)
+
+
+def v3_breakouts(F):
+    """Every first breakout of the 5 busiest morning stocks under the current rules, earliest first, each with
+    what it made if bought (stop mid, sold 40 minutes before the close). Same trades as exits_day for v3,
+    before the 3-a-day limit."""
+    rule = ("stop mid, no target", "mid", None, None, None)
+    p = dict(V2, **{"or": V3_OR, "until": V3_UNTIL, "stop": "mid", "hold": V3_BEFORE + 25})
+    out = []
+    for m, rank, s, (_, stop), _ in sorted(breakout(F, p), key=lambda x: (x[0], x[1])):
+        k0 = m + 1
+        if k0 >= F.n - 5:
+            continue
+        entry = F.o[s, k0] * (1 + SLIP)
+        risk = (entry - stop) / entry
+        if risk < 0.001 or risk > MAX_STOP + 1e-9:
+            continue
+        raw, why = walk_exit(F, s, k0, entry, stop, None, F.n - V3_BEFORE)
+        r = net(entry, raw)
+        out.append({"day": F.day, "s": s, "m": m, "rank": rank, "net": r, "acct": min(1 / 3, RISK / risk) * r,
+                    "why": why, "spy": F.c[F.spy, m] / F.prev_close[F.spy] - 1,
+                    "when": dt.datetime.combine(F.day, dt.time(9, 30), D.NY) + dt.timedelta(minutes=m + 1)})
+    assert rule[1] == "mid"
+    return out
+
+
+def news_window(symbol, start, end):
+    """Headlines about the stock published between start and end, newest first (at most 50)."""
+    r = D.api("GET", D.DATA_URL + "/v1beta1/news", {"symbols": symbol, "start": D.iso(start), "end": D.iso(end),
+                                                    "limit": 50, "sort": "desc"})
+    return [(n["created_at"], n.get("headline", "")) for n in (r.get("news") or [])]
+
+
+def load_news(rows, symbols):
+    """{key: [(published, headline), ...]} for the 4 days before each breakout; cached in data/news.json."""
+    cache = {}
+    if os.path.exists(NEWS_FILE):
+        with open(NEWS_FILE) as f:
+            cache = json.load(f)
+    todo = [r for r in rows if r["key"] not in cache]
+    print(f"News: {len(rows) - len(todo)} breakouts cached, fetching {len(todo)}.")
+
+    def get(r):
+        time.sleep(NEWS_PAUSE)
+        try:
+            return r["key"], news_window(symbols[r["s"]], r["when"] - dt.timedelta(hours=96), r["when"])
+        except Exception as e:
+            print(f"news unavailable for {r['key']}: {e}")
+            return r["key"], None
+
+    with cf.ThreadPoolExecutor(max_workers=3) as pool:
+        for k, (key, items) in enumerate(pool.map(get, todo), 1):
+            if items is not None:
+                cache[key] = items
+            if k % 100 == 0:
+                print(f"  fetched {k}/{len(todo)}")
+    os.makedirs(DATA_DIR, exist_ok=True)
+    with open(NEWS_FILE, "w") as f:
+        json.dump(cache, f)
+    return cache
+
+
+def news_features(items, when, prev_close):
+    """What the headlines said before the buy: counts, earnings, analyst moves, tone (positive - negative words)."""
+    parsed = [(dt.datetime.fromisoformat(c.replace("Z", "+00:00")), h) for c, h in items]
+    h24 = [h for t, h in parsed if when - dt.timedelta(hours=24) <= t <= when]
+    fresh = [h for t, h in parsed if prev_close <= t <= when]
+    text = " | ".join(h24)
+    tone = sum(len(POS.findall(h)) - len(NEG.findall(h)) for h in h24)
+    return {"n24": len(h24), "fresh": len(fresh), "earn": bool(EARN.search(text)), "up": bool(UP.search(text)),
+            "down": bool(DOWN.search(text)), "tone": tone, "h24": h24}
+
+
+NEWS_FILTERS = [  # (name, keep this breakout?)
+    ("News in the 24 hours before", lambda r: r["n24"] > 0),
+    ("No news in the 24 hours before", lambda r: r["n24"] == 0),
+    ("Fresh news since the last close", lambda r: r["fresh"] > 0),
+    ("No fresh news since the last close", lambda r: r["fresh"] == 0),
+    ("3 or more headlines in 24 hours", lambda r: r["n24"] >= 3),
+    ("Earnings news", lambda r: r["earn"]),
+    ("No earnings news", lambda r: not r["earn"]),
+    ("Analyst upgrade or higher price target", lambda r: r["up"]),
+    ("No analyst downgrade or lower target", lambda r: not r["down"]),
+    ("Positive headlines (tone above 0)", lambda r: r["tone"] > 0),
+    ("Not negative headlines (tone 0 or more)", lambda r: r["tone"] >= 0),
+    ("Negative headlines (tone below 0)", lambda r: r["tone"] < 0),
+    ("S&P 500 up at the buy", lambda r: r["spy"] > 0),
+    ("S&P 500 up AND news in 24 hours", lambda r: r["spy"] > 0 and r["n24"] > 0),
+    ("S&P 500 up AND fresh news", lambda r: r["spy"] > 0 and r["fresh"] > 0),
+    ("S&P 500 up AND not negative headlines", lambda r: r["spy"] > 0 and r["tone"] >= 0),
+    ("S&P 500 up AND positive headlines", lambda r: r["spy"] > 0 and r["tone"] > 0),
+    ("Fresh news AND positive headlines", lambda r: r["fresh"] > 0 and r["tone"] > 0),
+    ("Fresh news AND not negative", lambda r: r["fresh"] > 0 and r["tone"] >= 0),
+]
+
+
+def take_first(day_rows, keep):
+    """The bot's daily pick: the first 3 breakouts (in time order) that pass the filter."""
+    out = []
+    for r in day_rows:
+        if len(out) >= 3:
+            break
+        if keep(r):
+            out.append(r)
+    return out
+
+
+def news_research():
+    symbols, today, feats, tune, test = load_study()
+    days = []
+    for i, F in enumerate(feats):
+        prev = feats[i - 1] if i else None
+        prev_close = (dt.datetime.combine(prev.day, dt.time(9, 30), D.NY) + dt.timedelta(minutes=prev.n)
+                      if prev else None)
+        rows = v3_breakouts(F)
+        for r in rows:
+            r["key"] = f"{symbols[r['s']]}|{r['when'].isoformat()}"
+            r["part"] = "older" if i < len(tune) else "newer"
+            r["prev_close"] = prev_close or r["when"] - dt.timedelta(hours=24)
+        days.append(rows)
+    every = [r for rows in days for r in rows]
+    news = load_news(every, symbols)
+    missing = 0
+    for r in every:
+        items = news.get(r["key"])
+        missing += items is None
+        r.update(news_features(items or [], r["when"], r["prev_close"]))
+    n_old = sum(r["part"] == "older" for r in every)
+
+    def run(keep):
+        out = {"older": [], "newer": []}
+        for rows in days:
+            for r in take_first(rows, keep):
+                out[r["part"]].append(r)
+        return exit_stats(out["older"]), exit_stats(out["newer"])
+
+    def avg_line(st):
+        if not st["n"]:
+            return "no trades"
+        return f"{exit_line(st)} | avg trade {st['avg'] * 100:+.2f}%"
+
+    base = run(lambda r: True)
+    results = [(name, *run(keep)) for name, keep in NEWS_FILTERS]
+    lines = [f"📰 News test for the current rules (5-minute start, entries until 2:50 PM, stop in the middle, "
+             f"everything sold at 3:20 PM), {len(feats)} trading days ({feats[0].day} to {feats[-1].day}). "
+             "Sahm costs included. Per trade: % of the money in that trade. Total: % of the whole account, added up.",
+             f"Older months (used to choose): {tune[0].day} to {tune[-1].day}. "
+             f"Newer months (never used to choose): {test[0].day} to {test[-1].day}.",
+             f"Breakouts studied: {len(every)} ({n_old} older, {len(every) - n_old} newer); "
+             f"news missing for {missing}. Headlines: Benzinga via Alpaca, only those published before the buy.", "",
+             "== The bot today (no news filter) ==", f"   older: {avg_line(base[0])}", f"   NEWER: {avg_line(base[1])}",
+             "", "== The bot with each news filter (it buys the first 3 breakouts a day that pass) =="]
+    for name, a, b in sorted(results, key=lambda x: -x[1]["total"]):
+        lines += [name, f"   older: {avg_line(a)}", f"   NEWER: {avg_line(b)}"]
+    better = [x for x in results if x[1]["n"] >= 60 and x[2]["n"] >= 25
+              and x[1]["avg"] > base[0]["avg"] and x[2]["avg"] > base[1]["avg"]]
+    lines += ["", "== Better average trade than the bot today in BOTH periods (at least 60 older / 25 newer trades) =="]
+    lines += [f"{n}: older {a['avg'] * 100:+.2f}% vs {base[0]['avg'] * 100:+.2f}% | "
+              f"NEWER {b['avg'] * 100:+.2f}% vs {base[1]['avg'] * 100:+.2f}%" for n, a, b in better] or ["none"]
+    both = [x for x in results if x[1]["n"] >= 60 and x[2]["n"] >= 25 and x[1]["total"] > 0 and x[2]["total"] > 0]
+    lines += ["", "== Made money in BOTH periods =="]
+    lines += [f"{n}: older {a['total'] * 100:+.1f}%, NEWER {b['total'] * 100:+.1f}% of the account"
+              for n, a, b in both] or ["none"]
+
+    lines += ["", "== Every breakout, bought or not (no 3-a-day limit): average trade by news group =="]
+    for name, keep in [("Everything", lambda r: True)] + NEWS_FILTERS:
+        cells = []
+        for part in ("older", "newer"):
+            g = np.array([r["net"] for r in every if r["part"] == part and keep(r)])
+            if len(g):
+                se = g.std(ddof=1) / np.sqrt(len(g)) if len(g) > 1 else 0
+                cells.append(f"{part}: {len(g)} trades, {(g > 0).mean() * 100:.0f}% winners, "
+                             f"avg {g.mean() * 100:+.2f}% (± {se * 100:.2f})")
+            else:
+                cells.append(f"{part}: none")
+        lines.append(f"{name}: " + " | ".join(cells))
+
+    lines += ["", "== Examples, to check how headlines were read =="]
+    rng = np.random.default_rng(7)
+    for label, test_fn in [("earnings", lambda r: r["earn"]), ("analyst up", lambda r: r["up"]),
+                           ("analyst down", lambda r: r["down"]), ("positive", lambda r: r["tone"] > 0),
+                           ("negative", lambda r: r["tone"] < 0)]:
+        pool = [r for r in every if test_fn(r)]
+        lines.append(f"{label} ({len(pool)} breakouts):")
+        for k in rng.choice(len(pool), size=min(4, len(pool)), replace=False) if pool else []:
+            r = pool[int(k)]
+            lines.append(f"   {r['day']} {symbols[r['s']]} tone {r['tone']:+d}: {r['h24'][0][:110] if r['h24'] else ''}")
+
+    path = D.write_report(f"research-news-{today}.txt", lines, mode="w")
+    print("\n".join(lines))
+    print(f"Saved {path}")
+    D.send(f"📰 News test finished ({len(results)} news filters on {len(every)} breakouts). "
+           f"Claude will send you the summary. Full report saved in the repo ({path}).")
+
+
 if __name__ == "__main__":
     job = sys.argv[1] if len(sys.argv) > 1 else "research"
     try:
         {"research_ai": ai_research, "research_market": market_research,
-         "research_hold": hold_research, "research_exits": exits_research}.get(job, research)()
+         "research_hold": hold_research, "research_exits": exits_research,
+         "research_news": news_research}.get(job, research)()
     except Exception as e:
         D.send(f"⚠️ Research error: {e}")
         raise

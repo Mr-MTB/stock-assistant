@@ -1,0 +1,55 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Fri Oct 9 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): +0.35% today ✅
+1. UNH: buy above $378.90 (volume 12% of a normal day already) 📰
+2. PLTR: buy above $203.77 (volume 11% of a normal day already) 📰
+3. PFE: buy above $27.95 (volume 5% of a normal day already)
+4. TSLA: buy above $385.65 (volume 5% of a normal day already) 📰
+5. ORCL: buy above $140.63 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 658 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT UNH (trade 1 of 3 today): 0.4602 shares at $381.00 (≈ 658 SAR)
+Stop $376.05 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.35% today ✅
+📰 News (last 24 hours):
+• Humana Reaffirms FY26 Adjusted EPS Guidance Of At Least $9; Exceeding Goal Of Top Quartile Results In 2027 Medicare Advantage Star Ratings; Expects 2028 Benefit For One-Time Investments And Return To Shareholders
+• CMS Releases 2027 Medicare Advantage And Part D Star Ratings, With 37% Of MA-PD Contracts Earning Four Or More Stars And 71% Of Enrollees In High-Rated Plans
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[9:38 AM New York | 4:38 PM your time] ✅ BOUGHT PFE (trade 2 of 3 today): 6.2737 shares at $27.95 (≈ 658 SAR)
+Stop $27.77 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.32% today ✅
+📰 No news about it in the last 24 hours.
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[9:42 AM New York | 4:42 PM your time] ✅ BOUGHT ORCL (trade 3 of 3 today): 1.2484 shares at $140.46 (≈ 658 SAR)
+Stop $138.56 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.35% today ✅
+📰 News (last 24 hours):
+• Stock of the Day: Where is the Bottom for Oracle?
+• Dan Ives Updates AI 30: Adds DELL, SPCX While Dropping ORCL and PEGA Ahead of IVES Rebalance
+Past success rate of this setup: 32% (57 of 177 trades won, 2026-07-13 to 2026-10-05).
+[9:59 AM New York | 4:59 PM your time] ⚠️ ORCL is close to the STOP: now $139.02, stop $138.56
+Loss right now: -8.1 SAR (-1.23%)
+[10:00 AM New York | 5:00 PM your time] 🛑 SOLD ORCL at $138.50 (hit stop) after 18 min, trade 1 of 3 today
+❌ LOSS: -10.5 SAR (-1.60%)
+Balance: 1,962 SAR | Since start: 3 wins, 8 losses, net -37.7 SAR
+[10:04 AM New York | 5:04 PM your time] ⚠️ UNH is close to the STOP: now $376.36, stop $376.05
+Loss right now: -9.4 SAR (-1.43%)
+[10:05 AM New York | 5:05 PM your time] 🛑 SOLD UNH at $375.35 (hit stop) after 29 min, trade 2 of 3 today
+❌ LOSS: -11.1 SAR (-1.69%)
+Balance: 1,951 SAR | Since start: 3 wins, 9 losses, net -48.8 SAR
+[3:05 PM New York | 10:05 PM your time] ⏳ PFE: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $28.15 | Profit right now: +3.3 SAR (+0.50%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD PFE at $28.18 (end-of-day sale) after 342 min, trade 3 of 3 today
+✅ WIN: +4.0 SAR (+0.61%)
+Balance: 1,955 SAR | Since start: 4 wins, 9 losses, net -44.8 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Fri Oct 9
+Today: 3 trades, -17.6 SAR (-0.89%)
+Balance: 1,955 SAR | Since start: -44.8 SAR (-2.2%), 4 wins, 9 losses, net -44.8 SAR
+[3:20 PM New York | 10:20 PM your time] 📅 Weekly report
+This week: 13 trades, -44.8 SAR
+Since start:
+Trades: 13 | Winners: 4 (31%)
+Balance: 2,000 SAR → 1,955 SAR (-2.2%)
+Exits: {'stop': 6, 'time': 7}
+

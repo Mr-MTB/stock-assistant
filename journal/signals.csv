@@ -16,3 +16,7 @@ date,time_ny,symbol,rank,taken,why_not,market_pct,rvol,range_pct,gap_pct,would_e
 2026-10-09,9:42 AM,ORCL,5,yes,,0.3515,0.0417,2.9565,1.0365,stop,-1.7858,loss
 2026-10-09,9:43 AM,TSLA,4,no,limit,0.3114,0.0521,1.1144,1.9397,stop,-1.1088,loss
 2026-10-09,11:23 AM,PLTR,2,no,limit,0.4710,0.1125,1.9117,1.2955,time,1.3548,win
+2026-10-12,9:36 AM,NOW,1,yes,,0.0771,0.0890,1.7606,2.8929,stop,-1.5028,loss
+2026-10-12,9:36 AM,CVX,5,yes,,0.0771,0.0454,0.5333,1.2076,stop,-0.7049,loss
+2026-10-12,9:44 AM,PLTR,3,yes,,0.0488,0.0521,1.1210,0.0191,stop,-1.2089,loss
+2026-10-12,10:09 AM,AAPL,4,no,limit,-0.0713,0.0463,1.3551,0.4934,stop,-1.0514,loss

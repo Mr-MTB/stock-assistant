@@ -1,0 +1,49 @@
+[9:32 AM New York | 4:32 PM your time] Run started at 9:32 AM New York (4:32 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Mon Oct 12 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): +0.04% today ✅
+1. NOW: buy above $147.39 (volume 9% of a normal day already) 📰
+2. CRM: buy above $240.38 (volume 6% of a normal day already) 📰
+3. PLTR: buy above $210.20 (volume 5% of a normal day already) 📰
+4. AAPL: buy above $342.25 (volume 5% of a normal day already) 📰
+5. CVX: buy above $215.70 (volume 5% of a normal day already) 📰
+Up to 3 trades today, about 652 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT NOW (trade 1 of 3 today): 1.1753 shares at $147.86 (≈ 652 SAR)
+Stop $146.09 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.08% today ✅
+📰 News (last 24 hours):
+• BTIG Reiterates Buy on ServiceNow, Maintains $170 Price Target
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT CVX (trade 2 of 3 today): 0.8047 shares at $215.94 (≈ 652 SAR)
+Stop $215.12 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.08% today ✅
+📰 News (last 24 hours):
+• Iran Offers to Broker Saudi-Houthi Talks as Riyadh Vows an ‘Equally Serious’ Response to Deadly Airport Strikes: Report
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:39 AM New York | 4:39 PM your time] ⚠️ NOW is close to the STOP: now $146.42, stop $146.09
+Loss right now: -7.7 SAR (-1.18%)
+[9:40 AM New York | 4:40 PM your time] 🛑 SOLD NOW at $145.94 (hit stop) after 4 min, trade 1 of 3 today
+❌ LOSS: -9.8 SAR (-1.51%)
+Balance: 1,945 SAR | Since start: 4 wins, 10 losses, net -54.6 SAR
+[9:44 AM New York | 4:44 PM your time] ✅ BOUGHT PLTR (trade 3 of 3 today): 0.8251 shares at $210.63 (≈ 652 SAR)
+Stop $209.02 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.05% today ✅
+📰 News (last 24 hours):
+• Palantir CTO Says Some AI Researchers Are So Sure It Will Cure Cancer They’ve Started 'Smoking' — Warns Both AI Extremes Reflect ‘Social Delusion’
+• Ondas Partners Forms Regna AI With Palantir To Help Customers Develop And Deploy Mission-Specialized AI Models
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:47 AM New York | 4:47 PM your time] ⚠️ PLTR is close to the STOP: now $209.28, stop $209.02
+Loss right now: -5.5 SAR (-0.85%)
+[9:54 AM New York | 4:54 PM your time] 🛑 SOLD PLTR at $208.82 (hit stop) after 10 min, trade 2 of 3 today
+❌ LOSS: -7.0 SAR (-1.07%)
+Balance: 1,938 SAR | Since start: 4 wins, 11 losses, net -61.6 SAR
+[10:06 AM New York | 5:06 PM your time] ⚠️ CVX is close to the STOP: now $215.19, stop $215.12
+Loss right now: -3.6 SAR (-0.56%)
+[10:09 AM New York | 5:09 PM your time] 🛑 SOLD CVX at $214.95 (hit stop) after 33 min, trade 3 of 3 today
+❌ LOSS: -4.4 SAR (-0.67%)
+Balance: 1,934 SAR | Since start: 4 wins, 12 losses, net -66.0 SAR
+[2:50 PM New York | 9:50 PM your time] 📊 End of day, Mon Oct 12
+Today: 3 trades, -21.2 SAR (-1.08%)
+Balance: 1,934 SAR | Since start: -66.0 SAR (-3.3%), 4 wins, 12 losses, net -66.0 SAR
+

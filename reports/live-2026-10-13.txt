@@ -1,0 +1,49 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Tue Oct 13 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): -0.05% today ✅
+1. AAPL: buy above $348.11 (volume 9% of a normal day already) 📰
+2. ABBV: buy above $282.53 (volume 4% of a normal day already) 📰
+3. NOW: buy above $143.66 (volume 4% of a normal day already) 📰
+4. WMT: buy above $114.69 (volume 4% of a normal day already)
+5. CVX: buy above $217.11 (volume 3% of a normal day already) 📰
+Up to 3 trades today, about 645 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT ABBV (trade 1 of 3 today): 0.6072 shares at $283.10 (≈ 645 SAR)
+Stop $281.77 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.04% today ✅
+📰 News (last 24 hours):
+• Netflix, DocuSign And A Health Care Stock On CNBC’s ‘Final Trades’
+• CNBC Halftime Report Final Trades: AbbVie, DocuSign, Netflix
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT WMT (trade 2 of 3 today): 1.4989 shares at $114.68 (≈ 645 SAR)
+Stop $114.35 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.04% today ✅
+📰 News (last 24 hours):
+• 'Walmart to Cover Some GLP-1s, Insulin at No Cost for Workers' - Bloomberg
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:38 AM New York | 4:38 PM your time] ⚠️ ABBV is close to the STOP: now $281.92, stop $281.77
+Loss right now: -4.1 SAR (-0.63%)
+[9:38 AM New York | 4:38 PM your time] 🛑 SOLD ABBV at $281.64 (hit stop) after 2 min, trade 1 of 3 today
+❌ LOSS: -4.7 SAR (-0.73%)
+Balance: 1,929 SAR | Since start: 4 wins, 13 losses, net -70.7 SAR
+[9:39 AM New York | 4:39 PM your time] ⚠️ WMT is close to the STOP: now $114.41, stop $114.35
+Loss right now: -2.9 SAR (-0.45%)
+[9:40 AM New York | 4:40 PM your time] 🛑 SOLD WMT at $114.25 (hit stop) after 4 min, trade 2 of 3 today
+❌ LOSS: -3.8 SAR (-0.59%)
+Balance: 1,926 SAR | Since start: 4 wins, 14 losses, net -74.5 SAR
+[9:44 AM New York | 4:44 PM your time] ✅ BOUGHT NOW (trade 3 of 3 today): 1.1894 shares at $144.53 (≈ 645 SAR)
+Stop $142.05 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.03% today ✅
+📰 News (last 24 hours):
+• ServiceNow Gets Wall Street's Vote of Confidence Ahead of Earnings
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[10:15 AM New York | 5:15 PM your time] ⚠️ NOW is close to the STOP: now $142.55, stop $142.05
+Loss right now: -10.2 SAR (-1.58%)
+[10:46 AM New York | 5:46 PM your time] 🛑 SOLD NOW at $141.91 (hit stop) after 62 min, trade 3 of 3 today
+❌ LOSS: -13.0 SAR (-2.02%)
+Balance: 1,912 SAR | Since start: 4 wins, 15 losses, net -87.5 SAR
+[2:50 PM New York | 9:50 PM your time] 📊 End of day, Tue Oct 13
+Today: 3 trades, -21.5 SAR (-1.11%)
+Balance: 1,912 SAR | Since start: -87.5 SAR (-4.4%), 4 wins, 15 losses, net -87.5 SAR
+

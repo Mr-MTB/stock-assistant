@@ -1237,6 +1237,7 @@ def news_research():
 
 
 # ---------------- farther stops for the current rules (owner's request, Oct 14) ----------------
+START_SAR = 2000.0  # the owner's paper account
 V3_LIVE_START = dt.date(2026, 10, 7)  # first live day with the current rules
 STOP_RULES = [  # (name, short label, stop price from: buy price, 5-min high, 5-min low, day's low so far, ATR %)
     ("Middle of the first 5 minutes (the bot now)", "now", lambda e, hi, lo, low, atr: (hi + lo) / 2),
@@ -1375,12 +1376,152 @@ def stops_research(live_rows=None):
            f"Full report saved in the repo ({path}).")
 
 
+# ---------------- selling short instead of buying (owner's request, Oct 14) ----------------
+LIVE_START = dt.date(2026, 10, 5)  # first live paper trades
+SHORT_WAYS = [  # (name, kind, stop): kind "breakdown" = mirror of the bot, "opposite" = short the bot's own buys
+    ("Sell short the breakdowns, stop at the top of the first 5 minutes", "breakdown", "top"),
+    ("Sell short the breakdowns, stop in the middle of the first 5 minutes", "breakdown", "mid"),
+    ("Sell short the breakdowns, no stop (only the 3:20 PM buy-back)", "breakdown", None),
+    ("Do the opposite of the bot: sell short its own buys, stop as far above as its stop is below",
+     "opposite", "mirror"),
+    ("Do the opposite of the bot: sell short its own buys, no stop", "opposite", None),
+]
+
+
+def breakdown(F, p):
+    """Mirror of breakout(): of the 5 busiest morning stocks that are DOWN on the day and below VWAP after the
+    first minutes, a signal is the first 1-minute candle closing just below the opening-range low, while the
+    S&P 500 isn't up more than 1% today. Returns (minute, rank, stock, range high, range low)."""
+    n_or, cut = p["or"], cutoff(F, p["until"], p.get("hold", HOLD))
+    hi, lo = F.h[:, :n_or].max(1), F.l[:, :n_or].min(1)
+    last, vol = F.c[:, n_or - 1], F.v[:, :n_or].sum(1)
+    rng = (hi - lo) / last
+    ok = F.ok & (vol > 0) & (last < F.vwap[:, n_or - 1]) & (last < F.prev_close) & (rng >= 0.003) & (rng <= 0.03)
+    rvol = np.where(ok, vol / F.avg_vol, -1)
+    cands = [s for s in np.argsort(-rvol, kind="stable")[:p.get("top", 5)] if ok[s]]
+    calm = F.c[F.spy, n_or:cut] / F.prev_close[F.spy] - 1 < 0.01
+    sigs = []
+    for rank, s in enumerate(cands):
+        cc = F.c[s, n_or:cut]
+        hit = (cc < lo[s]) & (cc >= lo[s] - 0.5 * (hi[s] - lo[s])) & calm
+        if hit.any():
+            sigs.append((n_or + int(np.argmax(hit)), rank, s, hi[s], lo[s]))
+    return sigs
+
+
+def walk_short(F, s, k0, stop, end):
+    """Sold short at the open of bar k0; bought back at the stop (a candle's high reaches it) or at the open of
+    bar `end`. Returns (raw buy-back price, reason)."""
+    hi, op = F.h[s], F.o[s]
+    for k in range(k0, end):
+        if stop is not None and hi[k] >= stop:
+            return max(stop, op[k]), "stop"
+    return op[end], "end"
+
+
+def net_short(entry, raw_cover):
+    """A short sale's result after slippage and Sahm fees, as a fraction of the money in the trade."""
+    x = raw_cover * (1 + SLIP)
+    return (1 - x / entry) - FEE - FEE * x / entry
+
+
+def short_day(F, kind, stop_kind):
+    """One day's short sales: the first 3 signals (earliest first), a third of the money each, bought back at
+    3:20 PM unless the stop is hit."""
+    end, out = F.n - V3_BEFORE, []
+    if kind == "breakdown":
+        p = {"or": V3_OR, "until": V3_UNTIL, "hold": V3_BEFORE + 25, "top": 5}
+        picks = [(m + 1, s, hi, lo) for m, _, s, hi, lo in sorted(breakdown(F, p), key=lambda x: (x[0], x[1]))]
+    else:
+        picks = [(r["m"] + 1, r["s"], F.h[r["s"], :V3_OR].max(), F.l[r["s"], :V3_OR].min())
+                 for r in take_first(v3_breakouts(F), lambda r: True)]
+    for k0, s, hi, lo in picks:
+        if len(out) >= 3:
+            break
+        if k0 >= F.n - 5:
+            continue
+        entry = F.o[s, k0] * (1 - SLIP)
+        stop = {"top": hi, "mid": (hi + lo) / 2, "mirror": entry + (entry - lo), None: None}[stop_kind]
+        raw, why = walk_short(F, s, k0, stop, end)
+        n = net_short(entry, raw)
+        out.append({"day": F.day, "s": s, "k0": k0, "entry": entry, "stop": stop, "raw": raw, "why": why,
+                    "net": n, "acct": n / 3})
+    return out
+
+
+def short_research(live_rows=None):
+    symbols, today, feats, tune, test = load_study()
+    recent, live_days = feats[-30:], [F for F in feats if F.day >= LIVE_START]
+    ways = [("Buying (the bot now: middle stop)", "long", STOP_RULES[0]),
+            ("Buying with the farther stop (bottom of the first 5 minutes)", "long", STOP_RULES[1])] + \
+           [(name, kind, stop) for name, kind, stop in SHORT_WAYS]
+
+    def trades(way, days):
+        name, kind, stop = way
+        if kind == "long":
+            return [t for F in days for t in stop_day(F, stop, lambda F_, s: 0.02)]
+        return [t for F in days for t in short_day(F, kind, stop)]
+
+    def sar(ts):
+        return sum(t["acct"] for t in ts) * START_SAR
+
+    if live_rows is None:
+        try:
+            live_rows = fetch_live_trades()
+        except Exception as e:
+            print(f"Live trades unavailable: {e}")
+            live_rows = []
+    real = [r for r in live_rows if live_days and live_days[0].day <= dt.date.fromisoformat(r["date"])
+            <= live_days[-1].day]
+    real_sar = sum(float(r["pnl_usd"]) for r in real) * D.SAR_PER_USD
+    span = f"{live_days[0].day:%b %d} to {live_days[-1].day:%b %d}" if live_days else "none"
+    lines = [f"📉 Selling short instead of buying (5-minute start, up to 3 trades a day with a third of the money "
+             f"each, entries until 2:50 PM, bought back at 3:20 PM), {len(feats)} trading days ({feats[0].day} to "
+             f"{feats[-1].day}). Sahm costs included on both orders. No borrowing fee counted (same-day shorts).",
+             f"Older months (used to choose): {tune[0].day} to {tune[-1].day}. Newer months (never used to "
+             f"choose): {test[0].day} to {test[-1].day}. Last 30 trading days: {recent[0].day} to {recent[-1].day}.",
+             "", f"== The last days you've seen ({span}), on a {START_SAR:,.0f} SAR account ==",
+             f"The bot's real paper trades (buying): {real_sar:+.1f} SAR ({len(real)} trades, "
+             f"{sum(float(r['pnl_usd']) > 0 for r in real)} wins)"]
+    for way in ways:
+        ts = trades(way, live_days)
+        lines.append(f"{way[0]}: {sar(ts):+.1f} SAR ({len(ts)} trades, {sum(t['net'] > 0 for t in ts)} wins)")
+    for way in (ways[2], ways[5]):
+        lines += ["", f"== Day by day: {way[0]} =="]
+        for F in live_days:
+            ts = trades(way, [F])
+            cells = [f"{symbols[t['s']]} sold {clock12(dt.datetime.combine(F.day, dt.time(9, 30)) + dt.timedelta(minutes=int(t['k0'])))}"
+                     f" at ${t['entry']:.2f}, bought back {'at the stop' if t['why'] == 'stop' else 'at 3:20 PM'}"
+                     f" ${t['raw']:.2f}: {t['net'] * 100:+.2f}%" for t in ts]
+            lines.append(f"{F.day:%b %d}: " + ("; ".join(cells) if cells else "no trade") + f" | day {sar(ts):+.1f} SAR")
+    lines += ["", "== Each way over the past year =="]
+    stats = []
+    for way in ways:
+        a, b, c = (exit_stats(trades(way, days)) for days in (tune, test, recent))
+        stats.append((way, a, b, c))
+        lines += [way[0]] + [f"   {label}: {exit_line(st)} | avg trade {st['avg'] * 100:+.2f}%" if st["n"] else
+                             f"   {label}: no trades" for label, st in (("older", a), ("NEWER", b), ("last 30 days", c))]
+    base = stats[0]
+    lines += ["", "== Selling short ways better than buying (the bot now) in BOTH the older and the newer months =="]
+    lines += [f"{w[0]}: older {a['total'] * 100:+.1f}% vs {base[1]['total'] * 100:+.1f}% | NEWER "
+              f"{b['total'] * 100:+.1f}% vs {base[2]['total'] * 100:+.1f}%"
+              for w, a, b, c in stats[2:] if a["n"] and b["n"] and a["total"] > base[1]["total"]
+              and b["total"] > base[2]["total"]] or ["none"]
+    lines += ["", "== Made money in BOTH the older and the newer months =="]
+    lines += [w[0] for w, a, b, c in stats if a["n"] and b["n"] and a["total"] > 0 and b["total"] > 0] or ["none"]
+    path = D.write_report(f"research-short-{today}.txt", lines, mode="w")
+    print("\n".join(lines))
+    print(f"Saved {path}")
+    D.send(f"📉 Selling-short test finished. Claude will send you the summary. Full report saved in the repo ({path}).")
+
+
 if __name__ == "__main__":
     job = sys.argv[1] if len(sys.argv) > 1 else "research"
     try:
         {"research_ai": ai_research, "research_market": market_research,
          "research_hold": hold_research, "research_exits": exits_research,
-         "research_news": news_research, "research_stops": stops_research}.get(job, research)()
+         "research_news": news_research, "research_stops": stops_research,
+         "research_short": short_research}.get(job, research)()
     except Exception as e:
         D.send(f"⚠️ Research error: {e}")
         raise

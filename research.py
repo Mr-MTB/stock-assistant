@@ -1236,12 +1236,151 @@ def news_research():
            f"Claude will send you the summary. Full report saved in the repo ({path}).")
 
 
+# ---------------- farther stops for the current rules (owner's request, Oct 14) ----------------
+V3_LIVE_START = dt.date(2026, 10, 7)  # first live day with the current rules
+STOP_RULES = [  # (name, short label, stop price from: buy price, 5-min high, 5-min low, day's low so far, ATR %)
+    ("Middle of the first 5 minutes (the bot now)", "now", lambda e, hi, lo, low, atr: (hi + lo) / 2),
+    ("Bottom of the first 5 minutes", "5m low", lambda e, hi, lo, low, atr: lo),
+    ("Lowest price of the day so far", "day low", lambda e, hi, lo, low, atr: low),
+    ("1% below the buy price", "1%", lambda e, hi, lo, low, atr: e * 0.99),
+    ("1.5% below the buy price", "1.5%", lambda e, hi, lo, low, atr: e * 0.985),
+    ("2% below the buy price", "2%", lambda e, hi, lo, low, atr: e * 0.98),
+    ("3% below the buy price", "3%", lambda e, hi, lo, low, atr: e * 0.97),
+    ("Half a normal day's move below (0.5 ATR)", "0.5 ATR", lambda e, hi, lo, low, atr: e * (1 - 0.5 * atr)),
+    ("One normal day's move below (1 ATR)", "1 ATR", lambda e, hi, lo, low, atr: e * (1 - atr)),
+    ("No stop, only the 3:20 PM sale", "no stop", lambda e, hi, lo, low, atr: None),
+]
+
+
+def atr_table(symbols, start, end):
+    """Each stock's daily true range as a fraction of the previous close, by date."""
+    bars = D.get_bars(symbols, "1Day", start, end, adjustment="split")
+    out = {}
+    for s in symbols:
+        rows = bars.get(s, [])
+        pct = [np.nan] + [(max(b["h"], a["c"]) - min(b["l"], a["c"])) / a["c"] for a, b in zip(rows, rows[1:])]
+        out[s] = ([b["t"].date() for b in rows], np.array(pct, float))
+    return out
+
+
+def atr_before(table, symbol, day):
+    """Average true range (%) of the 14 trading days before `day` (2% if unknown)."""
+    dates, pct = table.get(symbol, ([], np.array([])))
+    k = bisect.bisect_left(dates, day)
+    window = pct[max(0, k - 14):k]
+    window = window[~np.isnan(window)]
+    return float(window.mean()) if len(window) >= 5 else 0.02
+
+
+def stop_price(rule, F, s, k0, entry, atr):
+    hi, lo = F.h[s, :V3_OR].max(), F.l[s, :V3_OR].min()
+    return rule[2](entry, hi, lo, F.l[s, :k0].min(), atr)
+
+
+def stop_day(F, rule, atr_of):
+    """The current rules' trades on one day (first 3 breakouts, same buys), with this stop; sold at 3:20 PM."""
+    out = []
+    for r in take_first(v3_breakouts(F), lambda r: True):
+        s, k0 = r["s"], r["m"] + 1
+        entry = F.o[s, k0] * (1 + SLIP)
+        stop = stop_price(rule, F, s, k0, entry, atr_of(F, s))
+        raw, why = walk_exit(F, s, k0, entry, stop, None, F.n - V3_BEFORE)
+        n = net(entry, raw)
+        out.append({"day": F.day, "s": s, "k0": k0, "entry": entry, "stop": stop, "raw": raw, "why": why,
+                    "net": n, "acct": n / 3})
+    return out
+
+
+def live_stop_review(rows, feats, symbols, atr_of):
+    """The live trades with the current rules: what each stop would have done (same buys, same 3:20 PM sale)."""
+    by_day = {F.day: F for F in feats}
+    head = "Trade (New York time)        live  | " + " | ".join(f"{x[1]:>7}" for x in STOP_RULES)
+    lines, sums, live_sum, used = [head], [0.0] * len(STOP_RULES), 0.0, 0
+    for r in rows:
+        day = dt.date.fromisoformat(r["date"])
+        if day < V3_LIVE_START or day not in by_day or r["symbol"] not in symbols:
+            continue
+        F, s = by_day[day], symbols.index(r["symbol"])
+        t = dt.datetime.strptime(r["entry_time_ny"].strip(), "%I:%M %p")
+        k0 = t.hour * 60 + t.minute - (9 * 60 + 30)
+        if not 0 < k0 < F.n - V3_BEFORE:
+            continue
+        entry, money = float(r["entry"]), float(r["invested_usd"]) * D.SAR_PER_USD
+        live = float(r["pnl_pct"]) / 100
+        cells = []
+        for i, rule in enumerate(STOP_RULES):
+            raw, why = walk_exit(F, s, k0, entry, stop_price(rule, F, s, k0, entry, atr_of(F, s)), None,
+                                 F.n - V3_BEFORE)
+            pct = net(entry, raw)
+            sums[i] += pct * money
+            cells.append(f"{pct * 100:+6.2f}{'s' if why in ('stop', 'protect') else ' '}")
+        live_sum += live * money
+        used += 1
+        lines.append(f"{day.strftime('%b %d')} {r['symbol']:<5} {r['entry_time_ny']:>8}  {live * 100:+6.2f}{'s' if r['exit_reason'] == 'stop' else ' '} | "
+                     + " | ".join(cells))
+    lines.append(f"Total in SAR ({used} trades)       {live_sum:+6.1f}  | " + " | ".join(f"{x:+7.1f}" for x in sums))
+    lines.append("(% of the money in each trade after Sahm fees; s = sold at the stop, otherwise sold at 3:20 PM)")
+    return lines
+
+
+def stops_research(live_rows=None):
+    symbols, today, feats, tune, test = load_study()
+    start = dt.datetime.combine(feats[0].day, dt.time(9, 30), D.NY) - dt.timedelta(days=60)
+    table = atr_table(symbols, start, dt.datetime.combine(feats[-1].day, dt.time(16, 0), D.NY))
+    cache = {}
+
+    def atr_of(F, s):
+        key = (F.day, s)
+        if key not in cache:
+            cache[key] = atr_before(table, symbols[s], F.day)
+        return cache[key]
+
+    recent = feats[-30:]
+    results = []
+    for rule in STOP_RULES:
+        parts = [[t for F in days for t in stop_day(F, rule, atr_of)] for days in (tune, test, recent)]
+        results.append((rule, *[exit_stats(p) for p in parts]))
+
+    def row(st):
+        return f"{exit_line(st)} | avg trade {st['avg'] * 100:+.2f}%" if st["n"] else "no trades"
+
+    if live_rows is None:
+        try:
+            live_rows = fetch_live_trades()
+        except Exception as e:
+            print(f"Live trades unavailable: {e}")
+            live_rows = []
+    lines = [f"🛑 Farther stops for the current rules (5-minute start, entries until 2:50 PM, everything sold at "
+             f"3:20 PM), {len(feats)} trading days ({feats[0].day} to {feats[-1].day}). Same buys every time, "
+             "only the stop changes. Sahm costs included. Per trade: % of the money in that trade. "
+             "Total: % of the whole account, added up.",
+             f"Older months (used to choose): {tune[0].day} to {tune[-1].day}. Newer months (never used to "
+             f"choose): {test[0].day} to {test[-1].day}. Last 30 trading days: {recent[0].day} to {recent[-1].day}.",
+             "", f"== Your live trades since {V3_LIVE_START:%b %d} (current rules) with each stop ==",
+             *live_stop_review(live_rows, feats, symbols, atr_of), "", "== Each stop over the past year =="]
+    now = results[0]
+    for rule, a, b, c in results:
+        lines += [rule[0], f"   older:  {row(a)}", f"   NEWER:  {row(b)}", f"   last 30 days: {row(c)}"]
+    lines += ["", "== Better than the bot now in BOTH the older and the newer months (total) =="]
+    lines += [f"{rule[0]}: older {a['total'] * 100:+.1f}% vs {now[1]['total'] * 100:+.1f}% | NEWER "
+              f"{b['total'] * 100:+.1f}% vs {now[2]['total'] * 100:+.1f}%"
+              for rule, a, b, c in results[1:] if a["total"] > now[1]["total"] and b["total"] > now[2]["total"]] \
+        or ["none"]
+    lines += ["", "== Made money in BOTH the older and the newer months =="]
+    lines += [rule[0] for rule, a, b, c in results if a["total"] > 0 and b["total"] > 0] or ["none"]
+    path = D.write_report(f"research-stops-{today}.txt", lines, mode="w")
+    print("\n".join(lines))
+    print(f"Saved {path}")
+    D.send(f"🛑 Farther-stop test finished ({len(STOP_RULES)} stops). Claude will send you the summary. "
+           f"Full report saved in the repo ({path}).")
+
+
 if __name__ == "__main__":
     job = sys.argv[1] if len(sys.argv) > 1 else "research"
     try:
         {"research_ai": ai_research, "research_market": market_research,
          "research_hold": hold_research, "research_exits": exits_research,
-         "research_news": news_research}.get(job, research)()
+         "research_news": news_research, "research_stops": stops_research}.get(job, research)()
     except Exception as e:
         D.send(f"⚠️ Research error: {e}")
         raise

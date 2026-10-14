@@ -7,9 +7,10 @@ Strategy: Opening Range Breakout, long only, held until shortly before the close
   2. Watch the 5 busiest stocks that are up on the day and above their average price (VWAP).
   3. Buy when a 1-minute candle closes just above its 5-minute high, any time until 2:50 PM,
      but only while the overall market (S&P 500 / SPY) is not down more than 1% on the day.
-  4. Stop = middle of the 5-minute range, checked on every price and every 1-minute candle, like a
-     real stop order. No fixed target: a trade rides until 3:20 PM unless the stop is hit, then
-     everything is sold (40 minutes before the 4:00 PM close).
+  4. Stop = bottom of the 5-minute range (farther than the middle, owner's request on Oct 14),
+     checked on every price and every 1-minute candle, like a real stop order. No fixed target:
+     a trade rides until 3:20 PM unless the stop is hit, then everything is sold (40 minutes
+     before the 4:00 PM close).
   5. Up to 3 trades a day, each with a third of the money, so they can run at the same time.
      Never borrows money or risks more than 3% of the account on one trade. Each pick shows the
      market, the stock's latest news and the setup's past success rate.
@@ -55,13 +56,14 @@ MAX_TRADES_PER_DAY = 3        # up to 3 trades a day ...
 SLOTS = 3                     # ... each with a third of the day's money, so they can overlap
 CANDIDATES = 5                # watch the 5 busiest stocks that pass the morning filters
 OR_MINUTES = 5                # opening range: the first 5 minutes (first entries from 9:35 AM New York)
+STOP_AT = "low"               # stop at the bottom ("low") of the opening range, or its middle ("mid")
 LAST_ENTRY = dt.time(14, 50)  # last new trade at 2:50 PM New York ...
 ENTRY_BEFORE_EXIT_MIN = 30    # ... and never later than 30 minutes before the end-of-day sale
 EXIT_BEFORE_CLOSE_MIN = 40    # sell everything 40 minutes before the close (3:20 PM New York)
 MARKET_FLOOR = -0.01          # no new buys while the S&P 500 (SPY) is down more than 1% today
 NEWS_HOURS = 24               # headlines shown with each pick
 REWARD_RISK = None            # no fixed target: trades ride until the end-of-day sale (a number = target in R)
-MAX_STOP_PCT = 0.03           # skip trades whose stop is more than 3% away
+MAX_STOP_PCT = 0.05           # skip trades whose stop is more than 5% away (account risk stays under 3%)
 COMMISSION_PCT = 0.00105      # Sahm: 0.105% per order (buy and sell each)
 MIN_FEE_USD = 0.0             # minimum fee per order, if your broker has one
 SLIPPAGE = 0.0005             # backtest only: 0.05% worse fill on market orders
@@ -258,11 +260,16 @@ def select_candidates(or_bars, stats, n=CANDIDATES):
         vwap = sum((b["h"] + b["l"] + b["c"]) / 3 * b["v"] for b in bars) / vol
         rng = (hi - lo) / last
         if last > vwap and last > stats[s]["prev_close"] and 0.003 <= rng <= 0.03:
-            cands.append({"symbol": s, "or_high": hi, "or_low": lo, "stop": (hi + lo) / 2,
+            cands.append({"symbol": s, "or_high": hi, "or_low": lo, "stop": stop_level(hi, lo),
                           "rvol": vol / stats[s]["avg_vol"], "range_pct": rng * 100,
                           "gap_pct": (bars[0]["o"] / stats[s]["prev_close"] - 1) * 100})
     cands.sort(key=lambda c: c["rvol"], reverse=True)
     return cands[:n]
+
+
+def stop_level(hi, lo):
+    """Where a trade's stop goes: the bottom of the opening range, or its middle (STOP_AT)."""
+    return lo if STOP_AT == "low" else (hi + lo) / 2
 
 
 def is_breakout(close, cand):
@@ -1083,6 +1090,7 @@ def run_backtest():
              f"Rules: up to {MAX_TRADES_PER_DAY} trades a day with a third of the money each, {OR_MINUTES}-minute "
              f"opening range, entries until {clock(dt.datetime.combine(days[0][0], LAST_ENTRY))} New York, no buys "
              f"when the S&P 500 is down more than {abs(MARKET_FLOOR) * 100:g}%, "
+             + f"stop at the {'bottom' if STOP_AT == 'low' else 'middle'} of the opening range, "
              + (f"target {REWARD_RISK:g}x the risk, " if REWARD_RISK is not None else "no fixed target, ")
              + f"everything sold {EXIT_BEFORE_CLOSE_MIN} minutes before the close", ""]
     lines.append(summary(trades, start, balance))

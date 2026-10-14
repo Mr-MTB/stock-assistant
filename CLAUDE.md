@@ -6,12 +6,19 @@ the owner's Telegram. Any real-money trades are placed by hand in the Sahm app, 
 this code.
 
 ## Fixed rules (change only when the owner asks)
-- Long only, opening-range breakout on the 5 busiest stocks of the morning, using the first
-  5 minutes (9:30-9:35 AM New York) as the opening range.
+- Opening-range breakout on the 5 busiest stocks of the morning, using the first 5 minutes
+  (9:30-9:35 AM New York) as the opening range. Since Oct 15, 2026 the bot SELLS SHORT these
+  breakouts (`SIDE = "short"`, owner's decision on Oct 14 after reports/research-short-2026-10-14.txt
+  on claude/research; that study showed shorting them lost more than buying over the past year,
+  but won over the last few days, and the owner chose to try it on paper). Short sales are
+  recorded by the bot at the live price, not sent to Alpaca (no fractional short sales there).
+  `SIDE = "long"` restores buying.
 - Up to 3 trades a day, a third of the day's money each (they may overlap); entries until
-  2:50 PM New York; no new buys while the S&P 500 (SPY) is down more than 1% on the day.
-- Stop at the bottom (low) of the opening range, no fixed target: every trade rides until the
-  end-of-day sale at 3:20 PM New York (40 minutes before the close) unless the stop is hit.
+  2:50 PM New York; no new trades while the S&P 500 (SPY) is down more than 1% on the day.
+- Stop: when buying, at the bottom (low) of the opening range; when selling short, as far above
+  the sale price as the bottom of the range is below it. No fixed target: every trade rides
+  until the end-of-day close-out at 3:20 PM New York (40 minutes before the close) unless the
+  stop is hit.
   Never held overnight. Never more than 3% of the account at risk on one trade.
   (Owner's request on Oct 5, 2026: "hold longer, from the opening till before closing".
   Version chosen from 64 tested: reports/research-exits-2026-10-06.txt on claude/research.

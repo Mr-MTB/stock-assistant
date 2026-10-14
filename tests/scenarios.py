@@ -20,6 +20,7 @@ D = F.D
 NY = D.NY
 SYMS = ["NVDA", "AAPL", "MSFT", "AMD", "KO", "XOM", "PEP"]
 D.WATCHLIST = SYMS
+D.SIDE = "long"  # checks 1-18 were written for buying; selling short has its own checks (19)
 results = []
 
 
@@ -116,7 +117,7 @@ watch = sent("picks: watching for breakouts")
 check("3 normal day: one watchlist, 12-hour times, 5 picks, market and success rate",
       len(watch) == 1 and "until 9:50 PM (your time)" in watch[0] and "5. KO" in watch[0]
       and "Market (S&P 500): +" in watch[0] and "Past success rate" in watch[0], watch)
-check("3 normal day: news mark on NVDA only", watch and "NVDA: buy above" in watch[0] and
+check("3 normal day: news mark on NVDA only", watch and "NVDA: buy if it breaks above" in watch[0] and
       watch[0].split("\n")[2].endswith("📰") and not watch[0].split("\n")[3].endswith("📰"), watch)
 b_nvda, b_aapl = sent("BOUGHT NVDA"), sent("BOUGHT AAPL")
 check("3 normal day: buy message has trade number, no fixed target, market, headlines, success rate",
@@ -171,7 +172,7 @@ F.install(w, at(DAY, *GO))
 F.run_main()
 book = D.load_book()
 check("6 market down: no trades", book["trades"] == [] and not sent("BOUGHT"), book["trades"])
-skips = sent("so no buy for now")
+skips = sent("so no trade for now")
 check("6 market down: one note per breakout", len(skips) == 4 and len({m.split()[1] for m in skips}) == 4, skips)
 check("6 market down: watchlist shows the market", sent("picks") and "Market (S&P 500): -0.50% today" in sent("picks")[0],
       sent("picks"))
@@ -499,6 +500,70 @@ check("18b late start: noted in the report", "Started late" in open(f"reports/li
 # 18. 12-hour clock.
 check("18 12-hour times", [D.clock(dt.datetime(2026, 1, 1, h, m)) for h, m in ((9, 5), (12, 0), (0, 30), (20, 55))]
       == ["9:05 AM", "12:00 PM", "12:30 AM", "8:55 PM"])
+
+# 19. Selling short (owner's choice from Oct 15): the same breakouts are sold short instead of bought.
+D.SIDE = "short"
+fresh_dir()
+os.makedirs("journal")
+old_fields = [f for f in D.TRADE_FIELDS if f != "side"]
+with open("journal/trades.csv", "w") as f:  # last week's journal, written before the "side" column existed
+    f.write(",".join(old_fields) + "\n" + "2026-10-02,XOM" + "," * (len(old_fields) - 2) + "\n")
+w = F.ScriptWorld([DAY], SYMS, NORMAL, seed=4)
+F.install(w, at(DAY, *GO))
+F.run_main()
+book = D.load_book()
+check("19 short: the first 3 breakouts are sold short, in order",
+      [m.split()[3] for m in sent("SOLD SHORT")] == ["NVDA", "AAPL", "MSFT"], sent("SOLD SHORT"))
+check("19 short: the riser is bought back at the stop (loss), the faller at 3:20 PM (win), the flat one at 3:20 PM",
+      sorted((t["symbol"], t["exit_reason"], t["pnl_usd"] > 0) for t in book["trades"])
+      == [("AAPL", "time", True), ("MSFT", "time", False), ("NVDA", "stop", False)], book["trades"])
+nv = [t for t in book["trades"] if t["symbol"] == "NVDA"]
+check("19 short: stop as far above the sale as the bottom of the first 5 minutes is below it",
+      sent("SOLD SHORT NVDA") and nv and f"Stop ${2 * nv[0]['entry'] - min(b['l'] for b in w.minute[('NVDA', DAY)][:D.OR_MINUTES]):.2f}"
+      in sent("SOLD SHORT NVDA")[0], sent("SOLD SHORT NVDA")[:1])
+check("19 short: no Alpaca orders (the bot records short sales itself)", not w.orders, w.orders)
+check("19 short: messages say sold short / bought back, and explain it",
+      sent("BOUGHT BACK AAPL") and "end-of-day buy-back" in sent("BOUGHT BACK AAPL")[0]
+      and "we make money if the price falls" in sent("SOLD SHORT NVDA")[0]
+      and sent("picks") and "sell short if it breaks above" in sent("picks")[0], F.SENT[:3])
+check("19 short: balance adds up", abs(book["balance_usd"] - (533.33 + sum(t["pnl_usd"] for t in book["trades"])))
+      < 0.05, book["balance_usd"])
+jt = journal("trades")
+check("19 short: journal marks short trades and keeps last week's rows under the new header",
+      jt and jt[0]["symbol"] == "XOM" and jt[0]["side"] == "" and [r["side"] for r in jt[1:]] == ["short"] * 3, jt[:2])
+check("19 short: every breakout's would-be result is a short sale",
+      [r["side"] for r in journal("signals")] == ["short"] * 4 and all(r["would_exit"] for r in journal("signals")),
+      journal("signals"))
+
+fresh_dir()
+w = F.ScriptWorld([DAY], SYMS, {"NVDA": (200, "up")}, seed=4)  # sold short 12:51 PM, rises through the stop ~1:45 PM
+F.install(w, at(DAY, *GO), job_start=at(DAY, 7, 30))  # hands over at about 1:24 PM
+F.run_main()
+F.install(w, at(DAY, 14, 0))
+F.run_main()
+check("19 short hand-over: a rise through the stop while no run was watching is caught",
+      [(t["symbol"], t["exit_reason"]) for t in D.load_book()["trades"]] == [("NVDA", "stop")],
+      D.load_book()["trades"])
+
+agree, total = 0, 0
+for seed in range(12):
+    one = [dt.date(2026, 9, 21)]
+    world = F.World(one, SYMS + ["SPY"], seed=seed)
+    fresh_dir()
+    F.install(world, at(one[0], *GO))
+    F.run_main()
+    live = [(t["symbol"], t["exit_reason"]) for t in D.load_book()["trades"]]
+    world.now = None
+    o, c = at(one[0], 9, 30), at(one[0], 16, 0)
+    daily = D.get_bars(SYMS + ["SPY"], "1Day", o - dt.timedelta(days=60), c, "split")
+    bars = D.get_bars(SYMS + ["SPY"], "1Min", o, c)
+    bt, _, _ = D.simulate_day(bars, D.stats_for_day(daily, one[0]), 533.33, one[0], o, c)
+    total += 1
+    agree += sorted(live) == sorted((t["symbol"], t["exit_reason"]) for t in bt)
+    if sorted(live) != sorted((t["symbol"], t["exit_reason"]) for t in bt):
+        print("   short seed", seed, "live", D.load_book()["trades"], "backtest", bt)
+check("19 short: live bot and backtest make the same trades", agree == total, f"{agree}/{total}")
+D.SIDE = "long"
 
 print(f"\n{sum(ok for _, ok in results)}/{len(results)} checks passed")
 sys.exit(0 if all(ok for _, ok in results) else 1)

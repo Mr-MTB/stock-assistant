@@ -2,13 +2,19 @@
 Day Trader Bot v3 (PAPER trading)
 Prepared by: Eng. Mohammed T. Basaqr
 
-Strategy: Opening Range Breakout, long only, held until shortly before the close (never overnight).
+Strategy: Opening Range Breakout, held until shortly before the close (never overnight).
+SIDE = "short" (owner's choice from Oct 15, 2026): the bot SELLS SHORT the breakouts it used to buy,
+i.e. it bets that they fail and fall back. SIDE = "long" buys them, as before.
   1. 9:30-9:35 AM New York: record each stock's first-5-minute high and low.
   2. Watch the 5 busiest stocks that are up on the day and above their average price (VWAP).
-  3. Buy when a 1-minute candle closes just above its 5-minute high, any time until 2:50 PM,
+  3. Trade when a 1-minute candle closes just above its 5-minute high, any time until 2:50 PM,
      but only while the overall market (S&P 500 / SPY) is not down more than 1% on the day.
-  4. Stop = middle of the 5-minute range. No fixed target: a trade rides until 3:20 PM unless
-     the stop is hit, then everything is sold (40 minutes before the 4:00 PM close).
+  4. Stop: buying = bottom of the 5-minute range (owner's request on Oct 14). Selling short = as far
+     ABOVE the sale price as the bottom of the range is below it. Checked on every price and every
+     1-minute candle, like a real stop order. No fixed target: a trade rides until 3:20 PM unless
+     the stop is hit (40 minutes before the 4:00 PM close).
+     Short sales are recorded by the bot itself at the live price (no Alpaca order), because the
+     Alpaca paper account can't sell fractional shares short.
   5. Up to 3 trades a day, each with a third of the money, so they can run at the same time.
      Never borrows money or risks more than 3% of the account on one trade. Each pick shows the
      market, the stock's latest news and the setup's past success rate.
@@ -54,13 +60,15 @@ MAX_TRADES_PER_DAY = 3        # up to 3 trades a day ...
 SLOTS = 3                     # ... each with a third of the day's money, so they can overlap
 CANDIDATES = 5                # watch the 5 busiest stocks that pass the morning filters
 OR_MINUTES = 5                # opening range: the first 5 minutes (first entries from 9:35 AM New York)
+STOP_AT = "low"               # buying: stop at the bottom ("low") of the opening range, or its middle ("mid")
+SIDE = "short"                # "short" = sell the breakouts short (from Oct 15), "long" = buy them
 LAST_ENTRY = dt.time(14, 50)  # last new trade at 2:50 PM New York ...
 ENTRY_BEFORE_EXIT_MIN = 30    # ... and never later than 30 minutes before the end-of-day sale
 EXIT_BEFORE_CLOSE_MIN = 40    # sell everything 40 minutes before the close (3:20 PM New York)
 MARKET_FLOOR = -0.01          # no new buys while the S&P 500 (SPY) is down more than 1% today
 NEWS_HOURS = 24               # headlines shown with each pick
 REWARD_RISK = None            # no fixed target: trades ride until the end-of-day sale (a number = target in R)
-MAX_STOP_PCT = 0.03           # skip trades whose stop is more than 3% away
+MAX_STOP_PCT = 0.05           # skip trades whose stop is more than 5% away (account risk stays under 3%)
 COMMISSION_PCT = 0.00105      # Sahm: 0.105% per order (buy and sell each)
 MIN_FEE_USD = 0.0             # minimum fee per order, if your broker has one
 SLIPPAGE = 0.0005             # backtest only: 0.05% worse fill on market orders
@@ -257,11 +265,40 @@ def select_candidates(or_bars, stats, n=CANDIDATES):
         vwap = sum((b["h"] + b["l"] + b["c"]) / 3 * b["v"] for b in bars) / vol
         rng = (hi - lo) / last
         if last > vwap and last > stats[s]["prev_close"] and 0.003 <= rng <= 0.03:
-            cands.append({"symbol": s, "or_high": hi, "or_low": lo, "stop": (hi + lo) / 2,
+            cands.append({"symbol": s, "or_high": hi, "or_low": lo, "stop": stop_level(hi, lo),
                           "rvol": vol / stats[s]["avg_vol"], "range_pct": rng * 100,
                           "gap_pct": (bars[0]["o"] / stats[s]["prev_close"] - 1) * 100})
     cands.sort(key=lambda c: c["rvol"], reverse=True)
     return cands[:n]
+
+
+def stop_level(hi, lo):
+    """Where a trade's stop goes: the bottom of the opening range, or its middle (STOP_AT)."""
+    return lo if STOP_AT == "low" else (hi + lo) / 2
+
+
+def sign(side):
+    """+1 for a purchase (makes money when the price rises), -1 for a short sale (when it falls)."""
+    return -1 if side == "short" else 1
+
+
+def trade_pnl(side, qty, entry, exit_price):
+    """Profit in dollars after Sahm fees on both orders."""
+    return sign(side) * qty * (exit_price - entry) - fee(qty * entry) - fee(qty * exit_price)
+
+
+def stop_reached(side, low, high, stop):
+    """A purchase is stopped when the price falls to the stop, a short sale when it rises to it."""
+    return high >= stop if side == "short" else low <= stop
+
+
+def words(side):
+    """Message words for the two kinds of trade."""
+    if side == "short":
+        return {"open": "SOLD SHORT", "close": "BOUGHT BACK", "sale": "end-of-day buy-back", "verb": "sell short",
+                "verbed": "sold short", "dir": "up"}
+    return {"open": "BOUGHT", "close": "SOLD", "sale": "end-of-day sale", "verb": "buy", "verbed": "bought",
+            "dir": "down"}
 
 
 def is_breakout(close, cand):
@@ -271,8 +308,9 @@ def is_breakout(close, cand):
 
 def plan_trade(cand, entry, slot_usd, balance):
     """Size one trade: a slot of the day's money, never risking more than RISK_PER_TRADE."""
-    stop = cand["stop"]
-    risk_pct = (entry - stop) / entry
+    ref = cand.get("ref", entry)  # short sales: the breakout candle's close, so live and backtest agree
+    stop = ref + (ref - cand["or_low"]) if SIDE == "short" else cand["stop"]
+    risk_pct = abs(entry - stop) / entry
     if risk_pct < 0.001 or risk_pct > MAX_STOP_PCT:
         return None
     notional = min(slot_usd, balance * RISK_PER_TRADE / risk_pct)
@@ -295,7 +333,7 @@ def market_text(change):
         return "Market (S&P 500): not available right now."
     if market_ok(change):
         return f"Market (S&P 500): {change * 100:+.2f}% today ✅"
-    return f"Market (S&P 500): {change * 100:+.2f}% today ⛔ no new buys while it's down more than 1%"
+    return f"Market (S&P 500): {change * 100:+.2f}% today ⛔ no new trades while it's down more than 1%"
 
 
 def headlines(symbol, now, limit=2):
@@ -441,9 +479,9 @@ def end_of_day_text(book, today):
 # ---------------- practice database (journal/) ----------------
 TRADE_FIELDS = ["date", "symbol", "rank", "entry_time_ny", "exit_time_ny", "minutes", "entry", "exit", "stop",
                 "target", "invested_usd", "pnl_usd", "pnl_pct", "result", "exit_reason", "market_pct",
-                "had_news", "headlines", "rvol", "range_pct", "gap_pct"]
+                "had_news", "headlines", "rvol", "range_pct", "gap_pct", "side"]
 SIGNAL_FIELDS = ["date", "time_ny", "symbol", "rank", "taken", "why_not", "market_pct", "rvol", "range_pct",
-                 "gap_pct", "would_exit", "would_pnl_pct", "would_result"]
+                 "gap_pct", "would_exit", "would_pnl_pct", "would_result", "side"]
 DAY_FIELDS = ["date", "market_pct", "candidates", "signals", "trades", "wins", "pnl_usd", "balance_usd"]
 
 
@@ -454,6 +492,15 @@ def journal_add(name, fields, rows):
     os.makedirs(JOURNAL_DIR, exist_ok=True)
     path = os.path.join(JOURNAL_DIR, f"{name}.csv")
     new = not os.path.exists(path)
+    if not new:  # a newer version added columns: rewrite the file once with the full header
+        with open(path, newline="") as f:
+            old = list(csv.DictReader(f))
+            header = list(old[0].keys()) if old else fields
+        if header != fields:
+            with open(path, "w", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+                w.writeheader()
+                w.writerows(old)
     with open(path, "a", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         if new:
@@ -473,12 +520,15 @@ def signal_outcomes(signals, sess_close):
             continue
         if len(bars) < 2:
             continue
-        entry = bars[1]["o"] * (1 + SLIPPAGE)
-        if entry <= sig["stop"]:
+        side = sig.get("side", "long")
+        entry = bars[1]["o"] * (1 + sign(side) * SLIPPAGE)
+        ref = sig.get("ref") or entry
+        stop = ref + (ref - sig["or_low"]) if side == "short" else sig["stop"]
+        if sign(side) * (entry - stop) <= 0:
             continue
-        target = target_price(entry, sig["stop"])
-        _, exit_price, why = simulate_exit(bars, 1, sig["stop"], target, trade_deadline(bars[1]["t"], sess_close))
-        pct = net_pct(entry, exit_price)
+        target = target_price(entry, stop)
+        _, exit_price, why = simulate_exit(bars, 1, stop, target, trade_deadline(bars[1]["t"], sess_close), side)
+        pct = net_pct(entry, exit_price, side)
         sig.update(would_exit=why, would_pnl_pct=pct, would_result="win" if pct > 0 else "loss")
 
 
@@ -692,10 +742,11 @@ def announce(book, today, cands, last_entry, change):
     for i, c in enumerate(cands, 1):
         news = headlines(c["symbol"], now, limit=1)
         marked |= bool(news)
-        lines.append(f"{i}. {c['symbol']}: buy above ${c['or_high']:.2f} "
+        lines.append(f"{i}. {c['symbol']}: {words(SIDE)['verb']} if it breaks above ${c['or_high']:.2f} "
                      f"(volume {c['rvol'] * 100:.0f}% of a normal day already){' 📰' if news else ''}")
     lines.append(f"Up to {MAX_TRADES_PER_DAY} trades today, about {sar(book['day']['start_usd'] / SLOTS)} each. "
-                 "The first ones to break out get bought.")
+                 f"The first ones to break out get {words(SIDE)['verbed']}."
+                 + (" (Selling short: we make money if the price falls back.)" if SIDE == "short" else ""))
     if marked:
         lines.append(f"📰 = news about the stock in the last {NEWS_HOURS} hours")
     lines.append(success_text())
@@ -725,16 +776,17 @@ def scan_for_entries(book, today, sess_close, stats, active, rank, scan_from, la
                 continue
             change = change_at(b["t"])
             if market_ok(change):
-                signals.append((b["t"], rank[s], s, change))
+                signals.append((b["t"], rank[s], s, change, b["c"]))
                 break
             skipped = book["day"].setdefault("skipped", [])
             if s not in skipped:
                 skipped.append(s)
                 record_signal(book, c, rank[s], b["t"], change, "market")
                 send(f"⏸ {s} broke out at {local(b['t'] + dt.timedelta(minutes=1))} (your time), but the "
-                     f"S&P 500 is down {abs(change) * 100:.2f}% today, so no buy for now.")
-    for t, _, s, change in sorted(signals):
+                     f"S&P 500 is down {abs(change) * 100:.2f}% today, so no trade for now.")
+    for t, _, s, change, ref in sorted(signals):
         cand = active.pop(s)
+        cand["ref"] = ref
         if MAX_TRADES_PER_DAY - len(today_trades(book, today)) - len(book["open"]) <= 0:
             record_signal(book, cand, rank[s], t, change, "limit")
             continue
@@ -750,18 +802,22 @@ def record_signal(book, cand, rank, bar_t, change, why_not):
         "time_ny": clock(bar_t + dt.timedelta(minutes=1)), "bar_t": bar_t.isoformat(), "symbol": cand["symbol"],
         "rank": rank + 1, "taken": "yes" if not why_not else "no", "why_not": why_not or "",
         "market_pct": None if change is None else change * 100, "rvol": cand["rvol"],
-        "range_pct": cand.get("range_pct"), "gap_pct": cand.get("gap_pct"), "stop": cand["stop"]})
+        "range_pct": cand.get("range_pct"), "gap_pct": cand.get("gap_pct"), "stop": cand["stop"],
+        "or_low": cand["or_low"], "ref": cand.get("ref"), "side": SIDE})
 
 
 def open_position(book, today, sess_close, cand, rank, change):
-    """Buy one breakout. Returns "" when bought, else why not ("plan" or "fill")."""
-    s = cand["symbol"]
+    """Buy (or sell short) one breakout. Returns "" when done, else why not ("plan" or "fill")."""
+    s, w = cand["symbol"], words(SIDE)
     price = latest_price(s)
     plan = plan_trade(cand, price, book["day"]["start_usd"] / SLOTS, book["day"]["start_usd"])
     if not plan:
         note(f"Skipped {s}: its stop would be too close or too far.")
         return "plan"
-    qty, entry = buy(s, plan["notional"], price)
+    if SIDE == "short":  # recorded by the bot at the live price (Alpaca paper can't short fractional shares)
+        qty, entry = plan["notional"] / price, price
+    else:
+        qty, entry = buy(s, plan["notional"], price)
     if qty <= 0:
         note(f"Skipped {s}: the buy order didn't fill.")
         return "fill"
@@ -770,7 +826,7 @@ def open_position(book, today, sess_close, cand, rank, change):
     target = target_price(entry, stop)
     deadline = trade_deadline(now, sess_close)
     news = headlines(s, now)
-    book["open"].append({"symbol": s, "qty": qty, "entry": entry, "stop": stop, "target": target,
+    book["open"].append({"symbol": s, "side": SIDE, "qty": qty, "entry": entry, "stop": stop, "target": target,
                          "entry_time": now.isoformat(), "deadline": deadline.isoformat(), "warned": [],
                          "context": {"rank": rank + 1, "market_pct": None if change is None else change * 100,
                                      "had_news": "" if news is None else ("yes" if news else "no"),
@@ -778,9 +834,11 @@ def open_position(book, today, sess_close, cand, rank, change):
                                      "range_pct": cand.get("range_pct"), "gap_pct": cand.get("gap_pct")}})
     save_book(book)
     number = len(today_trades(book, today)) + len(book["open"])
-    send(f"✅ BOUGHT {s} (trade {number} of {MAX_TRADES_PER_DAY} today): {qty:.4f} shares at ${entry:.2f} "
+    send(f"✅ {w['open']} {s} (trade {number} of {MAX_TRADES_PER_DAY} today): {qty:.4f} shares at ${entry:.2f} "
          f"(≈ {sar(qty * entry)})\n"
-         + (f"Stop ${stop:.2f} | Target ${target:.2f} | Sold by {local(deadline)} (your time) at the latest\n"
+         + ("Selling short: we make money if the price falls, and buy the shares back later.\n"
+            if SIDE == "short" else "")
+         + (f"Stop ${stop:.2f} | Target ${target:.2f} | Closed by {local(deadline)} (your time) at the latest\n"
             if target is not None else
             f"Stop ${stop:.2f} | No fixed target: it rides until {local(deadline)} (your time) unless the stop "
             "is hit\n")
@@ -788,54 +846,91 @@ def open_position(book, today, sess_close, cand, rank, change):
     return ""
 
 
+def stop_touched(positions):
+    """Symbols whose finished 1-minute candles since the last look reached the stop (down for a purchase,
+    up for a short sale).
+
+    A real stop order sells on any trade at the stop, and the backtest counts candle lows the same way,
+    but the price check every 20 seconds can miss a quick dip (MU on Oct 6). So each finished candle is
+    checked once too. Each position's "checked" mark moves to the first candle not looked at yet."""
+    done_by = now_ny().replace(second=0, microsecond=0)  # candles that started before this minute are finished
+    start = {p["symbol"]: dt.datetime.fromisoformat(p.get("checked") or p["entry_time"]).replace(
+             second=0, microsecond=0) for p in positions}
+    todo = [s for s, t in start.items() if t < done_by]
+    if not todo:
+        return set()
+    try:
+        bars = get_bars(todo, "1Min", min(start[s] for s in todo), done_by)
+    except Exception as e:
+        print(f"Couldn't load candles for the stop check: {e}")
+        return set()
+    hit = set()
+    for p in positions:
+        s = p["symbol"]
+        if s in todo:
+            if any(start[s] <= b["t"] < done_by and stop_reached(p.get("side", "long"), b["l"], b["h"], p["stop"])
+                   for b in bars.get(s, [])):
+                hit.add(s)
+            p["checked"] = done_by.isoformat()
+    return hit
+
+
 def manage_positions(book, today):
     prices = latest_prices([p["symbol"] for p in book["open"]])
+    touched = stop_touched(book["open"])
     now = now_ny()
     for p in list(book["open"]):
         price = prices.get(p["symbol"])
-        if price is None:
+        if price is None and p["symbol"] not in touched:
             continue
         s, qty, entry, stop, target = p["symbol"], p["qty"], p["entry"], p["stop"], p["target"]
+        side = p.get("side", "long")
+        k = sign(side)
         deadline = dt.datetime.fromisoformat(p["deadline"])
-        reason = ("stop" if price <= stop else "target" if target is not None and price >= target
+        reason = ("stop" if s in touched or stop_reached(side, price, price, stop)
+                  else "target" if target is not None and k * (price - target) >= 0
                   else "time" if now >= deadline else None)
         if reason:
             close_position(book, today, p, reason)
             continue
         invested = qty * entry
-        open_pnl = qty * (price - entry) - fee(invested) - fee(qty * price)
-        if target is not None and price >= entry + NEAR_LEVEL * (target - entry) and "target" not in p["warned"]:
+        open_pnl = trade_pnl(side, qty, entry, price)
+        if target is not None and k * (price - entry) >= NEAR_LEVEL * k * (target - entry) \
+                and "target" not in p["warned"]:
             p["warned"].append("target")
             send(f"🔥 {s} is close to the TARGET: now ${price:.2f}, target ${target:.2f}\n"
                  f"Profit right now: {pnl_text(open_pnl, invested)}")
-        elif price <= entry - NEAR_LEVEL * (entry - stop) and "stop" not in p["warned"]:
+        elif k * (entry - price) >= NEAR_LEVEL * k * (entry - stop) and "stop" not in p["warned"]:
             p["warned"].append("stop")
             send(f"⚠️ {s} is close to the STOP: now ${price:.2f}, stop ${stop:.2f}\n"
                  f"Loss right now: {pnl_text(open_pnl, invested)}")
         if now >= deadline - dt.timedelta(minutes=TIME_WARNING_MIN) and "time" not in p["warned"]:
             p["warned"].append("time")
-            send(f"⏳ {s}: {TIME_WARNING_MIN} minutes left before the end-of-day sale ({local(deadline)} your time).\n"
+            send(f"⏳ {s}: {TIME_WARNING_MIN} minutes left before the {words(side)['sale']} "
+                 f"({local(deadline)} your time).\n"
                  f"Now ${price:.2f} | {'Profit' if open_pnl > 0 else 'Loss'} right now: "
                  f"{pnl_text(open_pnl, invested)}")
     save_book(book)
 
 
 def close_position(book, today, p, reason):
-    s = p["symbol"]
-    try:
-        exit_price = sell_all(s)
-    except Exception as e:
-        note(f"Selling {s} reported a problem: {e}")
-        exit_price = 0
+    s, side = p["symbol"], p.get("side", "long")
+    w = words(side)
+    exit_price = 0
+    if side == "long":
+        try:
+            exit_price = sell_all(s)
+        except Exception as e:
+            note(f"Selling {s} reported a problem: {e}")
     if exit_price <= 0:
         exit_price = latest_price(s)
     qty, entry = p["qty"], p["entry"]
     invested = qty * entry
-    pnl = qty * (exit_price - entry) - fee(invested) - fee(qty * exit_price)
+    pnl = trade_pnl(side, qty, entry, exit_price)
     book["balance_usd"] = round(book["balance_usd"] + pnl, 2)
     minutes = round((now_ny() - dt.datetime.fromisoformat(p["entry_time"])).total_seconds() / 60)
     book["open"].remove(p)
-    book["trades"].append({"date": today.isoformat(), "symbol": s, "entry": round(entry, 4),
+    book["trades"].append({"date": today.isoformat(), "symbol": s, "side": side, "entry": round(entry, 4),
                            "exit": round(exit_price, 4), "qty": qty, "exit_reason": reason,
                            "minutes": minutes, "pnl_usd": round(pnl, 2), "balance_usd": book["balance_usd"]})
     save_book(book)
@@ -843,11 +938,13 @@ def close_position(book, today, p, reason):
                 entry_time_ny=clock(dt.datetime.fromisoformat(p["entry_time"])), exit_time_ny=clock(now_ny()),
                 minutes=minutes, entry=entry, exit=exit_price, stop=p["stop"], target=p.get("target") or "",
                 invested_usd=invested, pnl_usd=pnl, pnl_pct=pnl / invested * 100,
-                result="win" if pnl > 0 else "loss", exit_reason=reason)])
+                result="win" if pnl > 0 else "loss", exit_reason=reason, side=side)])
     number = len(today_trades(book, today))
     icon = {"target": "🎯", "stop": "🛑", "time": "⏰"}.get(reason, "⚠️")
-    label = {"target": "hit target", "stop": "hit stop", "time": "end-of-day sale"}.get(reason, "closed for safety")
-    send(f"{icon} SOLD {s} at ${exit_price:.2f} ({label}) after {minutes} min, trade {number} of "
+    label = {"target": "hit target", "stop": "hit stop", "time": w["sale"]}.get(reason, "closed for safety")
+    if reason == "stop" and sign(side) * (exit_price - p["stop"]) > 0:
+        label = f"hit stop: it traded {w['dir']} to the ${p['stop']:.2f} stop"
+    send(f"{icon} {w['close']} {s} at ${exit_price:.2f} ({label}) after {minutes} min, trade {number} of "
          f"{MAX_TRADES_PER_DAY} today\n"
          f"{'✅ WIN' if pnl > 0 else '❌ LOSS'}: {pnl_text(pnl, invested)}\n"
          f"Balance: {sar(book['balance_usd'])} | Since start: {record_text(book['trades'])}")
@@ -859,20 +956,21 @@ def check_gap(book, today):
     for p in list(book["open"]):
         since = dt.datetime.fromisoformat(p.get("checked") or p["entry_time"])
         bars = get_bars([p["symbol"]], "1Min", since, now).get(p["symbol"], [])
+        side = p.get("side", "long")
         for b in bars:
-            if b["l"] <= p["stop"]:
+            if stop_reached(side, b["l"], b["h"], p["stop"]):
                 close_position(book, today, p, "stop")
                 break
-            if p.get("target") is not None and b["h"] >= p["target"]:
+            if p.get("target") is not None and stop_reached("long" if side == "short" else "short",
+                                                            b["l"], b["h"], p["target"]):
                 close_position(book, today, p, "target")
                 break
 
 
 def hand_over(book, today):
     """Close to GitHub's 6-hour limit: save the open trades and start a fresh run to carry on."""
-    now = now_ny()
     for p in book["open"]:
-        p["checked"] = now.isoformat()
+        p.setdefault("checked", p["entry_time"])  # the next run checks every candle from here on
     save_book(book)
     note(f"Handing over to a fresh run ({len(book['open'])} open trade(s)).")
     if start_fresh_run():
@@ -928,8 +1026,19 @@ def finish_day(book, today, sess_close=None):
 
 
 # ---------------- backtest ----------------
-def simulate_exit(bars, k, stop, target, deadline):
-    """Buy at the open of bars[k]; returns (entry, exit price, reason) under the bot's exit rules."""
+def simulate_exit(bars, k, stop, target, deadline, side="long"):
+    """Buy (or sell short) at the open of bars[k]; returns (entry, exit price, reason) under the exit rules."""
+    if side == "short":
+        entry = bars[k]["o"] * (1 - SLIPPAGE)
+        for b in bars[k:]:
+            if b["t"] >= deadline:
+                return entry, b["o"] * (1 + SLIPPAGE), "time"
+            if b["h"] >= stop:
+                return entry, max(stop, b["o"]) * (1 + SLIPPAGE), "stop"
+            if target is not None and b["l"] <= target:
+                return entry, min(target, b["o"]) * (1 + SLIPPAGE), "target"
+        last = [b for b in bars if b["t"] < deadline][-1]
+        return entry, last["c"] * (1 + SLIPPAGE), "time"
     entry = bars[k]["o"] * (1 + SLIPPAGE)
     for b in bars[k:]:
         if b["t"] >= deadline:
@@ -942,9 +1051,9 @@ def simulate_exit(bars, k, stop, target, deadline):
     return entry, last["c"] * (1 - SLIPPAGE), "time"
 
 
-def net_pct(entry, exit_price):
+def net_pct(entry, exit_price, side="long"):
     """Result of one trade after Sahm fees, as % of the money put in."""
-    return ((exit_price / entry - 1) - COMMISSION_PCT - COMMISSION_PCT * exit_price / entry) * 100
+    return (sign(side) * (exit_price / entry - 1) - COMMISSION_PCT - COMMISSION_PCT * exit_price / entry) * 100
 
 
 def simulate_day(day_bars, stats, balance, day, sess_open, sess_close):
@@ -979,16 +1088,16 @@ def simulate_day(day_bars, stats, balance, day, sess_open, sess_close):
         if i + 1 >= len(bars):
             continue
         eb = bars[i + 1]
-        entry = eb["o"] * (1 + SLIPPAGE)
-        plan = plan_trade(c, entry, slot, balance)
+        entry = eb["o"] * (1 + sign(SIDE) * SLIPPAGE)
+        plan = plan_trade(dict(c, ref=bars[i]["c"]), entry, slot, balance)
         if not plan:
             continue
         stop = plan["stop"]
         target = target_price(entry, stop)
-        _, exit_price, reason = simulate_exit(bars, i + 1, stop, target, trade_deadline(eb["t"], sess_close))
+        _, exit_price, reason = simulate_exit(bars, i + 1, stop, target, trade_deadline(eb["t"], sess_close), SIDE)
         qty = plan["notional"] / entry
-        pnl = qty * (exit_price - entry) - fee(qty * entry) - fee(qty * exit_price)
-        trades.append({"date": day.isoformat(), "symbol": s, "entry": round(entry, 2),
+        pnl = trade_pnl(SIDE, qty, entry, exit_price)
+        trades.append({"date": day.isoformat(), "symbol": s, "side": SIDE, "entry": round(entry, 2),
                        "exit": round(exit_price, 2), "exit_reason": reason,
                        "pnl_usd": round(pnl, 2), "pct_of_account": pnl / balance,
                        "time": eb["t"].isoformat(), "market": change_at(bars[i]["t"])})
@@ -1050,11 +1159,14 @@ def run_backtest():
     spy_before = [b for b in spy if b["t"].date() < days[0][0]]
     spy_ret = (spy[-1]["c"] / spy_before[-1]["c"] - 1) * 100 if spy and spy_before else float("nan")
     lines = [f"🧪 Day-trading backtest: last {len(days)} trading days ({days[0][0]} to {days[-1][0]})",
-             f"Rules: up to {MAX_TRADES_PER_DAY} trades a day with a third of the money each, {OR_MINUTES}-minute "
-             f"opening range, entries until {clock(dt.datetime.combine(days[0][0], LAST_ENTRY))} New York, no buys "
-             f"when the S&P 500 is down more than {abs(MARKET_FLOOR) * 100:g}%, "
+             f"Rules: {'SELL SHORT' if SIDE == 'short' else 'buy'} the breakouts, "
+             f"up to {MAX_TRADES_PER_DAY} trades a day with a third of the money each, {OR_MINUTES}-minute "
+             f"opening range, entries until {clock(dt.datetime.combine(days[0][0], LAST_ENTRY))} New York, no new "
+             f"trades when the S&P 500 is down more than {abs(MARKET_FLOOR) * 100:g}%, "
+             + ("stop as far above the sale as the bottom of the opening range is below it, " if SIDE == "short"
+                else f"stop at the {'bottom' if STOP_AT == 'low' else 'middle'} of the opening range, ")
              + (f"target {REWARD_RISK:g}x the risk, " if REWARD_RISK is not None else "no fixed target, ")
-             + f"everything sold {EXIT_BEFORE_CLOSE_MIN} minutes before the close", ""]
+             + f"everything closed {EXIT_BEFORE_CLOSE_MIN} minutes before the close", ""]
     lines.append(summary(trades, start, balance))
     if trades:
         pcts = [t["pct_of_account"] * 100 for t in trades]

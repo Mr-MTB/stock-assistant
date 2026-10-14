@@ -1,0 +1,67 @@
+📉 Selling short instead of buying (5-minute start, up to 3 trades a day with a third of the money each, entries until 2:50 PM, bought back at 3:20 PM), 250 trading days (2025-10-15 to 2026-10-13). Sahm costs included on both orders. No borrowing fee counted (same-day shorts).
+Older months (used to choose): 2025-10-15 to 2026-06-26. Newer months (never used to choose): 2026-06-29 to 2026-10-13. Last 30 trading days: 2026-09-01 to 2026-10-13.
+
+== The last days you've seen (Oct 05 to Oct 13), on a 2,000 SAR account ==
+The bot's real paper trades (buying): -87.4 SAR (19 trades, 4 wins)
+Buying (the bot now: middle stop): -109.3 SAR (20 trades, 4 wins)
+Buying with the farther stop (bottom of the first 5 minutes): -88.4 SAR (20 trades, 8 wins)
+Sell short the breakdowns, stop at the top of the first 5 minutes: -55.7 SAR (21 trades, 7 wins)
+Sell short the breakdowns, stop in the middle of the first 5 minutes: -57.2 SAR (21 trades, 6 wins)
+Sell short the breakdowns, no stop (only the 3:20 PM buy-back): -55.3 SAR (21 trades, 7 wins)
+Do the opposite of the bot: sell short its own buys, stop as far above as its stop is below: +40.1 SAR (20 trades, 9 wins)
+Do the opposite of the bot: sell short its own buys, no stop: +49.3 SAR (20 trades, 9 wins)
+
+== Day by day: Sell short the breakdowns, stop at the top of the first 5 minutes ==
+Oct 05: PFE sold 9:36 AM at $27.55, bought back at 3:20 PM $27.52: -0.16%; MU sold 9:38 AM at $1063.60, bought back at 3:20 PM $1060.69: +0.01%; BAC sold 9:41 AM at $53.70, bought back at the stop $54.17: -1.13% | day -8.5 SAR
+Oct 06: NKE sold 9:36 AM at $33.53, bought back at the stop $33.86: -1.24%; MU sold 9:37 AM at $1051.87, bought back at the stop $1070.64: -2.05%; AAPL sold 9:53 AM at $331.40, bought back at the stop $333.61: -0.93% | day -28.1 SAR
+Oct 07: GS sold 9:36 AM at $871.16, bought back at the stop $883.01: -1.62%; GOOGL sold 9:36 AM at $345.42, bought back at the stop $347.14: -0.76%; COIN sold 9:41 AM at $178.94, bought back at 3:20 PM $178.60: -0.07% | day -16.3 SAR
+Oct 08: TMO sold 9:36 AM at $647.76, bought back at 3:20 PM $650.53: -0.69%; LLY sold 9:36 AM at $1170.22, bought back at 3:20 PM $1160.21: +0.60%; PFE sold 9:37 AM at $27.77, bought back at the stop $27.91: -0.76% | day -5.7 SAR
+Oct 09: PEP sold 9:41 AM at $125.59, bought back at 3:20 PM $126.05: -0.63%; TXN sold 9:45 AM at $286.67, bought back at 3:20 PM $283.95: +0.69%; MCD sold 9:58 AM at $235.98, bought back at 3:20 PM $235.93: -0.24% | day -1.2 SAR
+Oct 12: UNH sold 9:36 AM at $376.58, bought back at 3:20 PM $377.54: -0.51%; NVDA sold 9:37 AM at $227.40, bought back at 3:20 PM $226.47: +0.15%; AMZN sold 9:44 AM at $262.03, bought back at 3:20 PM $259.46: +0.72% | day +2.4 SAR
+Oct 13: JNJ sold 9:38 AM at $252.28, bought back at 3:20 PM $249.20: +0.96%; CAT sold 9:56 AM at $777.42, bought back at 3:20 PM $771.85: +0.46%; WFC sold 10:04 AM at $80.79, bought back at 3:20 PM $81.50: -1.15% | day +1.8 SAR
+
+== Day by day: Do the opposite of the bot: sell short its own buys, stop as far above as its stop is below ==
+Oct 05: INTU sold 9:36 AM at $286.56, bought back at 3:20 PM $284.27: +0.54%; MSFT sold 9:39 AM at $528.55, bought back at 3:20 PM $528.74: -0.30%; NVDA sold 9:42 AM at $237.57, bought back at 3:20 PM $239.71: -1.16% | day -6.1 SAR
+Oct 06: MS sold 9:37 AM at $192.23, bought back at 3:20 PM $191.30: +0.23%; NOW sold 9:40 AM at $139.99, bought back at 3:20 PM $137.23: +1.72%; AMZN sold 10:17 AM at $253.56, bought back at the stop $256.04: -1.24% | day +4.7 SAR
+Oct 07: LLY sold 9:43 AM at $1180.18, bought back at the stop $1191.68: -1.24%; INTC sold 10:17 AM at $114.31, bought back at 3:20 PM $112.59: +1.25%; ACN sold 11:50 AM at $197.41, bought back at 3:20 PM $197.87: -0.49% | day -3.2 SAR
+Oct 08: XOM sold 9:38 AM at $168.03, bought back at the stop $169.03: -0.86%; INTU sold 1:18 PM at $299.56, bought back at 3:20 PM $301.61: -0.95% | day -12.0 SAR
+Oct 09: UNH sold 9:36 AM at $380.27, bought back at the stop $387.34: -2.12%; PFE sold 9:38 AM at $27.94, bought back at 3:20 PM $28.18: -1.13%; ORCL sold 9:42 AM at $140.57, bought back at 3:20 PM $142.20: -1.42% | day -31.2 SAR
+Oct 12: NOW sold 9:36 AM at $147.79, bought back at 3:20 PM $140.38: +4.76%; CVX sold 9:36 AM at $215.63, bought back at 3:20 PM $215.33: -0.12%; PLTR sold 9:44 AM at $210.79, bought back at 3:20 PM $207.27: +1.41% | day +40.4 SAR
+Oct 13: ABBV sold 9:36 AM at $283.17, bought back at 3:20 PM $274.18: +2.92%; WMT sold 9:36 AM at $114.72, bought back at 3:20 PM $112.96: +1.28%; NOW sold 9:44 AM at $144.37, bought back at 3:20 PM $139.77: +2.93% | day +47.5 SAR
+
+== Each way over the past year ==
+Buying (the bot now: middle stop)
+   older: 514 trades |  33% winners | avg win +1.50% | avg loss -0.99% | worst -2.4% | total  -29.1% of the account | avg trade -0.17%
+   NEWER: 221 trades |  32% winners | avg win +1.54% | avg loss -1.06% | worst -2.2% | total  -17.3% of the account | avg trade -0.23%
+   last 30 days:  88 trades |  23% winners | avg win +1.60% | avg loss -1.08% | worst -2.1% | total  -13.8% of the account | avg trade -0.47%
+Buying with the farther stop (bottom of the first 5 minutes)
+   older: 514 trades |  39% winners | avg win +1.44% | avg loss -1.24% | worst -3.8% | total  -32.2% of the account | avg trade -0.19%
+   NEWER: 221 trades |  41% winners | avg win +1.37% | avg loss -1.29% | worst -3.3% | total  -14.3% of the account | avg trade -0.19%
+   last 30 days:  88 trades |  32% winners | avg win +1.27% | avg loss -1.32% | worst -3.3% | total  -14.4% of the account | avg trade -0.49%
+Sell short the breakdowns, stop at the top of the first 5 minutes
+   older: 496 trades |  37% winners | avg win +1.45% | avg loss -1.26% | worst -3.6% | total  -42.3% of the account | avg trade -0.26%
+   NEWER: 218 trades |  35% winners | avg win +1.31% | avg loss -1.12% | worst -3.2% | total  -19.9% of the account | avg trade -0.27%
+   last 30 days:  89 trades |  35% winners | avg win +1.14% | avg loss -1.13% | worst -2.8% | total  -10.0% of the account | avg trade -0.34%
+Sell short the breakdowns, stop in the middle of the first 5 minutes
+   older: 496 trades |  30% winners | avg win +1.63% | avg loss -0.95% | worst -2.3% | total  -30.5% of the account | avg trade -0.18%
+   NEWER: 218 trades |  28% winners | avg win +1.38% | avg loss -0.91% | worst -2.2% | total  -20.1% of the account | avg trade -0.28%
+   last 30 days:  89 trades |  29% winners | avg win +1.15% | avg loss -0.90% | worst -2.0% | total   -8.8% of the account | avg trade -0.30%
+Sell short the breakdowns, no stop (only the 3:20 PM buy-back)
+   older: 496 trades |  42% winners | avg win +1.41% | avg loss -1.41% | worst -12.0% | total  -37.4% of the account | avg trade -0.23%
+   NEWER: 218 trades |  39% winners | avg win +1.26% | avg loss -1.11% | worst -7.0% | total  -12.8% of the account | avg trade -0.18%
+   last 30 days:  89 trades |  39% winners | avg win +1.09% | avg loss -1.13% | worst -3.7% | total   -7.6% of the account | avg trade -0.26%
+Do the opposite of the bot: sell short its own buys, stop as far above as its stop is below
+   older: 514 trades |  32% winners | avg win +1.36% | avg loss -1.21% | worst -3.5% | total  -65.2% of the account | avg trade -0.38%
+   NEWER: 221 trades |  37% winners | avg win +1.39% | avg loss -1.25% | worst -3.2% | total  -19.9% of the account | avg trade -0.27%
+   last 30 days:  88 trades |  45% winners | avg win +1.52% | avg loss -1.26% | worst -2.9% | total   +0.1% of the account | avg trade +0.01%
+Do the opposite of the bot: sell short its own buys, no stop
+   older: 514 trades |  37% winners | avg win +1.31% | avg loss -1.50% | worst -8.0% | total  -79.3% of the account | avg trade -0.46%
+   NEWER: 221 trades |  42% winners | avg win +1.29% | avg loss -1.56% | worst -9.8% | total  -27.4% of the account | avg trade -0.37%
+   last 30 days:  88 trades |  50% winners | avg win +1.44% | avg loss -1.41% | worst -7.2% | total   +0.6% of the account | avg trade +0.02%
+
+== Selling short ways better than buying (the bot now) in BOTH the older and the newer months ==
+none
+
+== Made money in BOTH the older and the newer months ==
+none
+

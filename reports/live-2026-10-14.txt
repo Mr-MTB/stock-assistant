@@ -1,0 +1,51 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Wed Oct 14 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): -0.40% today ✅
+1. GS: buy above $895.70 (volume 9% of a normal day already) 📰
+2. ACN: buy above $216.88 (volume 7% of a normal day already) 📰
+3. AAPL: buy above $345.94 (volume 7% of a normal day already) 📰
+4. MA: buy above $605.50 (volume 6% of a normal day already) 📰
+5. MSFT: buy above $545.71 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 638 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT ACN (trade 1 of 3 today): 0.7832 shares at $217.04 (≈ 637 SAR)
+Stop $215.31 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.42% today ✅
+📰 News (last 24 hours):
+• Accenture Targets Operating Margin Expansion Of 10-30bps Over FY27-29; Projects Mid-Single Digit Revenue Growth In FY27 And FY28, With Mid To High Single Digit Growth In FY29; Targets $5.5B Of Share Repurchases In FY27
+• Accenture, Workday Announce Joint Engineering Program To Deploy Workday AI Agents In Client HR And Finance Teams
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 4:37 PM your time] ✅ BOUGHT GS (trade 2 of 3 today): 0.1892 shares at $898.23 (≈ 637 SAR)
+Stop $886.34 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.40% today ✅
+📰 News (last 24 hours):
+• Goldman CEO David Solomon Warns ‘Abrupt Moves’ in Interest Rates Create Headwinds, But ‘Underlying Economy’ Remains Strong
+• CoreWeave Eyes 'Unlimited' Insurance Capital to Fuel AI Expansion as Debt Needs Grow, Co-Founder Says ‘You Have to Be Huge’
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:38 AM New York | 4:38 PM your time] ✅ BOUGHT AAPL (trade 3 of 3 today): 0.4913 shares at $346.02 (≈ 637 SAR)
+Stop $344.84 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.41% today ✅
+📰 News (last 24 hours):
+• Wall Street’s ‘Last Men Standing’: The Mag 7 Are Propping Up the S&P 500, Then Why Are Your ETFs at Risk?
+• AAPL Stock Pulls Back From All-Time Highs: Gene Munster Says Apple Is Moving Faster on Hardware But Still Missing Tech's Biggest Opportunity
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:52 AM New York | 4:52 PM your time] ⚠️ GS is close to the STOP: now $886.50, stop $886.34
+Loss right now: -9.7 SAR (-1.51%)
+[9:53 AM New York | 4:53 PM your time] 🛑 SOLD GS at $884.64 (hit stop) after 16 min, trade 1 of 3 today
+❌ LOSS: -11.0 SAR (-1.72%)
+Balance: 1,902 SAR | Since start: 4 wins, 16 losses, net -98.5 SAR
+[10:06 AM New York | 5:06 PM your time] ⚠️ AAPL is close to the STOP: now $345.10, stop $344.84
+Loss right now: -3.0 SAR (-0.47%)
+[10:08 AM New York | 5:08 PM your time] 🛑 SOLD AAPL at $344.66 (hit stop) after 30 min, trade 2 of 3 today
+❌ LOSS: -3.8 SAR (-0.60%)
+Balance: 1,898 SAR | Since start: 4 wins, 17 losses, net -102.3 SAR
+[10:33 AM New York | 5:33 PM your time] ⚠️ ACN is close to the STOP: now $215.58, stop $215.31
+Loss right now: -5.6 SAR (-0.88%)
+[1:02 PM New York | 8:02 PM your time] 🛑 SOLD ACN at $214.79 (hit stop) after 207 min, trade 3 of 3 today
+❌ LOSS: -8.0 SAR (-1.25%)
+Balance: 1,890 SAR | Since start: 4 wins, 18 losses, net -110.3 SAR
+[2:50 PM New York | 9:50 PM your time] 📊 End of day, Wed Oct 14
+Today: 3 trades, -22.8 SAR (-1.19%)
+Balance: 1,890 SAR | Since start: -110.3 SAR (-5.5%), 4 wins, 18 losses, net -110.3 SAR
+

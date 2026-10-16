@@ -32,3 +32,6 @@ date,time_ny,symbol,rank,taken,why_not,market_pct,rvol,range_pct,gap_pct,would_e
 2026-10-15,9:36 AM,NFLX,2,yes,,-0.5457,0.1491,1.1231,1.3035,stop,-1.0891,loss
 2026-10-15,9:37 AM,COST,5,yes,,-0.4301,0.0767,0.8929,1.6017,stop,-0.8549,loss
 2026-10-15,9:42 AM,UNH,3,no,limit,-0.3131,0.0913,1.2368,1.3558,stop,-0.9364,loss
+2026-10-16,9:36 AM,BAC,3,yes,,0.0233,0.0607,0.5870,0.7159,stop,-0.7645,loss
+2026-10-16,9:36 AM,WFC,5,yes,,0.0233,0.0294,0.7686,1.2444,stop,-1.0354,loss
+2026-10-16,9:50 AM,MCD,2,yes,,0.0674,0.0621,0.6055,0.8247,stop,-0.7875,loss

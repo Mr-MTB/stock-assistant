@@ -1,0 +1,57 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Fri Oct 16 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): +0.09% today ✅
+1. TSLA: buy above $370.38 (volume 8% of a normal day already) 📰
+2. MCD: buy above $245.07 (volume 6% of a normal day already) 📰
+3. BAC: buy above $52.05 (volume 6% of a normal day already) 📰
+4. INTU: buy above $335.49 (volume 4% of a normal day already) 📰
+5. WFC: buy above $83.96 (volume 3% of a normal day already) 📰
+Up to 3 trades today, about 623 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT BAC (trade 1 of 3 today): 3.1896 shares at $52.12 (≈ 623 SAR)
+Stop $51.90 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.02% today ✅
+📰 News (last 24 hours):
+• Elizabeth Warren Calls Bank of America’s $1.2 Billion Fine a ‘Slap-on-the-Wrist,’ Points to $30 Billion Profit
+• Citigroup Maintains Buy on Bank of America, Lowers Price Target to $60
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT WFC (trade 2 of 3 today): 1.9717 shares at $84.31 (≈ 623 SAR)
+Stop $83.64 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.02% today ✅
+📰 News (last 24 hours):
+• CrowdStrike, Netflix And A Financial Stock: CNBC’s ‘Final Trades’
+• CNBC Halftime Report Final Trades: Wells Fargo, CrowdStrike, Netflix
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:50 AM New York | 4:50 PM your time] ✅ BOUGHT MCD (trade 3 of 3 today): 0.6772 shares at $245.46 (≈ 623 SAR)
+Stop $244.33 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.07% today ✅
+📰 News (last 24 hours):
+• Coca-Cola Deals Pepsi a Stinging Blow, Snatches KFC After Nearly 40 Years
+• 10 Consumer Discretionary Stocks Whale Activity In Today’s Session
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[10:03 AM New York | 5:03 PM your time] ⚠️ WFC is close to the STOP: now $83.78, stop $83.64
+Loss right now: -5.2 SAR (-0.83%)
+[10:04 AM New York | 5:04 PM your time] ⚠️ MCD is close to the STOP: now $244.59, stop $244.33
+Loss right now: -3.5 SAR (-0.56%)
+[10:07 AM New York | 5:07 PM your time] 🛑 SOLD MCD at $244.27 (hit stop) after 17 min, trade 1 of 3 today
+❌ LOSS: -4.3 SAR (-0.69%)
+Balance: 1,866 SAR | Since start: 4 wins, 22 losses, net -134.1 SAR
+[12:30 PM New York | 7:30 PM your time] ⚠️ BAC is close to the STOP: now $51.95, stop $51.90
+Loss right now: -3.3 SAR (-0.53%)
+[12:34 PM New York | 7:34 PM your time] 🛑 SOLD BAC at $51.89 (hit stop) after 178 min, trade 2 of 3 today
+❌ LOSS: -4.0 SAR (-0.64%)
+Balance: 1,862 SAR | Since start: 4 wins, 23 losses, net -138.1 SAR
+[12:40 PM New York | 7:40 PM your time] 🛑 SOLD WFC at $83.60 (hit stop) after 184 min, trade 3 of 3 today
+❌ LOSS: -6.5 SAR (-1.05%)
+Balance: 1,855 SAR | Since start: 4 wins, 24 losses, net -144.6 SAR
+[2:50 PM New York | 9:50 PM your time] 📊 End of day, Fri Oct 16
+Today: 3 trades, -14.8 SAR (-0.79%)
+Balance: 1,855 SAR | Since start: -144.6 SAR (-7.2%), 4 wins, 24 losses, net -144.6 SAR
+[2:50 PM New York | 9:50 PM your time] 📅 Weekly report
+This week: 15 trades, -99.8 SAR
+Since start:
+Trades: 28 | Winners: 4 (14%)
+Balance: 2,000 SAR → 1,855 SAR (-7.2%)
+Exits: {'stop': 21, 'time': 7}
+

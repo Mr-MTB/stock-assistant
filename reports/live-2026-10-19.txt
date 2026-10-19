@@ -1,0 +1,53 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Mon Oct 19 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): +0.53% today ✅
+1. INTC: buy above $95.34 (volume 6% of a normal day already) 📰
+2. AAPL: buy above $343.83 (volume 6% of a normal day already) 📰
+3. TSLA: buy above $362.13 (volume 5% of a normal day already) 📰
+4. ORCL: buy above $130.60 (volume 5% of a normal day already) 📰
+5. MSFT: buy above $532.05 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 618 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 4:37 PM your time] ✅ BOUGHT AAPL (trade 1 of 3 today): 0.4796 shares at $343.87 (≈ 618 SAR)
+Stop $341.98 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.57% today ✅
+📰 News (last 24 hours):
+• Analyzing Apple In Comparison To Competitors In Technology Hardware, Storage &amp; Peripherals Industry
+• What's Going On With Intel Stock Monday?
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 4:37 PM your time] ✅ BOUGHT MSFT (trade 2 of 3 today): 0.3101 shares at $531.76 (≈ 618 SAR)
+Stop $530.31 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.57% today ✅
+📰 News (last 24 hours):
+• Microsoft Expands Project Perception, CEO Satya Nadella Announces
+• Goldman Sachs Upgrades CoreWeave Despite 15% Bond Yields as Stock Jumps 6%
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:39 AM New York | 4:39 PM your time] ⚠️ MSFT is close to the STOP: now $530.43, stop $530.31
+Loss right now: -2.8 SAR (-0.46%)
+[9:51 AM New York | 4:51 PM your time] ✅ BOUGHT TSLA (trade 3 of 3 today): 0.4547 shares at $362.64 (≈ 618 SAR)
+Stop $358.44 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.46% today ✅
+📰 News (last 24 hours):
+• We Asked ChatGPT, Grok and Claude for 1 Stock to Buy This Week. No One Picked Tesla.
+• Musk Wants Every Kid In America To Own A Piece Of SpaceX
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[11:52 AM New York | 6:52 PM your time] ⚠️ AAPL is close to the STOP: now $342.39, stop $341.98
+Loss right now: -3.9 SAR (-0.64%)
+[11:59 AM New York | 6:59 PM your time] 🛑 SOLD AAPL at $341.91 (hit stop) after 143 min, trade 1 of 3 today
+❌ LOSS: -4.8 SAR (-0.78%)
+Balance: 1,851 SAR | Since start: 4 wins, 25 losses, net -149.4 SAR
+[3:05 PM New York | 10:05 PM your time] ⏳ MSFT: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $534.55 | Profit right now: +1.9 SAR (+0.31%)
+[3:05 PM New York | 10:05 PM your time] ⏳ TSLA: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $369.54 | Profit right now: +10.5 SAR (+1.69%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD MSFT at $534.13 (end-of-day sale) after 343 min, trade 2 of 3 today
+✅ WIN: +1.5 SAR (+0.23%)
+Balance: 1,852 SAR | Since start: 5 wins, 25 losses, net -148.0 SAR
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD TSLA at $369.04 (end-of-day sale) after 329 min, trade 3 of 3 today
+✅ WIN: +9.6 SAR (+1.55%)
+Balance: 1,862 SAR | Since start: 6 wins, 25 losses, net -138.4 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Mon Oct 19
+Today: 3 trades, +6.2 SAR (+0.34%)
+Balance: 1,862 SAR | Since start: -138.4 SAR (-6.9%), 6 wins, 25 losses, net -138.4 SAR
+

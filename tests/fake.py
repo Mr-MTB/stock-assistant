@@ -227,8 +227,10 @@ class ScriptWorld(World):
         bars, o = [], closes[0] / 1.0005 if s in self.script else closes[0]
         for i, c in enumerate(closes):
             lo = min(o, c) * 0.9995
-            if self.dip_at.get(s) == i:
-                lo = min(o, c) * 0.985  # a quick dip inside one minute
+            dip = self.dip_at.get(s)
+            minute, depth = dip if isinstance(dip, tuple) else (dip, 0.985)
+            if minute == i:
+                lo = min(o, c) * depth  # a quick dip inside one minute (1.5% unless given)
             bars.append({"t": t, "o": o, "h": max(o, c) * 1.0005, "l": lo, "c": c, "v": vols[i]})
             o, t = c, t + dt.timedelta(minutes=1)
         return bars

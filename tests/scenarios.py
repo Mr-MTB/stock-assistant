@@ -227,6 +227,63 @@ book = D.load_book()
 check("8 gap: stop hit while no run was watching is caught",
       [(t["symbol"], t["exit_reason"]) for t in book["trades"]] == [("NVDA", "stop")], book["trades"])
 
+# 8b. A quick dip through the stop inside one minute while the run IS watching (Oct 6, MU): the price
+#     check every 20 seconds can miss it, but a real stop order would sell and the backtest counts it.
+fresh_dir()
+w = F.ScriptWorld([DAY], SYMS, NORMAL, dip_at={"NVDA": 45}, seed=4)  # NVDA bought 10:11 AM, dips at 10:15 AM
+F.install(w, at(DAY, *GO))
+F.run_main()
+book = D.load_book()
+nvda = [t for t in book["trades"] if t["symbol"] == "NVDA"]
+check("8b quick dip: sold at the stop within 2 minutes",
+      [t["exit_reason"] for t in nvda] == ["stop"] and nvda[0]["minutes"] <= 6, nvda)
+check("8b quick dip: message says it traded down to the stop",
+      sent("SOLD NVDA") and "traded down to the $" in sent("SOLD NVDA")[0], sent("SOLD NVDA"))
+live = sorted((t["symbol"], t["exit_reason"]) for t in book["trades"])
+w.now = None
+o, c = at(DAY, 9, 30), at(DAY, 16, 0)
+bt, _, _ = D.simulate_day(D.get_bars(SYMS + ["SPY"], "1Min", o, c),
+                          D.stats_for_day(D.get_bars(SYMS + ["SPY"], "1Day", o - dt.timedelta(days=60), c, "split"),
+                                          DAY), 533.33, DAY, o, c)
+check("8b quick dip: live bot and backtest make the same trades",
+      live == sorted((t["symbol"], t["exit_reason"]) for t in bt), (live, [(t["symbol"], t["exit_reason"]) for t in bt]))
+check("8b quick dip: balance adds up", abs(book["balance_usd"] - (533.33 + sum(
+      t["pnl_usd"] for t in book["trades"]))) < 0.05, book["balance_usd"])
+
+# 8c. Farther stop (owner's request, Oct 14): the stop sits at the bottom of the first 5 minutes, so a dip
+#     below the middle of that range no longer sells the trade. With the old middle stop it would.
+def dip_day(stop_at):
+    fresh_dir()
+    D.STOP_AT = stop_at
+    w = F.ScriptWorld([DAY], SYMS, {"NVDA": (40, "up")}, dip_at={"NVDA": (45, 0.991)}, seed=4)
+    F.install(w, at(DAY, *GO))
+    try:
+        F.run_main()
+    finally:
+        D.STOP_AT = "low"
+    return w, D.load_book()
+
+
+w, book = dip_day("low")
+cand = book["trades"] and sent("BOUGHT NVDA")
+or_bars = w.minute[("NVDA", DAY)][:D.OR_MINUTES]
+or_low, or_high = min(b["l"] for b in or_bars), max(b["h"] for b in or_bars)
+check("8c farther stop: stop is the bottom of the first 5 minutes",
+      cand and f"Stop ${or_low:.2f}" in sent("BOUGHT NVDA")[0], (or_low, sent("BOUGHT NVDA")[:1]))
+check("8c farther stop: a dip below the middle doesn't sell, the trade rides to 3:20 PM",
+      [(t["symbol"], t["exit_reason"]) for t in book["trades"]] == [("NVDA", "time")], book["trades"])
+live = sorted((t["symbol"], t["exit_reason"]) for t in book["trades"])
+w.now = None
+o, c = at(DAY, 9, 30), at(DAY, 16, 0)
+bt, _, _ = D.simulate_day(D.get_bars(SYMS + ["SPY"], "1Min", o, c),
+                          D.stats_for_day(D.get_bars(SYMS + ["SPY"], "1Day", o - dt.timedelta(days=60), c, "split"),
+                                          DAY), 533.33, DAY, o, c)
+check("8c farther stop: live bot and backtest agree",
+      live == sorted((t["symbol"], t["exit_reason"]) for t in bt), (live, [(t["symbol"], t["exit_reason"]) for t in bt]))
+w, book = dip_day("mid")
+check("8c old middle stop: the same dip would have sold it",
+      [(t["symbol"], t["exit_reason"]) for t in book["trades"]] == [("NVDA", "stop")], book["trades"])
+
 # 9. Hand-over refused by GitHub: close the trade for safety.
 fresh_dir()
 w = F.ScriptWorld([DAY], SYMS, LATE, seed=4)

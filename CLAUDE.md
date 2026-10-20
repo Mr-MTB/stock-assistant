@@ -10,11 +10,14 @@ this code.
   5 minutes (9:30-9:35 AM New York) as the opening range.
 - Up to 3 trades a day, a third of the day's money each (they may overlap); entries until
   2:50 PM New York; no new buys while the S&P 500 (SPY) is down more than 1% on the day.
-- Stop at the middle of the opening range, no fixed target: every trade rides until the
+- Stop at the bottom (low) of the opening range, no fixed target: every trade rides until the
   end-of-day sale at 3:20 PM New York (40 minutes before the close) unless the stop is hit.
   Never held overnight. Never more than 3% of the account at risk on one trade.
   (Owner's request on Oct 5, 2026: "hold longer, from the opening till before closing".
-  Version chosen from 64 tested: reports/research-exits-2026-10-06.txt on claude/research.)
+  Version chosen from 64 tested: reports/research-exits-2026-10-06.txt on claude/research.
+  Owner's request on Oct 14, 2026: a farther stop. The bottom of the range was the best of 10
+  stops tested, about the same money as the middle with more winners:
+  reports/research-stops-2026-10-14.txt on claude/research.)
 - Each pick shows the market, the stock's latest headlines and the setup's past success rate.
 - Fees: Sahm 0.105% per order. Messages show Saudi time (Asia/Riyadh) in 12-hour format.
 - Paper trading only, starting from 2,000 SAR. Never add real-money order placement.

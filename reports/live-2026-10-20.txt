@@ -1,0 +1,50 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Tue Oct 20 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): -0.13% today ✅
+1. PFE: buy above $30.09 (volume 12% of a normal day already) 📰
+2. TXN: buy above $276.83 (volume 8% of a normal day already) 📰
+3. IBM: buy above $238.29 (volume 6% of a normal day already) 📰
+4. ABBV: buy above $287.76 (volume 6% of a normal day already) 📰
+5. UNH: buy above $415.16 (volume 6% of a normal day already) 📰
+Up to 3 trades today, about 621 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT PFE (trade 1 of 3 today): 5.5063 shares at $30.05 (≈ 621 SAR)
+Stop $29.84 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.15% today ✅
+📰 News (last 24 hours):
+• Swiss Pharma Giant Roche Suspends German Capital Commitments Amid Dispute Over Drug Discounts
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT ABBV (trade 2 of 3 today): 0.5761 shares at $287.24 (≈ 621 SAR)
+Stop $286.85 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.15% today ✅
+📰 News (last 24 hours):
+• AbbVie Says Health Canada Approves Skyrizi For Moderate To Severe Plaque Psoriasis In Patients Aged 6 To Under 18
+• AbbVie Inks Multi-Year Collaboration With McLaren Racing To Be Its Official Pharmaceutical Partner Of McLaren Mastercard Formula 1 Team
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:38 AM New York | 4:38 PM your time] 🛑 SOLD ABBV at $286.05 (hit stop) after 2 min, trade 1 of 3 today
+❌ LOSS: -3.9 SAR (-0.63%)
+Balance: 1,858 SAR | Since start: 6 wins, 26 losses, net -142.3 SAR
+[9:39 AM New York | 4:39 PM your time] ✅ BOUGHT IBM (trade 3 of 3 today): 0.6925 shares at $238.95 (≈ 621 SAR)
+Stop $237.27 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.09% today ✅
+📰 News (last 24 hours):
+• SpaceX Could Swing $128 Billion After Earnings
+• Dow Jones Industrial Average in Spotlight: 5 Stocks Report This Week, Including 2 of the Worst Performing
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:41 AM New York | 4:41 PM your time] ⚠️ IBM is close to the STOP: now $237.35, stop $237.27
+Loss right now: -5.4 SAR (-0.88%)
+[10:10 AM New York | 5:10 PM your time] ⚠️ PFE is close to the STOP: now $29.89, stop $29.84
+Loss right now: -4.5 SAR (-0.73%)
+[10:30 AM New York | 5:30 PM your time] 🛑 SOLD PFE at $29.84 (hit stop) after 54 min, trade 2 of 3 today
+❌ LOSS: -5.7 SAR (-0.91%)
+Balance: 1,852 SAR | Since start: 6 wins, 27 losses, net -147.9 SAR
+[3:05 PM New York | 10:05 PM your time] ⏳ IBM: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $241.23 | Profit right now: +4.6 SAR (+0.74%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD IBM at $241.55 (end-of-day sale) after 341 min, trade 3 of 3 today
+✅ WIN: +5.5 SAR (+0.88%)
+Balance: 1,857 SAR | Since start: 7 wins, 27 losses, net -142.5 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Tue Oct 20
+Today: 3 trades, -4.1 SAR (-0.22%)
+Balance: 1,857 SAR | Since start: -142.5 SAR (-7.1%), 7 wins, 27 losses, net -142.5 SAR
+

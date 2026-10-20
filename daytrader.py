@@ -7,8 +7,9 @@ Strategy: Opening Range Breakout, long only, held until shortly before the close
   2. Watch the 5 busiest stocks that are up on the day and above their average price (VWAP).
   3. Buy when a 1-minute candle closes just above its 5-minute high, any time until 2:50 PM,
      but only while the overall market (S&P 500 / SPY) is not down more than 1% on the day.
-  4. Stop = middle of the 5-minute range. No fixed target: a trade rides until 3:20 PM unless
-     the stop is hit, then everything is sold (40 minutes before the 4:00 PM close).
+  4. Stop = middle of the 5-minute range, checked on every price and every 1-minute candle, like a
+     real stop order. No fixed target: a trade rides until 3:20 PM unless the stop is hit, then
+     everything is sold (40 minutes before the 4:00 PM close).
   5. Up to 3 trades a day, each with a third of the money, so they can run at the same time.
      Never borrows money or risks more than 3% of the account on one trade. Each pick shows the
      market, the stock's latest news and the setup's past success rate.
@@ -788,16 +789,44 @@ def open_position(book, today, sess_close, cand, rank, change):
     return ""
 
 
+def stop_touched(positions):
+    """Symbols whose finished 1-minute candles since the last look went down to the stop.
+
+    A real stop order sells on any trade at the stop, and the backtest counts candle lows the same way,
+    but the price check every 20 seconds can miss a quick dip (MU on Oct 6). So each finished candle is
+    checked once too. Each position's "checked" mark moves to the first candle not looked at yet."""
+    done_by = now_ny().replace(second=0, microsecond=0)  # candles that started before this minute are finished
+    start = {p["symbol"]: dt.datetime.fromisoformat(p.get("checked") or p["entry_time"]).replace(
+             second=0, microsecond=0) for p in positions}
+    todo = [s for s, t in start.items() if t < done_by]
+    if not todo:
+        return set()
+    try:
+        bars = get_bars(todo, "1Min", min(start[s] for s in todo), done_by)
+    except Exception as e:
+        print(f"Couldn't load candles for the stop check: {e}")
+        return set()
+    hit = set()
+    for p in positions:
+        s = p["symbol"]
+        if s in todo:
+            if any(start[s] <= b["t"] < done_by and b["l"] <= p["stop"] for b in bars.get(s, [])):
+                hit.add(s)
+            p["checked"] = done_by.isoformat()
+    return hit
+
+
 def manage_positions(book, today):
     prices = latest_prices([p["symbol"] for p in book["open"]])
+    touched = stop_touched(book["open"])
     now = now_ny()
     for p in list(book["open"]):
         price = prices.get(p["symbol"])
-        if price is None:
+        if price is None and p["symbol"] not in touched:
             continue
         s, qty, entry, stop, target = p["symbol"], p["qty"], p["entry"], p["stop"], p["target"]
         deadline = dt.datetime.fromisoformat(p["deadline"])
-        reason = ("stop" if price <= stop else "target" if target is not None and price >= target
+        reason = ("stop" if s in touched or price <= stop else "target" if target is not None and price >= target
                   else "time" if now >= deadline else None)
         if reason:
             close_position(book, today, p, reason)
@@ -847,6 +876,8 @@ def close_position(book, today, p, reason):
     number = len(today_trades(book, today))
     icon = {"target": "🎯", "stop": "🛑", "time": "⏰"}.get(reason, "⚠️")
     label = {"target": "hit target", "stop": "hit stop", "time": "end-of-day sale"}.get(reason, "closed for safety")
+    if reason == "stop" and exit_price > p["stop"]:
+        label = f"hit stop: it traded down to the ${p['stop']:.2f} stop"
     send(f"{icon} SOLD {s} at ${exit_price:.2f} ({label}) after {minutes} min, trade {number} of "
          f"{MAX_TRADES_PER_DAY} today\n"
          f"{'✅ WIN' if pnl > 0 else '❌ LOSS'}: {pnl_text(pnl, invested)}\n"
@@ -870,9 +901,8 @@ def check_gap(book, today):
 
 def hand_over(book, today):
     """Close to GitHub's 6-hour limit: save the open trades and start a fresh run to carry on."""
-    now = now_ny()
     for p in book["open"]:
-        p["checked"] = now.isoformat()
+        p.setdefault("checked", p["entry_time"])  # the next run checks every candle from here on
     save_book(book)
     note(f"Handing over to a fresh run ({len(book['open'])} open trade(s)).")
     if start_fresh_run():

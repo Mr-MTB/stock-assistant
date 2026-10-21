@@ -1,0 +1,51 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Wed Oct 21 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): +0.15% today ✅
+1. NOW: buy above $150.27 (volume 13% of a normal day already) 📰
+2. META: buy above $701.90 (volume 5% of a normal day already) 📰
+3. AMD: buy above $554.03 (volume 4% of a normal day already) 📰
+4. PLTR: buy above $193.54 (volume 4% of a normal day already) 📰
+5. TXN: buy above $282.90 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 619 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT NOW (trade 1 of 3 today): 1.0964 shares at $150.59 (≈ 619 SAR)
+Stop $149.50 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.14% today ✅
+📰 News (last 24 hours):
+• NowVertical Group Inc. Closes Initial Tranche of $15.1 Million Private Placement
+• ServiceNow Delivers Industry-First Personal Enterprise Agent and Policy Enforcement with NVIDIA
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT PLTR (trade 2 of 3 today): 0.8495 shares at $194.35 (≈ 619 SAR)
+Stop $191.74 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.14% today ✅
+📰 News (last 24 hours):
+• Palantir and NVIDIA Collaborate on OpenShell Reference Architecture for Secure AI Agents
+• Cathie Wood Sells $5.4 Million Worth of Palantir Stock as Ark Continues to Dump PLTR, Analyst Warns Valuation Prices In ‘Years of Exceptional Execution’
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT TXN (trade 3 of 3 today): 0.5822 shares at $283.58 (≈ 619 SAR)
+Stop $280.19 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.14% today ✅
+📰 News (last 24 hours):
+• Stock Market Today: S&P 500, Nasdaq 100, Dow Jones Futures Gains as Iran Prolongs US Talks Ahead of Midterms— NFLX, SPCX, SMCI in Focus (UPDATED)
+• Texas Instruments Likely To Report Higher Q3 Earnings; These Most Accurate Analysts Revise Forecasts Ahead Of Earnings Call
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[3:05 PM New York | 10:05 PM your time] ⏳ NOW: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $152.49 | Profit right now: +6.5 SAR (+1.05%)
+[3:05 PM New York | 10:05 PM your time] ⏳ PLTR: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $199.44 | Profit right now: +14.9 SAR (+2.40%)
+[3:05 PM New York | 10:05 PM your time] ⏳ TXN: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $284.55 | Profit right now: +0.8 SAR (+0.13%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD NOW at $152.97 (end-of-day sale) after 344 min, trade 1 of 3 today
+✅ WIN: +8.5 SAR (+1.37%)
+Balance: 1,866 SAR | Since start: 8 wins, 27 losses, net -134.0 SAR
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD PLTR at $200.70 (end-of-day sale) after 344 min, trade 2 of 3 today
+✅ WIN: +18.9 SAR (+3.05%)
+Balance: 1,885 SAR | Since start: 9 wins, 27 losses, net -115.1 SAR
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD TXN at $286.09 (end-of-day sale) after 344 min, trade 3 of 3 today
+✅ WIN: +4.2 SAR (+0.68%)
+Balance: 1,889 SAR | Since start: 10 wins, 27 losses, net -110.9 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Wed Oct 21
+Today: 3 trades, +31.6 SAR (+1.70%)
+Balance: 1,889 SAR | Since start: -110.9 SAR (-5.5%), 10 wins, 27 losses, net -110.9 SAR
+

@@ -1,0 +1,50 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Thu Oct 22 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): -0.77% today ✅
+1. PG: buy above $166.12 (volume 17% of a normal day already) 📰
+2. TMO: buy above $698.86 (volume 10% of a normal day already) 📰
+3. TXN: buy above $285.41 (volume 9% of a normal day already) 📰
+4. WMT: buy above $119.33 (volume 8% of a normal day already) 📰
+5. V: buy above $410.33 (volume 8% of a normal day already) 📰
+Up to 3 trades today, about 630 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 4:37 PM your time] ✅ BOUGHT TMO (trade 1 of 3 today): 0.2395 shares at $701.05 (≈ 630 SAR)
+Stop $695.28 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.80% today ✅
+📰 News (last 24 hours):
+• Tesla To Rally Around 23%? Here Are 10 Top Analyst Forecasts For Thursday
+• Stifel Maintains Buy on Thermo Fisher Scientific, Raises Price Target to $775
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:39 AM New York | 4:39 PM your time] ✅ BOUGHT TXN (trade 2 of 3 today): 0.5909 shares at $284.18 (≈ 630 SAR)
+Stop $283.06 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.78% today ✅
+📰 News (last 24 hours):
+• Stifel Maintains Buy on Texas Instruments, Raises Price Target to $370
+• Rosenblatt Maintains Buy on Texas Instruments, Raises Price Target to $360
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:40 AM New York | 4:40 PM your time] 🛑 SOLD TXN at $282.59 (hit stop) after 1 min, trade 1 of 3 today
+❌ LOSS: -4.8 SAR (-0.77%)
+Balance: 1,884 SAR | Since start: 10 wins, 28 losses, net -115.8 SAR
+[9:41 AM New York | 4:41 PM your time] ✅ BOUGHT PG (trade 3 of 3 today): 1.0094 shares at $166.35 (≈ 630 SAR)
+Stop $164.06 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.80% today ✅
+📰 News (last 24 hours):
+• Procter & Gamble CFO Says Expect Materially Higher Cost Headwinds In Q2, Second Half Of Fiscal 2027 From Higher Oil Prices
+• Stock Market Today: S&P 500, Dow Jones, Nasdaq 100 Futures Drop Following Asian Market Sell-off, Middle East Tensions— NFLX, SPCX, SMCI in Focus (UPDATED)
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:43 AM New York | 4:43 PM your time] ⚠️ TMO is close to the STOP: now $696.24, stop $695.28
+Loss right now: -5.6 SAR (-0.90%)
+[9:44 AM New York | 4:44 PM your time] 🛑 SOLD TMO at $693.67 (hit stop) after 7 min, trade 2 of 3 today
+❌ LOSS: -7.9 SAR (-1.26%)
+Balance: 1,876 SAR | Since start: 10 wins, 29 losses, net -123.7 SAR
+[10:50 AM New York | 5:50 PM your time] ⏸ WMT broke out at 5:50 PM (your time), but the S&P 500 is down 1.35% today, so no buy for now.
+[3:05 PM New York | 10:05 PM your time] ⏳ PG: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $166.42 | Loss right now: -1.1 SAR (-0.17%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD PG at $166.35 (end-of-day sale) after 339 min, trade 3 of 3 today
+❌ LOSS: -1.3 SAR (-0.21%)
+Balance: 1,875 SAR | Since start: 10 wins, 30 losses, net -125.1 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Thu Oct 22
+Today: 3 trades, -14.1 SAR (-0.75%)
+Balance: 1,875 SAR | Since start: -125.1 SAR (-6.3%), 10 wins, 30 losses, net -125.1 SAR
+

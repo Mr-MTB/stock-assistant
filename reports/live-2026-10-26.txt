@@ -1,0 +1,53 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Mon Oct 26 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): +0.38% today ✅
+1. TSLA: buy above $391.10 (volume 12% of a normal day already) 📰
+2. LLY: buy above $1294.23 (volume 5% of a normal day already) 📰
+3. AVGO: buy above $325.82 (volume 4% of a normal day already) 📰
+4. NVDA: buy above $214.55 (volume 4% of a normal day already) 📰
+5. PFE: buy above $30.27 (volume 3% of a normal day already) 📰
+Up to 3 trades today, about 622 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 4:37 PM your time] ✅ BOUGHT AVGO (trade 1 of 3 today): 0.5087 shares at $326.05 (≈ 622 SAR)
+Stop $324.63 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.45% today ✅
+📰 News (last 24 hours):
+• Anthropic Says For Year Ended December 31, 2025, Expenses Related To Our Donation Matching Program Were $541M; Our Rent Payments Over The Life Of Leases Under Broadcom Lease Arrangements Equal To Aggregate Of About $161.2B Excluding Interest
+• Zuckerberg Is Raising the Stakes: Meta Plans $95 Billion Funding Push to Fuel AI Dreams
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 4:37 PM your time] ✅ BOUGHT NVDA (trade 2 of 3 today): 0.7726 shares at $214.65 (≈ 622 SAR)
+Stop $213.61 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.45% today ✅
+📰 News (last 24 hours):
+• CrowdStrike Stock Rose Friday Amid Cyber Rally. Here's a Look at the Week
+• Zuckerberg Is Raising the Stakes: Meta Plans $95 Billion Funding Push to Fuel AI Dreams
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:39 AM New York | 4:39 PM your time] ✅ BOUGHT TSLA (trade 3 of 3 today): 0.4247 shares at $390.47 (≈ 622 SAR)
+Stop $387.49 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.54% today ✅
+📰 News (last 24 hours):
+• Tesla’s FSD Reaches 10th EU Country With Latvia Approval. Here’s the Road Ahead for Tesla
+• Turo and Tesla Launch Verified FSD Rental Experience
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:43 AM New York | 4:43 PM your time] ⚠️ AVGO is close to the STOP: now $324.81, stop $324.63
+Loss right now: -3.7 SAR (-0.59%)
+[10:03 AM New York | 5:03 PM your time] 🛑 SOLD AVGO at $324.52 (hit stop) after 26 min, trade 1 of 3 today
+❌ LOSS: -4.2 SAR (-0.68%)
+Balance: 1,862 SAR | Since start: 11 wins, 33 losses, net -138.3 SAR
+[10:08 AM New York | 5:08 PM your time] ⚠️ NVDA is close to the STOP: now $213.74, stop $213.61
+Loss right now: -4.0 SAR (-0.64%)
+[3:05 PM New York | 10:05 PM your time] ⏳ NVDA: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $216.16 | Profit right now: +3.1 SAR (+0.49%)
+[3:05 PM New York | 10:05 PM your time] ⏳ TSLA: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $394.31 | Profit right now: +4.8 SAR (+0.77%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD NVDA at $216.53 (end-of-day sale) after 343 min, trade 2 of 3 today
+✅ WIN: +4.1 SAR (+0.66%)
+Balance: 1,866 SAR | Since start: 12 wins, 33 losses, net -134.1 SAR
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD TSLA at $394.75 (end-of-day sale) after 341 min, trade 3 of 3 today
+✅ WIN: +5.5 SAR (+0.88%)
+Balance: 1,871 SAR | Since start: 13 wins, 33 losses, net -128.6 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Mon Oct 26
+Today: 3 trades, +5.4 SAR (+0.29%)
+Balance: 1,871 SAR | Since start: -128.6 SAR (-6.4%), 13 wins, 33 losses, net -128.6 SAR
+

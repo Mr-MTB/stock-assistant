@@ -59,3 +59,6 @@ date,time_ny,symbol,rank,taken,why_not,market_pct,rvol,range_pct,gap_pct,would_e
 2026-10-23,9:43 AM,COIN,5,yes,,-0.5000,0.0226,1.4581,-0.6473,stop,-0.9230,loss
 2026-10-23,9:44 AM,CVX,4,no,limit,-0.4372,0.0245,0.7904,0.7106,time,1.1307,win
 2026-10-23,2:08 PM,NOW,1,no,limit,-0.4162,0.0659,1.2493,-0.4840,time,-0.3508,loss
+2026-10-26,9:37 AM,AVGO,3,yes,,0.4534,0.0380,0.7294,0.8594,stop,-0.7193,loss
+2026-10-26,9:37 AM,NVDA,4,yes,,0.4534,0.0371,0.8787,0.9644,time,0.5336,win
+2026-10-26,9:39 AM,TSLA,1,yes,,0.5383,0.1160,1.8534,3.1520,time,0.6201,win

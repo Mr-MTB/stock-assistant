@@ -1,0 +1,51 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Tue Oct 27 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): +0.28% today ✅
+1. GOOGL: buy above $319.09 (volume 8% of a normal day already) 📰
+2. INTC: buy above $93.36 (volume 6% of a normal day already) 📰
+3. TSLA: buy above $399.57 (volume 6% of a normal day already) 📰
+4. AVGO: buy above $341.25 (volume 6% of a normal day already) 📰
+5. AMD: buy above $547.30 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 624 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 4:37 PM your time] ✅ BOUGHT TSLA (trade 1 of 3 today): 0.4155 shares at $400.30 (≈ 624 SAR)
+Stop $397.45 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.29% today ✅
+📰 News (last 24 hours):
+• Daiwa Securities Adjusts Tesla Price Target
+• Scott Galloway Warns Tesla Is the ‘Patient’ and SpaceX Its ‘Organ Donor’ in Elon Musk’s $3.5 Trillion Merger Plan: 'Real Merger With a Fake Premise'
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 4:37 PM your time] ✅ BOUGHT AMD (trade 2 of 3 today): 0.3036 shares at $547.80 (≈ 624 SAR)
+Stop $543.16 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.29% today ✅
+📰 News (last 24 hours):
+• AMD Expands Strategic Partnership With Meta To Deploy Its Helios Rackscale Solutions, EPYC Processors And Technologies Providing Day-0 Support For Meta Models; AMD To Invest $1B In The META Equity Offering
+• Anthropic’s IPO Filing Reveals Over $500 Billion AI Compute Spending Across AMZN, GOOGL, MSFT, AVGO and SPCX: Top Analyst Says It Has ‘Barely Started’
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:38 AM New York | 4:38 PM your time] ✅ BOUGHT INTC (trade 3 of 3 today): 1.7813 shares at $93.37 (≈ 624 SAR)
+Stop $92.64 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.34% today ✅
+📰 News (last 24 hours):
+• Symbolic Mind Collaborates With Intel to Bring AI Training to CPU-Based Server Infrastructure
+• Wedbush Reiterates Neutral on Intel, Maintains $98 Price Target
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:49 AM New York | 4:49 PM your time] ⚠️ INTC is close to the STOP: now $92.78, stop $92.64
+Loss right now: -5.3 SAR (-0.85%)
+[9:51 AM New York | 4:51 PM your time] 🛑 SOLD INTC at $92.58 (hit stop) after 13 min, trade 1 of 3 today
+❌ LOSS: -6.6 SAR (-1.06%)
+Balance: 1,865 SAR | Since start: 13 wins, 34 losses, net -135.2 SAR
+[3:05 PM New York | 10:05 PM your time] ⏳ TSLA: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $407.43 | Profit right now: +9.8 SAR (+1.57%)
+[3:05 PM New York | 10:05 PM your time] ⏳ AMD: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $560.18 | Profit right now: +12.8 SAR (+2.05%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD TSLA at $408.09 (end-of-day sale) after 343 min, trade 2 of 3 today
+✅ WIN: +10.8 SAR (+1.73%)
+Balance: 1,876 SAR | Since start: 14 wins, 34 losses, net -124.4 SAR
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD AMD at $558.86 (end-of-day sale) after 343 min, trade 3 of 3 today
+✅ WIN: +11.3 SAR (+1.81%)
+Balance: 1,887 SAR | Since start: 15 wins, 34 losses, net -113.1 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Tue Oct 27
+Today: 3 trades, +15.5 SAR (+0.83%)
+Balance: 1,887 SAR | Since start: -113.1 SAR (-5.7%), 15 wins, 34 losses, net -113.1 SAR
+

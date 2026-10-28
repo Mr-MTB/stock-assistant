@@ -67,3 +67,6 @@ date,time_ny,symbol,rank,taken,why_not,market_pct,rvol,range_pct,gap_pct,would_e
 2026-10-27,9:38 AM,INTC,2,yes,,0.3365,0.0639,1.5394,2.1374,stop,-1.1669,loss
 2026-10-27,9:38 AM,AVGO,4,no,limit,0.3365,0.0553,1.0864,3.0673,stop,-1.0084,loss
 2026-10-27,9:39 AM,GOOGL,1,no,limit,0.3783,0.0843,0.6664,0.0616,stop,-0.8040,loss
+2026-10-28,9:36 AM,SHOP,2,yes,,0.2059,0.0548,1.1224,-0.4582,stop,-0.9986,loss
+2026-10-28,9:40 AM,MU,1,yes,,0.1377,0.0743,1.8641,3.5556,stop,-1.2913,loss
+2026-10-28,2:44 PM,AVGO,3,yes,,0.4372,0.0539,1.0784,1.9214,stop,-0.8768,loss

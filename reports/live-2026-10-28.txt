@@ -1,0 +1,51 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Wed Oct 28 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): +0.21% today ✅
+1. MU: buy above $978.20 (volume 7% of a normal day already) 📰
+2. SHOP: buy above $166.46 (volume 5% of a normal day already) 📰
+3. AVGO: buy above $351.51 (volume 5% of a normal day already) 📰
+4. AMZN: buy above $255.36 (volume 5% of a normal day already) 📰
+5. MSFT: buy above $534.55 (volume 5% of a normal day already) 📰
+Up to 3 trades today, about 629 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 4:36 PM your time] ✅ BOUGHT SHOP (trade 1 of 3 today): 1.0053 shares at $166.82 (≈ 629 SAR)
+Stop $165.52 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.21% today ✅
+📰 News (last 24 hours):
+• Pipe17 and Teifi Digital Announce Joint Retail Architecture on Shopify
+• CookieYes Earns 'Built for Shopify' Badge
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:40 AM New York | 4:40 PM your time] ✅ BOUGHT MU (trade 2 of 3 today): 0.1718 shares at $976.39 (≈ 629 SAR)
+Stop $969.10 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.14% today ✅
+📰 News (last 24 hours):
+• SK Hynix’s 80% Profit Margin Fuels AI Frenzy: Should Investors Bet on 2X ETFs?
+• EXCLUSIVE: SK Hynix Soars 11% on Record Profit, But This Expert Says Samsung Will Lead HBM in 2027
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:47 AM New York | 4:47 PM your time] ⚠️ MU is close to the STOP: now $970.57, stop $969.10
+Loss right now: -5.1 SAR (-0.81%)
+[9:47 AM New York | 4:47 PM your time] 🛑 SOLD MU at $968.74 (hit stop) after 7 min, trade 1 of 3 today
+❌ LOSS: -6.2 SAR (-0.99%)
+Balance: 1,881 SAR | Since start: 15 wins, 35 losses, net -119.4 SAR
+[10:59 AM New York | 5:59 PM your time] ⚠️ SHOP is close to the STOP: now $165.84, stop $165.52
+Loss right now: -5.0 SAR (-0.80%)
+[11:24 AM New York | 6:24 PM your time] 🛑 SOLD SHOP at $165.31 (hit stop) after 108 min, trade 2 of 3 today
+❌ LOSS: -7.0 SAR (-1.11%)
+Balance: 1,874 SAR | Since start: 15 wins, 36 losses, net -126.4 SAR
+[2:44 PM New York | 9:44 PM your time] ✅ BOUGHT AVGO (trade 3 of 3 today): 0.4773 shares at $351.37 (≈ 629 SAR)
+Stop $349.62 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.44% today ✅
+📰 News (last 24 hours):
+• Steve Eisman Says Anthropic Left Q3 Figures Out of IPO Filing on Purpose: 'Very Intentional'
+• 10 Information Technology Stocks Whale Activity In Today’s Session
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[2:46 PM New York | 9:46 PM your time] ⚠️ AVGO is close to the STOP: now $349.80, stop $349.62
+Loss right now: -4.1 SAR (-0.66%)
+[2:46 PM New York | 9:46 PM your time] 🛑 SOLD AVGO at $349.61 (hit stop) after 2 min, trade 3 of 3 today
+❌ LOSS: -4.5 SAR (-0.71%)
+Balance: 1,869 SAR | Since start: 15 wins, 37 losses, net -130.9 SAR
+[2:50 PM New York | 9:50 PM your time] 📊 End of day, Wed Oct 28
+Today: 3 trades, -17.7 SAR (-0.94%)
+Balance: 1,869 SAR | Since start: -130.9 SAR (-6.5%), 15 wins, 37 losses, net -130.9 SAR
+

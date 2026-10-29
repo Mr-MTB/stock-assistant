@@ -1,0 +1,50 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Thu Oct 29 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): -0.62% today ✅
+1. XOM: buy above $184.20 (volume 30% of a normal day already) 📰
+2. V: buy above $411.74 (volume 20% of a normal day already) 📰
+3. AAPL: buy above $351.37 (volume 7% of a normal day already) 📰
+4. MRK: buy above $148.29 (volume 5% of a normal day already) 📰
+5. MCD: buy above $255.96 (volume 5% of a normal day already)
+Up to 3 trades today, about 623 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:39 AM New York | 4:39 PM your time] ✅ BOUGHT MRK (trade 1 of 3 today): 1.1144 shares at $149.08 (≈ 623 SAR)
+Stop $146.27 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.61% today ✅
+📰 News (last 24 hours):
+• Merck Exec Says It Expects Moderate Top-Line Growth In 2027
+• Merck Opens New Asia-Pacific Bioprocessing Production Center in South Korea
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[10:07 AM New York | 5:07 PM your time] ✅ BOUGHT V (trade 2 of 3 today): 0.4034 shares at $411.83 (≈ 623 SAR)
+Stop $408.06 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.41% today ✅
+📰 News (last 24 hours):
+• Visa and Mastercard Face Potential £5bn UK Lawsuit
+• Rothschild & Co Redburn Adjusts Price Target on Visa to $467
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[10:19 AM New York | 5:19 PM your time] ⚠️ MRK is close to the STOP: now $146.72, stop $146.27
+Loss right now: -11.2 SAR (-1.79%)
+[1:59 PM New York | 8:59 PM your time] ✅ BOUGHT MCD (trade 3 of 3 today): 0.6491 shares at $255.94 (≈ 623 SAR)
+Stop $254.90 | No fixed target: it rides until 10:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.66% today ✅
+📰 News (last 24 hours):
+• 10 Consumer Discretionary Stocks With Whale Alerts In Today’s Session
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[2:29 PM New York | 9:29 PM your time] 🛑 SOLD MRK at $145.89 (hit stop) after 290 min, trade 1 of 3 today
+❌ LOSS: -14.6 SAR (-2.35%)
+Balance: 1,854 SAR | Since start: 15 wins, 38 losses, net -145.5 SAR
+[3:05 PM New York | 10:05 PM your time] ⏳ V: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $409.89 | Loss right now: -4.2 SAR (-0.68%)
+[3:05 PM New York | 10:05 PM your time] ⏳ MCD: 15 minutes left before the end-of-day sale (10:20 PM your time).
+Now $257.28 | Profit right now: +1.9 SAR (+0.31%)
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD V at $410.12 (end-of-day sale) after 313 min, trade 2 of 3 today
+❌ LOSS: -3.9 SAR (-0.63%)
+Balance: 1,851 SAR | Since start: 15 wins, 39 losses, net -149.4 SAR
+[3:20 PM New York | 10:20 PM your time] ⏰ SOLD MCD at $257.35 (end-of-day sale) after 81 min, trade 3 of 3 today
+✅ WIN: +2.1 SAR (+0.34%)
+Balance: 1,853 SAR | Since start: 16 wins, 39 losses, net -147.3 SAR
+[3:20 PM New York | 10:20 PM your time] 📊 End of day, Thu Oct 29
+Today: 3 trades, -16.4 SAR (-0.88%)
+Balance: 1,853 SAR | Since start: -147.3 SAR (-7.4%), 16 wins, 39 losses, net -147.3 SAR
+

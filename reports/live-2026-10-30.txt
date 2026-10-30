@@ -1,0 +1,23 @@
+[9:28 AM New York | 4:28 PM your time] Run started at 9:28 AM New York (4:28 PM your time).
+[9:35 AM New York | 4:35 PM your time] 👀 Fri Oct 30 picks: watching for breakouts until 9:50 PM (your time)
+Market (S&P 500): -1.27% today ⛔ no new buys while it's down more than 1%
+1. PEP: buy above $137.53 (volume 9% of a normal day already) 📰
+2. MCD: buy above $262.79 (volume 8% of a normal day already) 📰
+3. NKE: buy above $39.20 (volume 6% of a normal day already)
+4. SBUX: buy above $106.12 (volume 6% of a normal day already) 📰
+5. PFE: buy above $30.64 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 618 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[11:01 AM New York | 6:01 PM your time] ⏸ PEP broke out at 6:01 PM (your time), but the S&P 500 is down 1.28% today, so no buy for now.
+[12:47 PM New York | 7:47 PM your time] ⏸ PFE broke out at 7:47 PM (your time), but the S&P 500 is down 1.72% today, so no buy for now.
+[2:50 PM New York | 9:50 PM your time] 📊 End of day, Fri Oct 30
+Today: no trade, so no gain or loss.
+Balance: 1,853 SAR | Since start: -147.3 SAR (-7.4%), 16 wins, 39 losses, net -147.3 SAR
+[2:50 PM New York | 9:50 PM your time] 📅 Weekly report
+This week: 12 trades, -13.2 SAR
+Since start:
+Trades: 55 | Winners: 16 (29%)
+Balance: 2,000 SAR → 1,853 SAR (-7.4%)
+Exits: {'stop': 34, 'time': 21}
+

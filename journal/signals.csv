@@ -73,3 +73,5 @@ date,time_ny,symbol,rank,taken,why_not,market_pct,rvol,range_pct,gap_pct,would_e
 2026-10-29,9:39 AM,MRK,4,yes,,-0.6099,0.0539,2.7292,2.2397,stop,-2.1252,loss
 2026-10-29,10:07 AM,V,2,yes,,-0.4131,0.1978,1.7911,1.0623,time,-0.7085,loss
 2026-10-29,1:59 PM,MCD,5,yes,,-0.6578,0.0522,0.8299,1.5860,time,0.2459,win
+2026-10-30,11:01 AM,PEP,1,no,market,-1.2801,0.0902,0.7707,2.2234,time,-0.0090,loss
+2026-10-30,12:47 PM,PFE,5,no,market,-1.7193,0.0424,0.8346,1.7696,stop,-0.7414,loss

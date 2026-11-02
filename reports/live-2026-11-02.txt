@@ -1,0 +1,51 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Mon Nov 2 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +0.50% today ✅
+1. GOOGL: buy above $285.43 (volume 7% of a normal day already) 📰
+2. MU: buy above $892.06 (volume 7% of a normal day already) 📰
+3. NFLX: buy above $62.59 (volume 7% of a normal day already) 📰
+4. BA: buy above $175.44 (volume 6% of a normal day already) 📰
+5. AMZN: buy above $246.38 (volume 6% of a normal day already) 📰
+Up to 3 trades today, about 618 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT NFLX (trade 1 of 3 today): 2.6248 shares at $62.74 (≈ 618 SAR)
+Stop $62.33 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.51% today ✅
+📰 News (last 24 hours):
+• Netflix Expands K-Pop Content Strategy with 'We Go High' Audition Series
+• Bill Ackman Says MSFT, AMZN and NFLX Fit His ‘Enormously Valuable’ 20-Year Investing Test
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT AMZN (trade 2 of 3 today): 0.6624 shares at $248.62 (≈ 618 SAR)
+Stop $244.37 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.51% today ✅
+📰 News (last 24 hours):
+• Estée Lauder Turns Up the Glamour With Strong Earnings, Higher Outlook
+• Narwal Launches V50 Cube Cordless Vacuum in the U.S.
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:41 AM New York | 5:41 PM your time] ✅ BOUGHT GOOGL (trade 3 of 3 today): 0.5758 shares at $286.02 (≈ 618 SAR)
+Stop $283.90 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.45% today ✅
+📰 News (last 24 hours):
+• AMD, Micron Selloff Is 'Just the Beginning,' Tom Sosnoff Says
+• Apple Earnings Prediction Market Preview: What Will John Ternus Say?
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:42 AM New York | 5:42 PM your time] ⚠️ NFLX is close to the STOP: now $62.39, stop $62.33
+Loss right now: -4.7 SAR (-0.77%)
+[9:44 AM New York | 5:44 PM your time] 🛑 SOLD NFLX at $62.30 (hit stop) after 7 min, trade 1 of 3 today
+❌ LOSS: -5.6 SAR (-0.91%)
+Balance: 1,847 SAR | Since start: 16 wins, 40 losses, net -152.9 SAR
+[10:53 AM New York | 6:53 PM your time] ⚠️ GOOGL is close to the STOP: now $284.42, stop $283.90
+Loss right now: -4.7 SAR (-0.77%)
+[11:00 AM New York | 7:00 PM your time] 🛑 SOLD GOOGL at $283.91 (hit stop) after 79 min, trade 2 of 3 today
+❌ LOSS: -5.8 SAR (-0.94%)
+Balance: 1,841 SAR | Since start: 16 wins, 41 losses, net -158.7 SAR
+[3:05 PM New York | 11:05 PM your time] ⏳ AMZN: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $248.56 | Loss right now: -1.4 SAR (-0.23%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD AMZN at $248.07 (end-of-day sale) after 343 min, trade 3 of 3 today
+❌ LOSS: -2.7 SAR (-0.43%)
+Balance: 1,839 SAR | Since start: 16 wins, 42 losses, net -161.4 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Mon Nov 2
+Today: 3 trades, -14.1 SAR (-0.76%)
+Balance: 1,839 SAR | Since start: -161.4 SAR (-8.1%), 16 wins, 42 losses, net -161.4 SAR
+

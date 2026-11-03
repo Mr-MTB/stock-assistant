@@ -1,0 +1,51 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Tue Nov 3 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +0.18% today ✅
+1. ORCL: buy above $123.16 (volume 22% of a normal day already) 📰
+2. AMD: buy above $482.84 (volume 17% of a normal day already) 📰
+3. PFE: buy above $31.04 (volume 11% of a normal day already) 📰
+4. MU: buy above $870.07 (volume 7% of a normal day already) 📰
+5. NVDA: buy above $208.49 (volume 5% of a normal day already) 📰
+Up to 3 trades today, about 613 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT AMD (trade 1 of 3 today): 0.3353 shares at $487.37 (≈ 613 SAR)
+Stop $478.41 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.21% today ✅
+📰 News (last 24 hours):
+• Samsung Reportedly Secures AMD Orders for New Texas Chip Plant
+• AMD Stock Reports Earnings Today: Here’s What Investors Need to Know
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT NVDA (trade 2 of 3 today): 0.7821 shares at $208.95 (≈ 613 SAR)
+Stop $207.22 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.21% today ✅
+📰 News (last 24 hours):
+• Nvidia Tightens the Screws on China's AI Access — Cloud Partners Worldwide Must Restrict Chinese Customers Under New Revenue Rule: Report (UPDATED)
+• Dan Ives Calls Tech Selloff a 'Gut Check' — Names His Top Stocks to Own for the Next 5 Years
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:43 AM New York | 5:43 PM your time] ✅ BOUGHT ORCL (trade 3 of 3 today): 1.3212 shares at $123.69 (≈ 613 SAR)
+Stop $122.25 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.23% today ✅
+📰 News (last 24 hours):
+• Deloitte Expands Oracle Alliance With New Business Group Focused On AI, Cloud Infrastructure, Data, Cybersecurity And Managed Services
+• Dan Ives Calls Tech Selloff a 'Gut Check' — Names His Top Stocks to Own for the Next 5 Years
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:55 AM New York | 5:55 PM your time] ⚠️ NVDA is close to the STOP: now $207.40, stop $207.22
+Loss right now: -5.8 SAR (-0.95%)
+[10:39 AM New York | 6:39 PM your time] 🛑 SOLD NVDA at $207.22 (hit stop) after 62 min, trade 1 of 3 today
+❌ LOSS: -6.3 SAR (-1.04%)
+Balance: 1,832 SAR | Since start: 16 wins, 43 losses, net -167.7 SAR
+[3:05 PM New York | 11:05 PM your time] ⏳ AMD: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $486.64 | Loss right now: -2.2 SAR (-0.36%)
+[3:05 PM New York | 11:05 PM your time] ⏳ ORCL: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $124.60 | Profit right now: +3.2 SAR (+0.53%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD AMD at $487.39 (end-of-day sale) after 344 min, trade 2 of 3 today
+❌ LOSS: -1.3 SAR (-0.21%)
+Balance: 1,831 SAR | Since start: 16 wins, 44 losses, net -169.0 SAR
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD ORCL at $125.53 (end-of-day sale) after 337 min, trade 3 of 3 today
+✅ WIN: +7.8 SAR (+1.28%)
+Balance: 1,839 SAR | Since start: 17 wins, 44 losses, net -161.2 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Tue Nov 3
+Today: 3 trades, +0.2 SAR (+0.01%)
+Balance: 1,839 SAR | Since start: -161.2 SAR (-8.1%), 17 wins, 44 losses, net -161.2 SAR
+

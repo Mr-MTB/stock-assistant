@@ -1,0 +1,51 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Wed Nov 4 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +1.24% today ✅
+1. MSFT: buy above $547.50 (volume 16% of a normal day already) 📰
+2. MA: buy above $662.00 (volume 10% of a normal day already) 📰
+3. AAPL: buy above $346.95 (volume 9% of a normal day already) 📰
+4. KO: buy above $95.89 (volume 7% of a normal day already) 📰
+5. GS: buy above $920.13 (volume 6% of a normal day already) 📰
+Up to 3 trades today, about 613 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT MA (trade 1 of 3 today): 0.2463 shares at $663.50 (≈ 613 SAR)
+Stop $658.73 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +1.27% today ✅
+📰 News (last 24 hours):
+• Mastercard Supporting Rollout Of Samsung Pay In Morocco Enabled By Its Tokenization Technology
+• Mastercard Launches SME Academy: Cybersecurity in Europe
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT AAPL (trade 2 of 3 today): 0.4707 shares at $347.22 (≈ 613 SAR)
+Stop $343.98 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +1.27% today ✅
+📰 News (last 24 hours):
+• What's Going On With Alibaba Stock Wednesday?
+• Apple Issues December-Quarter Revenue Guidance and Warns of Margin Pressures
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT GS (trade 3 of 3 today): 0.1770 shares at $923.60 (≈ 613 SAR)
+Stop $918.00 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +1.27% today ✅
+📰 News (last 24 hours):
+• Goldman Sachs Strategist Discusses AI Trade and Election Impact
+• Goldman Sachs Files Major Holdings Notification for AUTO1 Group SE
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:39 AM New York | 5:39 PM your time] ⚠️ MA is close to the STOP: now $659.11, stop $658.73
+Loss right now: -5.3 SAR (-0.87%)
+[9:39 AM New York | 5:39 PM your time] 🛑 SOLD MA at $657.92 (hit stop) after 3 min, trade 1 of 3 today
+❌ LOSS: -6.4 SAR (-1.05%)
+Balance: 1,832 SAR | Since start: 17 wins, 45 losses, net -167.6 SAR
+[9:54 AM New York | 5:54 PM your time] ⚠️ GS is close to the STOP: now $918.74, stop $918.00
+Loss right now: -4.5 SAR (-0.74%)
+[9:55 AM New York | 5:55 PM your time] 🛑 SOLD GS at $915.91 (hit stop) after 19 min, trade 2 of 3 today
+❌ LOSS: -6.4 SAR (-1.04%)
+Balance: 1,826 SAR | Since start: 17 wins, 46 losses, net -174.0 SAR
+[3:05 PM New York | 11:05 PM your time] ⏳ AAPL: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $352.30 | Profit right now: +7.7 SAR (+1.25%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD AAPL at $352.49 (end-of-day sale) after 344 min, trade 3 of 3 today
+✅ WIN: +8.0 SAR (+1.31%)
+Balance: 1,834 SAR | Since start: 18 wins, 46 losses, net -166.0 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Wed Nov 4
+Today: 3 trades, -4.8 SAR (-0.26%)
+Balance: 1,834 SAR | Since start: -166.0 SAR (-8.3%), 18 wins, 46 losses, net -166.0 SAR
+

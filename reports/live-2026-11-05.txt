@@ -1,0 +1,48 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Thu Nov 5 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): -0.56% today ✅
+1. HD: buy above $362.23 (volume 13% of a normal day already) 📰
+2. XOM: buy above $171.67 (volume 6% of a normal day already) 📰
+3. COST: buy above $1071.25 (volume 5% of a normal day already) 📰
+4. DIS: buy above $120.72 (volume 4% of a normal day already) 📰
+5. BAC: buy above $52.87 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 611 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT BAC (trade 1 of 3 today): 3.0786 shares at $52.95 (≈ 611 SAR)
+Stop $52.72 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.55% today ✅
+📰 News (last 24 hours):
+• Morgan Stanley Joins Tokenization Push as Banks Double Down on Blockchains
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT XOM (trade 2 of 3 today): 0.9486 shares at $171.84 (≈ 611 SAR)
+Stop $171.14 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.66% today ✅
+📰 News (last 24 hours):
+• ExxonMobil Alaska Production Inc. Signs 15-Year Gas Sale Agreement
+• STAK Energy Inks 15-Year Gas Sale Agreement With ExxonMobil Alaska Production To Provide Gas To New Power Plant In North State's North Slope
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:38 AM New York | 5:38 PM your time] 🛑 SOLD BAC at $52.65 (hit stop) after 1 min, trade 1 of 3 today
+❌ LOSS: -4.7 SAR (-0.77%)
+Balance: 1,829 SAR | Since start: 18 wins, 47 losses, net -170.7 SAR
+[9:39 AM New York | 5:39 PM your time] ✅ BOUGHT COST (trade 3 of 3 today): 0.1523 shares at $1070.66 (≈ 611 SAR)
+Stop $1066.47 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.82% today ✅
+📰 News (last 24 hours):
+• Costco Wholesale Reported Net Sales Of $24.50B For The Retail Month Of October, An Increase Of 12.6 Percent From $21.75B Last Year; Net Sales For The First Nine Weeks Were $54.52B, An Increase Of 12.8 Percent From $48.33B Last Year
+• Costco Wholesale Corporation Reports October 2026 Sales Results
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:39 AM New York | 5:39 PM your time] ⚠️ COST is close to the STOP: now $1067.45, stop $1066.47
+Loss right now: -3.1 SAR (-0.51%)
+[10:03 AM New York | 6:03 PM your time] 🛑 SOLD COST at $1065.82 (hit stop) after 24 min, trade 2 of 3 today
+❌ LOSS: -4.0 SAR (-0.66%)
+Balance: 1,825 SAR | Since start: 18 wins, 48 losses, net -174.7 SAR
+[11:34 AM New York | 7:34 PM your time] ⚠️ XOM is close to the STOP: now $171.28, stop $171.14
+Loss right now: -3.3 SAR (-0.53%)
+[11:35 AM New York | 7:35 PM your time] 🛑 SOLD XOM at $170.71 (hit stop) after 118 min, trade 3 of 3 today
+❌ LOSS: -5.3 SAR (-0.87%)
+Balance: 1,820 SAR | Since start: 18 wins, 49 losses, net -180.0 SAR
+[2:50 PM New York | 10:50 PM your time] 📊 End of day, Thu Nov 5
+Today: 3 trades, -14.0 SAR (-0.76%)
+Balance: 1,820 SAR | Since start: -180.0 SAR (-9.0%), 18 wins, 49 losses, net -180.0 SAR
+

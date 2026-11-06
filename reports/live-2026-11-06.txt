@@ -1,0 +1,58 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Fri Nov 6 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +0.27% today ✅
+1. GOOGL: buy above $288.35 (volume 9% of a normal day already) 📰
+2. INTC: buy above $55.68 (volume 6% of a normal day already) 📰
+3. QCOM: buy above $162.59 (volume 6% of a normal day already) 📰
+4. AMZN: buy above $262.82 (volume 4% of a normal day already) 📰
+5. SHOP: buy above $146.24 (volume 3% of a normal day already) 📰
+Up to 3 trades today, about 607 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT GOOGL (trade 1 of 3 today): 0.5601 shares at $288.85 (≈ 607 SAR)
+Stop $286.56 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.37% today ✅
+📰 News (last 24 hours):
+• Stock Market Today: Dow Jones, S&P 500, Nasdaq 100 Futures Trade Mixed as October Jobs Rose by 165,000— Airbnb, Cloudflare, Lam Research in Focus (UPDATED)
+• Former Goldman Sachs CEO Slams 'Current Hysteria' to Block AI Data Centers, Calls it a 'Gift to China'—Patrick Moorhead Warns US Jobs, Tax Revenue Losses
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT QCOM (trade 2 of 3 today): 0.9893 shares at $163.52 (≈ 607 SAR)
+Stop $161.03 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.37% today ✅
+📰 News (last 24 hours):
+• Micron, AMD, SanDisk Lead AI Stock Bounce as Investors Buy the Dip
+• $7 Billion Gone: DRAM ETF Investors Crushed As Memory Chip Mania Unravels
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT SHOP (trade 3 of 3 today): 1.1070 shares at $146.13 (≈ 607 SAR)
+Stop $144.64 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.37% today ✅
+📰 News (last 24 hours):
+• Argus Research Maintains Buy Rating on Shopify
+• Argus Research Reiterates Buy on Shopify, Maintains $180 Price Target
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:56 AM New York | 5:56 PM your time] ⚠️ GOOGL is close to the STOP: now $287.08, stop $286.56
+Loss right now: -5.0 SAR (-0.82%)
+[9:58 AM New York | 5:58 PM your time] ⚠️ QCOM is close to the STOP: now $161.30, stop $161.03
+Loss right now: -9.5 SAR (-1.57%)
+[9:58 AM New York | 5:58 PM your time] 🛑 SOLD QCOM at $160.71 (hit stop) after 22 min, trade 1 of 3 today
+❌ LOSS: -11.7 SAR (-1.93%)
+Balance: 1,808 SAR | Since start: 18 wins, 50 losses, net -191.7 SAR
+[10:31 AM New York | 6:31 PM your time] 🛑 SOLD GOOGL at $286.18 (hit stop) after 55 min, trade 2 of 3 today
+❌ LOSS: -6.9 SAR (-1.13%)
+Balance: 1,801 SAR | Since start: 18 wins, 51 losses, net -198.6 SAR
+[3:05 PM New York | 11:05 PM your time] ⏳ SHOP: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $148.31 | Profit right now: +7.7 SAR (+1.27%)
+[3:05 PM New York | 11:05 PM your time] (Telegram failed: <urlopen error [Errno 104] Connection reset by peer>)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD SHOP at $148.37 (end-of-day sale) after 343 min, trade 3 of 3 today
+✅ WIN: +8.0 SAR (+1.32%)
+Balance: 1,809 SAR | Since start: 19 wins, 51 losses, net -190.6 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Fri Nov 6
+Today: 3 trades, -10.6 SAR (-0.58%)
+Balance: 1,809 SAR | Since start: -190.6 SAR (-9.5%), 19 wins, 51 losses, net -190.6 SAR
+[3:20 PM New York | 11:20 PM your time] 📅 Weekly report
+This week: 15 trades, -43.3 SAR
+Since start:
+Trades: 70 | Winners: 19 (27%)
+Balance: 2,000 SAR → 1,809 SAR (-9.5%)
+Exits: {'stop': 44, 'time': 26}
+

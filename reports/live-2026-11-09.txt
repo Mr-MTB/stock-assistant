@@ -1,0 +1,51 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Mon Nov 9 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +1.15% today ✅
+1. AMZN: buy above $273.63 (volume 12% of a normal day already) 📰
+2. GOOGL: buy above $295.41 (volume 9% of a normal day already) 📰
+3. AVGO: buy above $310.84 (volume 8% of a normal day already) 📰
+4. TSLA: buy above $369.10 (volume 6% of a normal day already) 📰
+5. META: buy above $640.00 (volume 6% of a normal day already) 📰
+Up to 3 trades today, about 603 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT AVGO (trade 1 of 3 today): 0.5170 shares at $311.11 (≈ 603 SAR)
+Stop $307.63 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +1.16% today ✅
+📰 News (last 24 hours):
+• Chip Stocks Are 38% Off Their Peak: 'Time to Buy the Dip,' Analysts Say
+• Broadcom Contributes VM API Project to Cloud Native Computing Foundation
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT TSLA (trade 2 of 3 today): 0.4342 shares at $370.42 (≈ 603 SAR)
+Stop $364.82 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +1.16% today ✅
+📰 News (last 24 hours):
+• Elon Musk Says Tesla Will Have to Return Cybertruck Deposits to 'A Lot of People,' Rejects Unprofitability Reports
+• Chuck Schumer Says Republicans Threatened to Interfere With Midterm Elections, Credits Democrats And 'Tens of Thousands' of Poll Watchers: 'Our Democracy Is Stronger...'
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT AMZN (trade 3 of 3 today): 0.5866 shares at $274.18 (≈ 603 SAR)
+Stop $271.48 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +1.17% today ✅
+📰 News (last 24 hours):
+• Amazon Web Services Commits $600,000 Annual Technology Credits to PenFed Foundation
+• Deerfield Management Announces Collaboration With AWS To Accelerate Ai-Driven Healthcare Innovation, Care Delivery
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:59 AM New York | 5:59 PM your time] ⚠️ AMZN is close to the STOP: now $272.04, stop $271.48
+Loss right now: -6.0 SAR (-0.99%)
+[10:01 AM New York | 6:01 PM your time] 🛑 SOLD AMZN at $271.42 (hit stop) after 24 min, trade 1 of 3 today
+❌ LOSS: -7.3 SAR (-1.21%)
+Balance: 1,802 SAR | Since start: 19 wins, 52 losses, net -197.9 SAR
+[3:05 PM New York | 11:05 PM your time] ⏳ AVGO: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $320.80 | Profit right now: +17.5 SAR (+2.90%)
+[3:05 PM New York | 11:05 PM your time] ⏳ TSLA: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $380.55 | Profit right now: +15.2 SAR (+2.52%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD AVGO at $321.92 (end-of-day sale) after 344 min, trade 2 of 3 today
+✅ WIN: +19.7 SAR (+3.26%)
+Balance: 1,822 SAR | Since start: 20 wins, 52 losses, net -178.2 SAR
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD TSLA at $380.62 (end-of-day sale) after 344 min, trade 3 of 3 today
+✅ WIN: +15.3 SAR (+2.54%)
+Balance: 1,837 SAR | Since start: 21 wins, 52 losses, net -162.9 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Mon Nov 9
+Today: 3 trades, +27.7 SAR (+1.53%)
+Balance: 1,837 SAR | Since start: -162.9 SAR (-8.1%), 21 wins, 52 losses, net -162.9 SAR
+

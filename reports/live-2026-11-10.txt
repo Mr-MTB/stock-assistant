@@ -1,0 +1,49 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Tue Nov 10 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): -0.56% today ✅
+1. AMD: buy above $509.76 (volume 7% of a normal day already) 📰
+2. AVGO: buy above $320.62 (volume 5% of a normal day already) 📰
+3. AMZN: buy above $270.16 (volume 5% of a normal day already) 📰
+4. GE: buy above $340.45 (volume 4% of a normal day already) 📰
+5. GOOGL: buy above $289.75 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 612 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT AMZN (trade 1 of 3 today): 0.6031 shares at $270.77 (≈ 612 SAR)
+Stop $268.24 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.53% today ✅
+📰 News (last 24 hours):
+• Constellation Has Done Something ‘Unseen’ in the Power Industry, CEO Says
+• Denodo Enters Strategic Collaboration Agreement with Amazon Web Services
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT AMD (trade 2 of 3 today): 0.3197 shares at $510.81 (≈ 612 SAR)
+Stop $505.06 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.49% today ✅
+📰 News (last 24 hours):
+• AMD to Invest $2.5 Billion in Anthropic IPO
+• Daiwa Securities Adjusts Price Target on Advanced Micro Devices to $525 From $575
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT AVGO (trade 3 of 3 today): 0.5088 shares at $320.94 (≈ 612 SAR)
+Stop $318.69 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.49% today ✅
+📰 News (last 24 hours):
+• Google’s New AI System Doubles Compute in the Same Space. JPMorgan Sees a Broadcom Win
+• Broadcom Co-Chairs New Kubernetes Workload Conformance Working Group
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[11:27 AM New York | 7:27 PM your time] ⚠️ AMZN is close to the STOP: now $268.79, stop $268.24
+Loss right now: -5.7 SAR (-0.94%)
+[12:35 PM New York | 8:35 PM your time] 🛑 SOLD AMD at $504.68 (hit stop) after 178 min, trade 1 of 3 today
+❌ LOSS: -8.6 SAR (-1.41%)
+Balance: 1,828 SAR | Since start: 21 wins, 53 losses, net -171.5 SAR
+[12:38 PM New York | 8:38 PM your time] 🛑 SOLD AMZN at $268.26 (hit stop) after 183 min, trade 2 of 3 today
+❌ LOSS: -7.0 SAR (-1.14%)
+Balance: 1,822 SAR | Since start: 21 wins, 54 losses, net -178.5 SAR
+[3:05 PM New York | 11:05 PM your time] ⏳ AVGO: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $330.67 | Profit right now: +17.3 SAR (+2.82%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD AVGO at $331.48 (end-of-day sale) after 343 min, trade 3 of 3 today
+✅ WIN: +18.8 SAR (+3.07%)
+Balance: 1,840 SAR | Since start: 22 wins, 54 losses, net -159.7 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Tue Nov 10
+Today: 3 trades, +3.2 SAR (+0.17%)
+Balance: 1,840 SAR | Since start: -159.7 SAR (-8.0%), 22 wins, 54 losses, net -159.7 SAR
+

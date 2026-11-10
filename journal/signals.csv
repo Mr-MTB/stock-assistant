@@ -101,3 +101,7 @@ date,time_ny,symbol,rank,taken,why_not,market_pct,rvol,range_pct,gap_pct,would_e
 2026-11-09,9:37 AM,AMZN,1,yes,,1.1722,0.1217,1.5765,3.8736,stop,-1.2259,loss
 2026-11-09,9:38 AM,META,5,no,limit,1.1762,0.0596,1.5177,3.3338,time,0.5203,win
 2026-11-09,9:42 AM,GOOGL,2,no,limit,1.3884,0.0945,1.2178,2.5850,stop,-1.0202,loss
+2026-11-10,9:36 AM,AMZN,3,yes,,-0.5307,0.0543,1.4219,-0.1499,stop,-1.1948,loss
+2026-11-10,9:37 AM,AMD,1,yes,,-0.4909,0.0660,1.8469,-1.1451,stop,-1.4028,loss
+2026-11-10,9:37 AM,AVGO,2,yes,,-0.4909,0.0549,1.2028,-0.8700,time,2.8490,win
+2026-11-10,9:41 AM,GOOGL,5,no,limit,-0.5208,0.0374,0.8675,0.3297,stop,-0.7601,loss

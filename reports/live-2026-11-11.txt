@@ -1,0 +1,51 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Wed Nov 11 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +0.83% today ✅
+1. AAPL: buy above $353.31 (volume 6% of a normal day already) 📰
+2. NVDA: buy above $174.92 (volume 6% of a normal day already) 📰
+3. COST: buy above $1090.42 (volume 5% of a normal day already) 📰
+4. META: buy above $648.38 (volume 5% of a normal day already) 📰
+5. GOOGL: buy above $291.40 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 613 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:39 AM New York | 5:39 PM your time] ✅ BOUGHT NVDA (trade 1 of 3 today): 0.9368 shares at $174.60 (≈ 613 SAR)
+Stop $173.71 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.94% today ✅
+📰 News (last 24 hours):
+• Quake AI Announces Plans to Deploy NVIDIA Minerva
+• Nvidia To $200? Here Are 10 Top Analyst Forecasts For Wednesday
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:39 AM New York | 5:39 PM your time] ✅ BOUGHT GOOGL (trade 2 of 3 today): 0.5617 shares at $291.20 (≈ 613 SAR)
+Stop $290.52 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.94% today ✅
+📰 News (last 24 hours):
+• Bernie Sanders Vows Federal Billionaire Wealth Tax After California Proposal Fails, Warns ‘Oligarchs’: ‘Your Victory Is Fleeting’
+• Bloomberg Reported, ByteDance Plans To Release Muse-Like AI Assistant In Coming Weeks To Augment Its Lead In AI Video
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:40 AM New York | 5:40 PM your time] ⚠️ GOOGL is close to the STOP: now $290.65, stop $290.52
+Loss right now: -2.4 SAR (-0.40%)
+[9:40 AM New York | 5:40 PM your time] 🛑 SOLD GOOGL at $290.02 (hit stop) after 2 min, trade 1 of 3 today
+❌ LOSS: -3.8 SAR (-0.61%)
+Balance: 1,837 SAR | Since start: 22 wins, 55 losses, net -163.4 SAR
+[9:41 AM New York | 5:41 PM your time] ⚠️ NVDA is close to the STOP: now $173.87, stop $173.71
+Loss right now: -3.8 SAR (-0.63%)
+[9:42 AM New York | 5:42 PM your time] 🛑 SOLD NVDA at $173.36 (hit stop) after 3 min, trade 2 of 3 today
+❌ LOSS: -5.6 SAR (-0.91%)
+Balance: 1,831 SAR | Since start: 22 wins, 56 losses, net -169.0 SAR
+[9:45 AM New York | 5:45 PM your time] ✅ BOUGHT AAPL (trade 3 of 3 today): 0.4622 shares at $353.90 (≈ 613 SAR)
+Stop $351.31 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.82% today ✅
+📰 News (last 24 hours):
+• China Renaissance Upgrades Apple to Buy, Announces $425 Price Target
+• China Renaissance Upgrades Apple to Buy From Hold
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[3:05 PM New York | 11:05 PM your time] ⏳ AAPL: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $354.62 | Loss right now: -0.0 SAR (-0.01%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD AAPL at $354.98 (end-of-day sale) after 335 min, trade 3 of 3 today
+✅ WIN: +0.6 SAR (+0.09%)
+Balance: 1,832 SAR | Since start: 23 wins, 56 losses, net -168.5 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Wed Nov 11
+Today: 3 trades, -8.8 SAR (-0.48%)
+Balance: 1,832 SAR | Since start: -168.5 SAR (-8.4%), 23 wins, 56 losses, net -168.5 SAR
+

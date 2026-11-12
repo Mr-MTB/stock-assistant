@@ -1,0 +1,47 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Thu Nov 12 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): -0.60% today ✅
+1. AVGO: buy above $361.85 (volume 20% of a normal day already) 📰
+2. AMD: buy above $569.14 (volume 17% of a normal day already) 📰
+3. AAPL: buy above $358.88 (volume 5% of a normal day already) 📰
+4. COST: buy above $1102.25 (volume 4% of a normal day already) 📰
+5. MCD: buy above $279.72 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 610 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT AVGO (trade 1 of 3 today): 0.4470 shares at $364.18 (≈ 610 SAR)
+Stop $358.37 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.55% today ✅
+📰 News (last 24 hours):
+• Broadcom Stock Rises Amid Nvidia Executive Turmoil
+• AMD, Broadcom Stocks Gain as Investors Rotate Away From Nvidia: What’s Going On?
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT MCD (trade 2 of 3 today): 0.5835 shares at $278.98 (≈ 610 SAR)
+Stop $278.40 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.55% today ✅
+📰 News (last 24 hours):
+• McDonald's Joins UK Government Youth Employment Initiative
+• Tapcheck and LIFELENZ Announce Partnership to Provide Earned Wage Access to McDonald's Employees
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:37 AM New York | 5:37 PM your time] 🛑 SOLD MCD at $278.30 (hit stop) after 1 min, trade 1 of 3 today
+❌ LOSS: -2.8 SAR (-0.45%)
+Balance: 1,829 SAR | Since start: 23 wins, 57 losses, net -171.3 SAR
+[9:37 AM New York | 5:37 PM your time] ✅ BOUGHT AMD (trade 3 of 3 today): 0.2860 shares at $569.25 (≈ 610 SAR)
+Stop $562.10 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.38% today ✅
+📰 News (last 24 hours):
+• Bentaus and DriveNets Achieve Efficiency Gains Using AMD Instinct MI325X GPUs
+• AMD and PsiQuantum Expand Partnership for Quantum Computing Infrastructure
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:48 AM New York | 5:48 PM your time] ⚠️ AVGO is close to the STOP: now $359.54, stop $358.37
+Loss right now: -9.0 SAR (-1.48%)
+[9:50 AM New York | 5:50 PM your time] 🛑 SOLD AVGO at $357.35 (hit stop) after 14 min, trade 2 of 3 today
+❌ LOSS: -12.7 SAR (-2.08%)
+Balance: 1,816 SAR | Since start: 23 wins, 58 losses, net -184.0 SAR
+[9:50 AM New York | 5:50 PM your time] 🛑 SOLD AMD at $561.32 (hit stop) after 13 min, trade 3 of 3 today
+❌ LOSS: -9.8 SAR (-1.60%)
+Balance: 1,806 SAR | Since start: 23 wins, 59 losses, net -193.8 SAR
+[2:50 PM New York | 10:50 PM your time] 📊 End of day, Thu Nov 12
+Today: 3 trades, -25.3 SAR (-1.38%)
+Balance: 1,806 SAR | Since start: -193.8 SAR (-9.7%), 23 wins, 59 losses, net -193.8 SAR
+

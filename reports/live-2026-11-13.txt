@@ -1,0 +1,59 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Fri Nov 13 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +0.11% today ✅
+1. GOOGL: buy above $304.94 (volume 7% of a normal day already) 📰
+2. NFLX: buy above $62.95 (volume 4% of a normal day already) 📰
+3. LLY: buy above $1434.00 (volume 2% of a normal day already) 📰
+4. COST: buy above $1102.03 (volume 2% of a normal day already) 📰
+5. WMT: buy above $126.98 (volume 2% of a normal day already) 📰
+Up to 3 trades today, about 602 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT NFLX (trade 1 of 3 today): 2.5370 shares at $63.28 (≈ 602 SAR)
+Stop $62.72 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.04% today ✅
+📰 News (last 24 hours):
+• Netflix to Release Russell Brand Documentary
+• Energy Leads Sectors In Thursday Trading As Materials Trail
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT COST (trade 2 of 3 today): 0.1456 shares at $1102.98 (≈ 602 SAR)
+Stop $1097.94 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.04% today ✅
+📰 News (last 24 hours):
+• Jackery Launches FridgeGuard Power Solution at Costco
+• Antigravity A1 Drone Bundle Available at Costco
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT WMT (trade 3 of 3 today): 1.2606 shares at $127.35 (≈ 602 SAR)
+Stop $126.65 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.04% today ✅
+📰 News (last 24 hours):
+• Wells Fargo Adjusts Price Target on Walmart to $135 From $120
+• Flourish Protein Pancake and Waffle Mixes Launch at Walmart
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[10:17 AM New York | 6:17 PM your time] ⚠️ COST is close to the STOP: now $1099.15, stop $1097.94
+Loss right now: -3.4 SAR (-0.56%)
+[10:30 AM New York | 6:30 PM your time] ⚠️ NFLX is close to the STOP: now $62.86, stop $62.72
+Loss right now: -5.3 SAR (-0.87%)
+[11:01 AM New York | 7:01 PM your time] 🛑 SOLD NFLX at $62.67 (hit stop) after 85 min, trade 1 of 3 today
+❌ LOSS: -7.1 SAR (-1.18%)
+Balance: 1,799 SAR | Since start: 23 wins, 60 losses, net -200.9 SAR
+[3:05 PM New York | 11:05 PM your time] ⏳ COST: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $1102.49 | Loss right now: -1.5 SAR (-0.25%)
+[3:05 PM New York | 11:05 PM your time] ⏳ WMT: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $127.39 | Loss right now: -1.1 SAR (-0.18%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD COST at $1103.70 (end-of-day sale) after 344 min, trade 2 of 3 today
+❌ LOSS: -0.9 SAR (-0.14%)
+Balance: 1,798 SAR | Since start: 23 wins, 61 losses, net -201.7 SAR
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD WMT at $127.56 (end-of-day sale) after 344 min, trade 3 of 3 today
+❌ LOSS: -0.3 SAR (-0.04%)
+Balance: 1,798 SAR | Since start: 23 wins, 62 losses, net -202.0 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Fri Nov 13
+Today: 3 trades, -8.2 SAR (-0.45%)
+Balance: 1,798 SAR | Since start: -202.0 SAR (-10.1%), 23 wins, 62 losses, net -202.0 SAR
+[3:20 PM New York | 11:20 PM your time] 📅 Weekly report
+This week: 15 trades, -11.4 SAR
+Since start:
+Trades: 85 | Winners: 23 (27%)
+Balance: 2,000 SAR → 1,798 SAR (-10.1%)
+Exits: {'stop': 53, 'time': 32}
+

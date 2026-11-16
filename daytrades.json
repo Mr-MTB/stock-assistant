@@ -1,8 +1,8 @@
 {
   "start_usd": 533.33,
-  "balance_usd": 479.47,
+  "balance_usd": 477.69,
   "paused": false,
-  "last_run": "2026-11-13",
+  "last_run": "2026-11-16",
   "trades": [
     {
       "date": "2026-10-05",
@@ -938,82 +938,64 @@
       "minutes": 344,
       "pnl_usd": -0.07,
       "balance_usd": 479.47
+    },
+    {
+      "date": "2026-11-16",
+      "symbol": "LLY",
+      "entry": 1474.754,
+      "exit": 1461.374,
+      "qty": 0.108363835,
+      "exit_reason": "stop",
+      "minutes": 2,
+      "pnl_usd": -1.78,
+      "balance_usd": 477.69
     }
   ],
   "open": [],
   "day": {
-    "date": "2026-11-13",
-    "start_usd": 481.66,
+    "date": "2026-11-16",
+    "start_usd": 479.47,
     "done": true,
-    "spy_prev": 757.16,
+    "spy_prev": 754.27,
     "candidates": 5,
     "announced": true,
     "scanning": true,
     "signals": [
       {
         "time_ny": "9:36 AM",
-        "bar_t": "2026-11-13T09:35:00-05:00",
-        "symbol": "NFLX",
-        "rank": 2,
-        "taken": "yes",
-        "why_not": "",
-        "market_pct": 0.04226319404090351,
-        "rvol": 0.0366991228328652,
-        "range_pct": 0.7227958697378958,
-        "gap_pct": 0.27121888959795726,
-        "stop": 62.7225,
-        "would_exit": "stop",
-        "would_pnl_pct": -0.8952002981546522,
-        "would_result": "loss"
-      },
-      {
-        "time_ny": "9:36 AM",
-        "bar_t": "2026-11-13T09:35:00-05:00",
-        "symbol": "COST",
-        "rank": 4,
-        "taken": "yes",
-        "why_not": "",
-        "market_pct": 0.04226319404090351,
-        "rvol": 0.016121173539025084,
-        "range_pct": 0.7414062216414454,
-        "gap_pct": 0.3258104076290902,
-        "stop": 1097.945,
-        "would_exit": "time",
-        "would_pnl_pct": -0.26370225877542014,
-        "would_result": "loss"
-      },
-      {
-        "time_ny": "9:36 AM",
-        "bar_t": "2026-11-13T09:35:00-05:00",
-        "symbol": "WMT",
-        "rank": 5,
-        "taken": "yes",
-        "why_not": "",
-        "market_pct": 0.04226319404090351,
-        "rvol": 0.015662628917199405,
-        "range_pct": 0.5197668924240123,
-        "gap_pct": 0.5032892129666289,
-        "stop": 126.65,
-        "would_exit": "time",
-        "would_pnl_pct": -0.05490540327620073,
-        "would_result": "loss"
-      },
-      {
-        "time_ny": "10:32 AM",
-        "bar_t": "2026-11-13T10:31:00-05:00",
+        "bar_t": "2026-11-16T09:35:00-05:00",
         "symbol": "LLY",
-        "rank": 3,
+        "rank": 1,
+        "taken": "yes",
+        "why_not": "",
+        "market_pct": -0.8670635183687492,
+        "rvol": 0.04574780582449126,
+        "range_pct": 1.2389314428509424,
+        "gap_pct": 0.6641057585825116,
+        "stop": 1463.5175,
+        "would_exit": "stop",
+        "would_pnl_pct": -1.0390389988763402,
+        "would_result": "loss"
+      },
+      {
+        "time_ny": "10:19 AM",
+        "bar_t": "2026-11-16T10:18:00-05:00",
+        "symbol": "PG",
+        "rank": 5,
         "taken": "no",
-        "why_not": "limit",
-        "market_pct": -0.9218659200169066,
-        "rvol": 0.021676456554411107,
-        "range_pct": 0.31632752817619186,
-        "gap_pct": 0.20313477870197438,
-        "stop": 1431.7350000000001,
-        "would_exit": "time",
-        "would_pnl_pct": 0.5418144632407597,
-        "would_result": "win"
+        "why_not": "market",
+        "market_pct": -1.26612486244978,
+        "rvol": 0.03243001430916164,
+        "range_pct": 0.4219531227421278,
+        "gap_pct": 1.5780486368721425,
+        "stop": 172.845,
+        "would_exit": "stop",
+        "would_pnl_pct": -0.6839761808160432,
+        "would_result": "loss"
       }
+    ],
+    "skipped": [
+      "PG"
     ],
     "journaled": true
   }

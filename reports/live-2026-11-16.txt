@@ -1,0 +1,28 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Mon Nov 16 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): -0.90% today ✅
+1. LLY: buy above $1472.64 (volume 5% of a normal day already) 📰
+2. V: buy above $430.92 (volume 4% of a normal day already) 📰
+3. CRM: buy above $218.99 (volume 4% of a normal day already) 📰
+4. DIS: buy above $119.35 (volume 3% of a normal day already) 📰
+5. PG: buy above $173.21 (volume 3% of a normal day already) 📰
+Up to 3 trades today, about 599 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT LLY (trade 1 of 3 today): 0.1084 shares at $1474.75 (≈ 599 SAR)
+Stop $1463.52 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.87% today ✅
+📰 News (last 24 hours):
+• Biotech ETFs Brace for FDA Showdown: Two Drug Decisions Could Test Investor Sentiment
+• Eli Lilly and Company to Acquire Calytrix Bio
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:38 AM New York | 5:38 PM your time] ⚠️ LLY is close to the STOP: now $1464.58, stop $1463.52
+Loss right now: -5.4 SAR (-0.90%)
+[9:38 AM New York | 5:38 PM your time] 🛑 SOLD LLY at $1461.37 (hit stop) after 2 min, trade 1 of 3 today
+❌ LOSS: -6.7 SAR (-1.12%)
+Balance: 1,791 SAR | Since start: 23 wins, 63 losses, net -208.7 SAR
+[10:19 AM New York | 6:19 PM your time] ⏸ PG broke out at 6:19 PM (your time), but the S&P 500 is down 1.27% today, so no buy for now.
+[2:50 PM New York | 10:50 PM your time] 📊 End of day, Mon Nov 16
+Today: 1 trade, -6.7 SAR (-0.37%)
+Balance: 1,791 SAR | Since start: -208.7 SAR (-10.4%), 23 wins, 63 losses, net -208.7 SAR
+

@@ -1,0 +1,51 @@
+[9:51 AM New York | 5:51 PM your time] Run started at 9:51 AM New York (5:51 PM your time).
+[9:51 AM New York | 5:51 PM your time] 👀 Tue Nov 17 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): -0.22% today ✅
+1. DIS: buy above $120.69 (volume 12% of a normal day already) 📰
+2. NKE: buy above $40.49 (volume 12% of a normal day already) 📰
+3. SBUX: buy above $109.57 (volume 4% of a normal day already) 📰
+4. COST: buy above $1120.28 (volume 4% of a normal day already) 📰
+5. AVGO: buy above $338.38 (volume 3% of a normal day already) 📰
+Up to 3 trades today, about 597 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:51 AM New York | 5:51 PM your time] Started late, so breakouts before 9:50 AM New York are skipped.
+[9:51 AM New York | 5:51 PM your time] ✅ BOUGHT AVGO (trade 1 of 3 today): 0.4706 shares at $338.32 (≈ 597 SAR)
+Stop $336.68 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.17% today ✅
+📰 News (last 24 hours):
+• Court Grants Intervention in Broadcom and VMware Legal Case
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:52 AM New York | 5:52 PM your time] ✅ BOUGHT DIS (trade 2 of 3 today): 1.3145 shares at $121.13 (≈ 597 SAR)
+Stop $119.60 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.22% today ✅
+📰 News (last 24 hours):
+• Disney Increases Annual Dividend by 33% and Targets $9 Billion in Fiscal 2027 Buybacks
+• The Walt Disney Company and Visa Announce Multi-Year Strategic Alliance in Asia Pacific
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:53 AM New York | 5:53 PM your time] ✅ BOUGHT SBUX (trade 3 of 3 today): 1.4497 shares at $109.83 (≈ 597 SAR)
+Stop $108.62 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.25% today ✅
+📰 News (last 24 hours):
+• Starbucks Announces Annual Red Cup Day Promotion
+• Starbucks Implements First Quarterly Barista Bonuses
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:59 AM New York | 5:59 PM your time] ⚠️ SBUX is close to the STOP: now $108.67, stop $108.62
+Loss right now: -7.6 SAR (-1.27%)
+[10:00 AM New York | 6:00 PM your time] 🛑 SOLD SBUX at $108.60 (hit stop) after 7 min, trade 1 of 3 today
+❌ LOSS: -7.9 SAR (-1.33%)
+Balance: 1,783 SAR | Since start: 23 wins, 64 losses, net -216.6 SAR
+[10:18 AM New York | 6:18 PM your time] ⚠️ AVGO is close to the STOP: now $337.07, stop $336.68
+Loss right now: -3.5 SAR (-0.58%)
+[10:32 AM New York | 6:32 PM your time] 🛑 SOLD AVGO at $336.67 (hit stop) after 41 min, trade 2 of 3 today
+❌ LOSS: -4.2 SAR (-0.70%)
+Balance: 1,779 SAR | Since start: 23 wins, 65 losses, net -220.8 SAR
+[10:54 AM New York | 6:54 PM your time] ⚠️ DIS is close to the STOP: now $119.98, stop $119.60
+Loss right now: -6.9 SAR (-1.15%)
+[10:59 AM New York | 6:59 PM your time] 🛑 SOLD DIS at $119.48 (hit stop) after 67 min, trade 3 of 3 today
+❌ LOSS: -9.4 SAR (-1.57%)
+Balance: 1,770 SAR | Since start: 23 wins, 66 losses, net -230.1 SAR
+[2:50 PM New York | 10:50 PM your time] 📊 End of day, Tue Nov 17
+Today: 3 trades, -21.5 SAR (-1.20%)
+Balance: 1,770 SAR | Since start: -230.1 SAR (-11.5%), 23 wins, 66 losses, net -230.1 SAR
+

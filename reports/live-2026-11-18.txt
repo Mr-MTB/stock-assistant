@@ -1,0 +1,50 @@
+[9:31 AM New York | 5:31 PM your time] Run started at 9:31 AM New York (5:31 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Wed Nov 18 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +0.14% today ✅
+1. DIS: buy above $117.92 (volume 5% of a normal day already) 📰
+2. AAPL: buy above $355.85 (volume 4% of a normal day already) 📰
+3. TMO: buy above $688.98 (volume 3% of a normal day already)
+4. NFLX: buy above $60.11 (volume 3% of a normal day already) 📰
+5. V: buy above $416.90 (volume 2% of a normal day already) 📰
+Up to 3 trades today, about 590 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT DIS (trade 1 of 3 today): 1.3278 shares at $118.48 (≈ 590 SAR)
+Stop $117.34 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.06% today ✅
+📰 News (last 24 hours):
+• Analysts Adjust Price Targets for The Walt Disney Company
+• Barclays Adjusts Price Target on The Walt Disney Company
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT NFLX (trade 2 of 3 today): 2.6088 shares at $60.30 (≈ 590 SAR)
+Stop $59.91 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.06% today ✅
+📰 News (last 24 hours):
+• Netflix Partners with Wonder for Branded Restaurant Concept
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT V (trade 3 of 3 today): 0.3764 shares at $417.88 (≈ 590 SAR)
+Stop $416.03 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.06% today ✅
+📰 News (last 24 hours):
+• Visa and Lianlian DigiTech Complete First Live B2B Agentic Commerce Transaction
+• Visa and Alipay+ Announce Scan to Pay Interoperability in Asia Pacific
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:40 AM New York | 5:40 PM your time] ⚠️ V is close to the STOP: now $416.25, stop $416.03
+Loss right now: -3.5 SAR (-0.60%)
+[9:40 AM New York | 5:40 PM your time] 🛑 SOLD V at $415.87 (hit stop) after 4 min, trade 1 of 3 today
+❌ LOSS: -4.1 SAR (-0.69%)
+Balance: 1,766 SAR | Since start: 23 wins, 67 losses, net -234.2 SAR
+[9:45 AM New York | 5:45 PM your time] ⚠️ NFLX is close to the STOP: now $59.95, stop $59.91
+Loss right now: -4.6 SAR (-0.78%)
+[9:47 AM New York | 5:47 PM your time] 🛑 SOLD NFLX at $59.88 (hit stop) after 11 min, trade 2 of 3 today
+❌ LOSS: -5.3 SAR (-0.91%)
+Balance: 1,760 SAR | Since start: 23 wins, 68 losses, net -239.6 SAR
+[3:05 PM New York | 11:05 PM your time] ⏳ DIS: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $122.94 | Profit right now: +21.0 SAR (+3.55%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD DIS at $122.87 (end-of-day sale) after 344 min, trade 3 of 3 today
+✅ WIN: +20.6 SAR (+3.49%)
+Balance: 1,781 SAR | Since start: 24 wins, 68 losses, net -218.9 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Wed Nov 18
+Today: 3 trades, +11.2 SAR (+0.63%)
+Balance: 1,781 SAR | Since start: -218.9 SAR (-10.9%), 24 wins, 68 losses, net -218.9 SAR
+

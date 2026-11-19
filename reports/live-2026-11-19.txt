@@ -1,0 +1,47 @@
+[9:40 AM New York | 5:40 PM your time] Run started at 9:40 AM New York (5:40 PM your time).
+[9:40 AM New York | 5:40 PM your time] 👀 Thu Nov 19 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +0.83% today ✅
+1. COIN: buy above $115.17 (volume 6% of a normal day already) 📰
+2. PLTR: buy above $165.21 (volume 6% of a normal day already) 📰
+3. AVGO: buy above $366.87 (volume 5% of a normal day already) 📰
+4. MU: buy above $751.74 (volume 5% of a normal day already) 📰
+5. TSLA: buy above $392.92 (volume 4% of a normal day already) 📰
+Up to 3 trades today, about 594 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:40 AM New York | 5:40 PM your time] Started late, so breakouts before 9:39 AM New York are skipped.
+[9:40 AM New York | 5:40 PM your time] ✅ BOUGHT PLTR (trade 1 of 3 today): 0.9593 shares at $165.03 (≈ 594 SAR)
+Stop $162.92 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.84% today ✅
+📰 News (last 24 hours):
+• Russian Espionage Case Involves Palantir Employees
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:42 AM New York | 5:42 PM your time] ✅ BOUGHT AVGO (trade 2 of 3 today): 0.4311 shares at $367.19 (≈ 594 SAR)
+Stop $364.39 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +1.00% today ✅
+📰 News (last 24 hours):
+• Goldman Sachs Maintains Buy Rating on Broadcom, Adjusts Price Target
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:47 AM New York | 5:47 PM your time] ✅ BOUGHT COIN (trade 3 of 3 today): 1.3732 shares at $115.28 (≈ 594 SAR)
+Stop $114.45 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.91% today ✅
+📰 News (last 24 hours):
+• Coinbase Expands Bitcoin-Backed Loan Availability to All 50 U.S. States
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:51 AM New York | 5:51 PM your time] 🛑 SOLD COIN at $114.59 (hit stop) after 4 min, trade 1 of 3 today
+❌ LOSS: -4.8 SAR (-0.81%)
+Balance: 1,776 SAR | Since start: 24 wins, 69 losses, net -223.7 SAR
+[9:54 AM New York | 5:54 PM your time] ⚠️ AVGO is close to the STOP: now $364.42, stop $364.39
+Loss right now: -5.7 SAR (-0.96%)
+[9:55 AM New York | 5:55 PM your time] 🛑 SOLD AVGO at $363.58 (hit stop) after 13 min, trade 2 of 3 today
+❌ LOSS: -7.1 SAR (-1.19%)
+Balance: 1,769 SAR | Since start: 24 wins, 70 losses, net -230.8 SAR
+[10:16 AM New York | 6:16 PM your time] ⚠️ PLTR is close to the STOP: now $163.29, stop $162.92
+Loss right now: -7.5 SAR (-1.27%)
+[10:18 AM New York | 6:18 PM your time] 🛑 SOLD PLTR at $162.91 (hit stop) after 38 min, trade 3 of 3 today
+❌ LOSS: -8.9 SAR (-1.50%)
+Balance: 1,760 SAR | Since start: 24 wins, 71 losses, net -239.7 SAR
+[2:50 PM New York | 10:50 PM your time] 📊 End of day, Thu Nov 19
+Today: 3 trades, -20.7 SAR (-1.16%)
+Balance: 1,760 SAR | Since start: -239.7 SAR (-12.0%), 24 wins, 71 losses, net -239.7 SAR
+

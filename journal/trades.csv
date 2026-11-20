@@ -94,3 +94,6 @@ date,symbol,rank,entry_time_ny,exit_time_ny,minutes,entry,exit,stop,target,inves
 2026-11-19,COIN,1,9:47 AM,9:51 AM,4,115.2820,114.5900,114.4500,,158.3100,-1.2817,-0.8096,loss,stop,0.9092,yes,Coinbase Expands Bitcoin-Backed Loan Availability to All 50 U.S. States,0.0561,1.2566,3.6275
 2026-11-19,AVGO,3,9:42 AM,9:55 AM,13,367.1880,363.5840,364.3900,,158.3100,-1.8847,-1.1905,loss,stop,1.0009,yes,"Goldman Sachs Maintains Buy Rating on Broadcom, Adjusts Price Target",0.0476,1.3523,2.4119
 2026-11-19,PLTR,2,9:40 AM,10:18 AM,38,165.0340,162.9100,162.9225,,158.3100,-2.3678,-1.4957,loss,stop,0.8441,yes,Russian Espionage Case Involves Palantir Employees,0.0552,2.7710,2.5243
+2026-11-20,AMGN,4,9:46 AM,9:51 AM,5,444.8240,441.9060,442.2100,,156.4600,-1.3538,-0.8653,loss,stop,-0.3506,yes,Amgen Supports Pitch4RARE 2026 and SIAMG Indo US Bridging RARE Summit | BofA Securities Identifies Viridian Therapeutics' Lumvoa as Competitor to Amgen's Tepezza,0.0608,0.6242,0.9111
+2026-11-20,NFLX,1,9:36 AM,10:40 AM,64,59.0400,58.6300,58.6450,,156.4600,-1.4140,-0.9037,loss,stop,-0.4065,yes,Omdia Analysis Shows Netflix Outperforms YouTube in Daily Viewing Time Across Latin American Markets | Netflix Announces Grendel Animated Series,0.1019,1.1040,-0.2223
+2026-11-20,NOW,5,9:36 AM,3:05 PM,329,90.2760,88.6200,88.7200,,156.4600,-3.1956,-2.0424,loss,stop,-0.4065,no,,0.0572,2.3470,-1.3392

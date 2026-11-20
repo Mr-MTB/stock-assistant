@@ -1,0 +1,53 @@
+[9:28 AM New York | 5:28 PM your time] Run started at 9:28 AM New York (5:28 PM your time).
+[9:35 AM New York | 5:35 PM your time] 👀 Fri Nov 20 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): -0.43% today ✅
+1. NFLX: buy above $58.97 (volume 10% of a normal day already) 📰
+2. UNH: buy above $344.98 (volume 8% of a normal day already) 📰
+3. WMT: buy above $129.80 (volume 7% of a normal day already) 📰
+4. AMGN: buy above $443.59 (volume 6% of a normal day already) 📰
+5. NOW: buy above $89.77 (volume 6% of a normal day already)
+Up to 3 trades today, about 587 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT NFLX (trade 1 of 3 today): 2.6501 shares at $59.04 (≈ 587 SAR)
+Stop $58.64 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.41% today ✅
+📰 News (last 24 hours):
+• Omdia Analysis Shows Netflix Outperforms YouTube in Daily Viewing Time Across Latin American Markets
+• Netflix Announces Grendel Animated Series
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:36 AM New York | 5:36 PM your time] ✅ BOUGHT NOW (trade 2 of 3 today): 1.7331 shares at $90.28 (≈ 587 SAR)
+Stop $88.72 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.41% today ✅
+📰 No news about it in the last 24 hours.
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:44 AM New York | 5:44 PM your time] ⚠️ NOW is close to the STOP: now $89.07, stop $88.72
+Loss right now: -9.1 SAR (-1.54%)
+[9:46 AM New York | 5:46 PM your time] ✅ BOUGHT AMGN (trade 3 of 3 today): 0.3517 shares at $444.82 (≈ 587 SAR)
+Stop $442.21 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.35% today ✅
+📰 News (last 24 hours):
+• Amgen Supports Pitch4RARE 2026 and SIAMG Indo US Bridging RARE Summit
+• BofA Securities Identifies Viridian Therapeutics' Lumvoa as Competitor to Amgen's Tepezza
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[9:51 AM New York | 5:51 PM your time] 🛑 SOLD AMGN at $441.91 (hit stop) after 5 min, trade 1 of 3 today
+❌ LOSS: -5.1 SAR (-0.87%)
+Balance: 1,755 SAR | Since start: 24 wins, 72 losses, net -244.7 SAR
+[9:52 AM New York | 5:52 PM your time] ⚠️ NFLX is close to the STOP: now $58.72, stop $58.64
+Loss right now: -4.4 SAR (-0.75%)
+[10:40 AM New York | 6:40 PM your time] 🛑 SOLD NFLX at $58.63 (hit stop) after 64 min, trade 2 of 3 today
+❌ LOSS: -5.3 SAR (-0.90%)
+Balance: 1,750 SAR | Since start: 24 wins, 73 losses, net -250.0 SAR
+[3:05 PM New York | 11:05 PM your time] 🛑 SOLD NOW at $88.62 (hit stop) after 329 min, trade 3 of 3 today
+❌ LOSS: -12.0 SAR (-2.04%)
+Balance: 1,738 SAR | Since start: 24 wins, 74 losses, net -262.0 SAR
+[3:05 PM New York | 11:05 PM your time] 📊 End of day, Fri Nov 20
+Today: 3 trades, -22.4 SAR (-1.27%)
+Balance: 1,738 SAR | Since start: -262.0 SAR (-13.1%), 24 wins, 74 losses, net -262.0 SAR
+[3:05 PM New York | 11:05 PM your time] 📅 Weekly report
+This week: 13 trades, -60.0 SAR
+Since start:
+Trades: 98 | Winners: 24 (24%)
+Balance: 2,000 SAR → 1,738 SAR (-13.1%)
+Exits: {'stop': 65, 'time': 33}
+

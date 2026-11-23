@@ -1,0 +1,48 @@
+[11:27 AM New York | 7:27 PM your time] Run started at 11:27 AM New York (7:27 PM your time).
+[11:27 AM New York | 7:27 PM your time] 👀 Mon Nov 23 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): +4.84% today ✅
+1. IBM: buy above $230.74 (volume 7% of a normal day already)
+2. SHOP: buy above $134.46 (volume 7% of a normal day already) 📰
+3. ORCL: buy above $118.63 (volume 6% of a normal day already) 📰
+4. NKE: buy above $33.47 (volume 6% of a normal day already) 📰
+5. PLTR: buy above $159.18 (volume 4% of a normal day already)
+Up to 3 trades today, about 579 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[11:27 AM New York | 7:27 PM your time] Started late, so breakouts before 11:26 AM New York are skipped.
+[11:27 AM New York | 7:27 PM your time] ✅ BOUGHT SHOP (trade 1 of 3 today): 1.1461 shares at $134.78 (≈ 579 SAR)
+Stop $133.10 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +4.87% today ✅
+📰 News (last 24 hours):
+• OnTrac Launches Tracking Integration with Shopify
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[11:27 AM New York | 7:27 PM your time] ✅ BOUGHT NKE (trade 2 of 3 today): 4.5990 shares at $33.59 (≈ 579 SAR)
+Stop $33.30 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +4.87% today ✅
+📰 News (last 24 hours):
+• Berenberg Bank Initiates Coverage on Nike with Sell Rating
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[11:27 AM New York | 7:27 PM your time] ✅ BOUGHT PLTR (trade 3 of 3 today): 0.9709 shares at $159.11 (≈ 579 SAR)
+Stop $158.04 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): +4.87% today ✅
+📰 No news about it in the last 24 hours.
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[11:36 AM New York | 7:36 PM your time] ⚠️ PLTR is close to the STOP: now $158.30, stop $158.04
+Loss right now: -4.2 SAR (-0.72%)
+[11:37 AM New York | 7:37 PM your time] 🛑 SOLD PLTR at $157.74 (hit stop) after 10 min, trade 1 of 3 today
+❌ LOSS: -6.2 SAR (-1.07%)
+Balance: 1,732 SAR | Since start: 24 wins, 75 losses, net -268.2 SAR
+[3:05 PM New York | 11:05 PM your time] ⏳ SHOP: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $134.21 | Loss right now: -3.7 SAR (-0.64%)
+[3:05 PM New York | 11:05 PM your time] ⏳ NKE: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $33.80 | Profit right now: +2.5 SAR (+0.43%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD SHOP at $134.59 (end-of-day sale) after 233 min, trade 2 of 3 today
+❌ LOSS: -2.0 SAR (-0.35%)
+Balance: 1,730 SAR | Since start: 24 wins, 76 losses, net -270.3 SAR
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD NKE at $33.78 (end-of-day sale) after 233 min, trade 3 of 3 today
+✅ WIN: +2.1 SAR (+0.36%)
+Balance: 1,732 SAR | Since start: 25 wins, 76 losses, net -268.2 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Mon Nov 23
+Today: 3 trades, -6.2 SAR (-0.36%)
+Balance: 1,732 SAR | Since start: -268.2 SAR (-13.4%), 25 wins, 76 losses, net -268.2 SAR
+

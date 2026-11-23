@@ -136,3 +136,6 @@ date,time_ny,symbol,rank,taken,why_not,market_pct,rvol,range_pct,gap_pct,would_e
 2026-11-20,9:46 AM,AMGN,4,yes,,-0.3506,0.0608,0.6242,0.9111,stop,-0.8251,loss
 2026-11-20,10:01 AM,UNH,2,no,limit,0.2473,0.0835,1.8028,2.8893,stop,-1.4539,loss
 2026-11-20,10:13 AM,WMT,3,no,limit,-0.1739,0.0683,1.9693,0.9838,stop,-1.3814,loss
+2026-11-23,11:27 AM,SHOP,2,yes,,4.8735,0.0706,2.0254,8.6589,time,-0.4950,loss
+2026-11-23,11:27 AM,NKE,4,yes,,4.8735,0.0567,1.0520,1.5331,time,0.1654,win
+2026-11-23,11:27 AM,PLTR,5,yes,,4.8735,0.0382,1.4334,9.7181,stop,-0.9996,loss

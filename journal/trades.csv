@@ -97,3 +97,6 @@ date,symbol,rank,entry_time_ny,exit_time_ny,minutes,entry,exit,stop,target,inves
 2026-11-20,AMGN,4,9:46 AM,9:51 AM,5,444.8240,441.9060,442.2100,,156.4600,-1.3538,-0.8653,loss,stop,-0.3506,yes,Amgen Supports Pitch4RARE 2026 and SIAMG Indo US Bridging RARE Summit | BofA Securities Identifies Viridian Therapeutics' Lumvoa as Competitor to Amgen's Tepezza,0.0608,0.6242,0.9111
 2026-11-20,NFLX,1,9:36 AM,10:40 AM,64,59.0400,58.6300,58.6450,,156.4600,-1.4140,-0.9037,loss,stop,-0.4065,yes,Omdia Analysis Shows Netflix Outperforms YouTube in Daily Viewing Time Across Latin American Markets | Netflix Announces Grendel Animated Series,0.1019,1.1040,-0.2223
 2026-11-20,NOW,5,9:36 AM,3:05 PM,329,90.2760,88.6200,88.7200,,156.4600,-3.1956,-2.0424,loss,stop,-0.4065,no,,0.0572,2.3470,-1.3392
+2026-11-23,PLTR,5,11:27 AM,11:37 AM,10,159.1100,157.7360,158.0400,,154.4800,-1.6570,-1.0726,loss,stop,4.8735,no,,0.0382,1.4334,9.7181
+2026-11-23,SHOP,2,11:27 AM,3:20 PM,233,134.7840,134.5900,133.1025,,154.4800,-0.5465,-0.3538,loss,time,4.8735,yes,OnTrac Launches Tracking Integration with Shopify,0.0706,2.0254,8.6589
+2026-11-23,NKE,4,11:27 AM,3:20 PM,233,33.5900,33.7800,33.2950,,154.4800,0.5485,0.3551,win,time,4.8735,yes,Berenberg Bank Initiates Coverage on Nike with Sell Rating,0.0567,1.0520,1.5331

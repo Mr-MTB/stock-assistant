@@ -139,3 +139,4 @@ date,time_ny,symbol,rank,taken,why_not,market_pct,rvol,range_pct,gap_pct,would_e
 2026-11-23,11:27 AM,SHOP,2,yes,,4.8735,0.0706,2.0254,8.6589,time,-0.4950,loss
 2026-11-23,11:27 AM,NKE,4,yes,,4.8735,0.0567,1.0520,1.5331,time,0.1654,win
 2026-11-23,11:27 AM,PLTR,5,yes,,4.8735,0.0382,1.4334,9.7181,stop,-0.9996,loss
+2026-11-24,1:31 PM,TMO,1,yes,,-0.4429,0.0746,1.2370,-0.0421,time,-0.5039,loss

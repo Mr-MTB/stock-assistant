@@ -1,0 +1,27 @@
+[11:20 AM New York | 7:20 PM your time] Run started at 11:20 AM New York (7:20 PM your time).
+[11:20 AM New York | 7:20 PM your time] 👀 Tue Nov 24 picks: watching for breakouts until 10:50 PM (your time)
+Market (S&P 500): -1.17% today ⛔ no new buys while it's down more than 1%
+1. TMO: buy above $696.87 (volume 7% of a normal day already) 📰
+2. NKE: buy above $34.74 (volume 4% of a normal day already) 📰
+3. ADBE: buy above $225.44 (volume 4% of a normal day already)
+4. MRK: buy above $136.16 (volume 3% of a normal day already) 📰
+5. ABBV: buy above $291.58 (volume 3% of a normal day already) 📰
+Up to 3 trades today, about 577 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[11:20 AM New York | 7:20 PM your time] Started late, so breakouts before 11:19 AM New York are skipped.
+[1:31 PM New York | 9:31 PM your time] ✅ BOUGHT TMO (trade 1 of 3 today): 0.2208 shares at $697.24 (≈ 577 SAR)
+Stop $692.56 | No fixed target: it rides until 11:20 PM (your time) unless the stop is hit
+Market (S&P 500): -0.44% today ✅
+📰 News (last 24 hours):
+• Thermo Fisher Scientific Receives Expanded US FDA Clearance for Multiple Myeloma Test
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[3:05 PM New York | 11:05 PM your time] ⏳ TMO: 15 minutes left before the end-of-day sale (11:20 PM your time).
+Now $695.19 | Loss right now: -2.9 SAR (-0.50%)
+[3:20 PM New York | 11:20 PM your time] ⏰ SOLD TMO at $695.68 (end-of-day sale) after 109 min, trade 1 of 3 today
+❌ LOSS: -2.5 SAR (-0.43%)
+Balance: 1,729 SAR | Since start: 25 wins, 77 losses, net -270.8 SAR
+[3:20 PM New York | 11:20 PM your time] 📊 End of day, Tue Nov 24
+Today: 1 trade, -2.5 SAR (-0.15%)
+Balance: 1,729 SAR | Since start: -270.8 SAR (-13.5%), 25 wins, 77 losses, net -270.8 SAR
+

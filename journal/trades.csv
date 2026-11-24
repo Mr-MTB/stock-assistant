@@ -100,3 +100,4 @@ date,symbol,rank,entry_time_ny,exit_time_ny,minutes,entry,exit,stop,target,inves
 2026-11-23,PLTR,5,11:27 AM,11:37 AM,10,159.1100,157.7360,158.0400,,154.4800,-1.6570,-1.0726,loss,stop,4.8735,no,,0.0382,1.4334,9.7181
 2026-11-23,SHOP,2,11:27 AM,3:20 PM,233,134.7840,134.5900,133.1025,,154.4800,-0.5465,-0.3538,loss,time,4.8735,yes,OnTrac Launches Tracking Integration with Shopify,0.0706,2.0254,8.6589
 2026-11-23,NKE,4,11:27 AM,3:20 PM,233,33.5900,33.7800,33.2950,,154.4800,0.5485,0.3551,win,time,4.8735,yes,Berenberg Bank Initiates Coverage on Nike with Sell Rating,0.0567,1.0520,1.5331
+2026-11-24,TMO,1,1:31 PM,3:20 PM,109,697.2440,695.6820,692.5600,,153.9200,-0.6677,-0.4338,loss,time,-0.4429,yes,Thermo Fisher Scientific Receives Expanded US FDA Clearance for Multiple Myeloma Test,0.0746,1.2370,-0.0421

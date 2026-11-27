@@ -1,0 +1,54 @@
+[10:33 AM New York | 6:33 PM your time] Run started at 10:33 AM New York (6:33 PM your time).
+[10:33 AM New York | 6:33 PM your time] 👀 Fri Nov 27 picks: watching for breakouts until 7:50 PM (your time)
+Market (S&P 500): +0.87% today ✅
+1. SHOP: buy above $142.02 (volume 6% of a normal day already) 📰
+2. NKE: buy above $37.07 (volume 4% of a normal day already)
+3. CVX: buy above $214.20 (volume 4% of a normal day already) 📰
+4. NFLX: buy above $60.90 (volume 3% of a normal day already) 📰
+5. PFE: buy above $28.54 (volume 2% of a normal day already)
+Up to 3 trades today, about 576 SAR each. The first ones to break out get bought.
+📰 = news about the stock in the last 24 hours
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[10:33 AM New York | 6:33 PM your time] Started late, so breakouts before 10:32 AM New York are skipped.
+[10:33 AM New York | 6:33 PM your time] ✅ BOUGHT CVX (trade 1 of 3 today): 0.7160 shares at $214.68 (≈ 576 SAR)
+Stop $213.67 | No fixed target: it rides until 8:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.86% today ✅
+📰 News (last 24 hours):
+• Investigation into Alleged Deliberate Methane Releases at Chevron Facilities
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[10:34 AM New York | 6:34 PM your time] ✅ BOUGHT NKE (trade 2 of 3 today): 4.1295 shares at $37.22 (≈ 576 SAR)
+Stop $36.89 | No fixed target: it rides until 8:20 PM (your time) unless the stop is hit
+Market (S&P 500): +0.85% today ✅
+📰 No news about it in the last 24 hours.
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[10:38 AM New York | 6:38 PM your time] ✅ BOUGHT SHOP (trade 3 of 3 today): 1.0812 shares at $142.16 (≈ 576 SAR)
+Stop $140.53 | No fixed target: it rides until 8:20 PM (your time) unless the stop is hit
+Market (S&P 500): +1.15% today ✅
+📰 News (last 24 hours):
+• Canadian Tech Leaders Urge Domestic Data Centre Construction
+Past success rate of this setup: 32% (56 of 177 trades won, 2026-07-16 to 2026-10-08).
+[11:06 AM New York | 7:06 PM your time] ⚠️ CVX is close to the STOP: now $213.72, stop $213.67
+Loss right now: -3.8 SAR (-0.66%)
+[11:14 AM New York | 7:14 PM your time] 🛑 SOLD CVX at $213.56 (hit stop) after 41 min, trade 1 of 3 today
+❌ LOSS: -4.2 SAR (-0.73%)
+Balance: 1,725 SAR | Since start: 25 wins, 78 losses, net -275.0 SAR
+[12:05 PM New York | 8:05 PM your time] ⏳ NKE: 15 minutes left before the end-of-day sale (8:20 PM your time).
+Now $37.33 | Profit right now: +0.4 SAR (+0.07%)
+[12:05 PM New York | 8:05 PM your time] ⏳ SHOP: 15 minutes left before the end-of-day sale (8:20 PM your time).
+Now $141.40 | Loss right now: -4.3 SAR (-0.75%)
+[12:20 PM New York | 8:20 PM your time] ⏰ SOLD NKE at $37.25 (end-of-day sale) after 106 min, trade 2 of 3 today
+❌ LOSS: -0.7 SAR (-0.13%)
+Balance: 1,724 SAR | Since start: 25 wins, 79 losses, net -275.7 SAR
+[12:20 PM New York | 8:20 PM your time] ⏰ SOLD SHOP at $141.39 (end-of-day sale) after 102 min, trade 3 of 3 today
+❌ LOSS: -4.3 SAR (-0.75%)
+Balance: 1,720 SAR | Since start: 25 wins, 80 losses, net -280.1 SAR
+[12:20 PM New York | 8:20 PM your time] 📊 End of day, Fri Nov 27
+Today: 3 trades, -9.3 SAR (-0.54%)
+Balance: 1,720 SAR | Since start: -280.1 SAR (-14.0%), 25 wins, 80 losses, net -280.1 SAR
+[12:20 PM New York | 8:20 PM your time] 📅 Weekly report
+This week: 7 trades, -18.0 SAR
+Since start:
+Trades: 105 | Winners: 25 (24%)
+Balance: 2,000 SAR → 1,720 SAR (-14.0%)
+Exits: {'stop': 67, 'time': 38}
+
